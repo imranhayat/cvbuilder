@@ -73,6 +73,8 @@ function Form({ formData, updateFormData, markAsChanged }) {
                         type="tel"
                         name="phone"
                         placeholder="Enter your phone number"
+                        value={formData.phone || ''}
+                        onChange={(e) => handleInputChange('phone', e.target.value)}
                     />
                 </div>
 
@@ -86,6 +88,8 @@ function Form({ formData, updateFormData, markAsChanged }) {
                         type="email"
                         name="email"
                         placeholder="Enter your email"
+                        value={formData.email || ''}
+                        onChange={(e) => handleInputChange('email', e.target.value)}
                     />
                 </div>
 
@@ -99,6 +103,8 @@ function Form({ formData, updateFormData, markAsChanged }) {
                         type="text"
                         name="address"
                         placeholder="Enter your address"
+                        value={formData.address || ''}
+                        onChange={(e) => handleInputChange('address', e.target.value)}
                     />
                 </div>
             </div>
@@ -112,7 +118,8 @@ function Form({ formData, updateFormData, markAsChanged }) {
                         className="professional-summary-textarea styled-input"
                         name="professionalSummary"
                         rows={4}
-                        defaultValue="To work with a organization that offers a creative, dynamic and professional environment, where my education, knowledge, skills and proven abilities can be fully utilized and which also offers learning opportunities for my career development in the long run."
+                        value={formData.professionalSummary || "To work with a organization that offers a creative, dynamic and professional environment, where my education, knowledge, skills and proven abilities can be fully utilized and which also offers learning opportunities for my career development in the long run."}
+                        onChange={(e) => handleInputChange('professionalSummary', e.target.value)}
                     />
                 </div>
             </div>

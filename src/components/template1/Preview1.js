@@ -4,7 +4,7 @@ import generatePDF from './pdf1';
 import './Preview1.css';
 
 function Preview1({ formData: propFormData, autoSaveStatus, hasUnsavedChanges }) {
-  const { formData: hookFormData, getProfileImageUrl, formatContactInfo } = usePreviewHandler();
+  const { formData: hookFormData, getProfileImageUrl, formatContactInfo } = usePreviewHandler(propFormData);
   const formData = propFormData || hookFormData;
   const profileImageUrl = getProfileImageUrl();
   const contactInfo = formatContactInfo();

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-const usePreviewHandler = () => {
+const usePreviewHandler = (passedFormData = null) => {
   const [formData, setFormData] = useState({
     name: '',
     position: '',
@@ -19,6 +19,13 @@ const usePreviewHandler = () => {
     customSection: [],
     references: []
   });
+
+  // Use passed form data if available
+  useEffect(() => {
+    if (passedFormData && Object.keys(passedFormData).length > 0) {
+      setFormData(passedFormData);
+    }
+  }, [passedFormData]);
 
   // Function to get form data from Form1 inputs
   const getFormData = () => {
