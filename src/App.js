@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
+import { SupabaseProvider } from './components/Supabase';
 import Login from './components/Login/Login';
 import Dashboard from './components/Dashboard/Dashboard';
 import Form1 from './components/template1/Form1';
@@ -103,4 +104,13 @@ function App() {
   return null;
 }
 
-export default App;
+// Wrap the entire app with SupabaseProvider
+function AppWithSupabase() {
+  return (
+    <SupabaseProvider>
+      <App />
+    </SupabaseProvider>
+  );
+}
+
+export default AppWithSupabase;
