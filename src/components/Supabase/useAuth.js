@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useSupabase } from './SupabaseProvider'
+import { supabase } from './supabase'
 
 // Custom hook for authentication
 export const useAuth = () => {

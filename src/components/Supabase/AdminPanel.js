@@ -89,7 +89,7 @@ const AdminPanel = () => {
 
   // Delete user
   const deleteUser = async (userId) => {
-    if (!confirm('Are you sure you want to delete this user?')) return
+    if (!window.confirm('Are you sure you want to delete this user?')) return
 
     try {
       const { error } = await supabase
@@ -107,7 +107,7 @@ const AdminPanel = () => {
 
   // Delete CV
   const deleteCV = async (cvId) => {
-    if (!confirm('Are you sure you want to delete this CV?')) return
+    if (!window.confirm('Are you sure you want to delete this CV?')) return
 
     try {
       const { error } = await supabase
