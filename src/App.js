@@ -17,7 +17,7 @@ function App() {
   const [autoSaveStatus, setAutoSaveStatus] = useState('');
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
 
-  // Auto-save functionality
+  // Auto-save functionality - Updated for deployment
   const autoSave = async () => {
     if (!hasUnsavedChanges || !formData.name?.trim()) return;
 
