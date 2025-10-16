@@ -46,12 +46,12 @@ const generatePDF = async () => {
       format: 'a4'
     });
 
-    // Calculate dimensions
+    // Calculate dimensions - no margins, edge-to-edge
     const pageWidth = 210; // A4 width in mm
     const pageHeight = 297; // A4 height in mm
-    const margin = 10; // 10mm margin on all sides
-    const contentWidth = pageWidth - (2 * margin);
-    const contentHeight = pageHeight - (2 * margin);
+    const margin = 0; // No margins - edge-to-edge
+    const contentWidth = pageWidth; // Full page width
+    const contentHeight = pageHeight; // Full page height
 
     // Calculate image dimensions
     const imgWidth = contentWidth;
@@ -59,7 +59,7 @@ const generatePDF = async () => {
 
     // If content fits in one page
     if (imgHeight <= contentHeight) {
-      pdf.addImage(imgData, 'JPEG', margin, margin, imgWidth, imgHeight);
+      pdf.addImage(imgData, 'JPEG', 0, 0, imgWidth, imgHeight);
     } else {
       // Multi-page handling
       const totalPages = Math.ceil(imgHeight / contentHeight);
@@ -89,9 +89,9 @@ const generatePDF = async () => {
           canvas.width, (pageImgHeight / imgHeight) * canvas.height
         );
         
-        // Add to PDF
+        // Add to PDF - no margins, edge-to-edge
         const pageImgData = pageCanvas.toDataURL('image/jpeg', 0.8);
-        pdf.addImage(pageImgData, 'JPEG', margin, margin, imgWidth, pageImgHeight);
+        pdf.addImage(pageImgData, 'JPEG', 0, 0, imgWidth, pageImgHeight);
       }
     }
 
