@@ -12,7 +12,9 @@ function Form({ formData, updateFormData, markAsChanged }) {
 
     // Handle input changes and trigger auto-save
     const handleInputChange = (field, value) => {
+        console.log('Form1 - handleInputChange called:', field, value);
         const newFormData = { ...formData, [field]: value };
+        console.log('Form1 - newFormData:', newFormData);
         updateFormData(newFormData);
         markAsChanged();
     };
