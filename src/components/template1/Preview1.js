@@ -11,21 +11,6 @@ function Preview1({ formData: propFormData, autoSaveStatus, hasUnsavedChanges })
 
   return (
     <div className="right-container">
-      <div className="preview-header">
-        <h3>CV Preview</h3>
-        <div className="preview-auto-save-status">
-          {autoSaveStatus && (
-            <span className={`status-indicator ${autoSaveStatus.includes('failed') ? 'error' : 'success'}`}>
-              {autoSaveStatus}
-            </span>
-          )}
-          {hasUnsavedChanges && !autoSaveStatus && (
-            <span className="status-indicator warning">
-              Unsaved changes
-            </span>
-          )}
-        </div>
-      </div>
       <div className="cv-preview">
         {/* CV Header */}
         <div className="cv-header">
