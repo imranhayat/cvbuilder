@@ -235,6 +235,15 @@ function Form({ formData, updateFormData, markAsChanged }) {
                         type="text"
                         name="jobTitle"
                         placeholder="Enter your job title"
+                        value={formData.experience?.[0]?.jobTitle || ''}
+                        onChange={(e) => {
+                            const newExperience = [...(formData.experience || [])];
+                            if (newExperience.length === 0) {
+                                newExperience.push({ jobTitle: '', company: '', duration: '', jobDetails: '' });
+                            }
+                            newExperience[0].jobTitle = e.target.value;
+                            handleInputChange('experience', newExperience);
+                        }}
                     />
                 </div>
 
@@ -248,6 +257,15 @@ function Form({ formData, updateFormData, markAsChanged }) {
                         type="text"
                         name="company"
                         placeholder="Enter your company"
+                        value={formData.experience?.[0]?.company || ''}
+                        onChange={(e) => {
+                            const newExperience = [...(formData.experience || [])];
+                            if (newExperience.length === 0) {
+                                newExperience.push({ jobTitle: '', company: '', duration: '', jobDetails: '' });
+                            }
+                            newExperience[0].company = e.target.value;
+                            handleInputChange('experience', newExperience);
+                        }}
                     />
                 </div>
 
@@ -261,6 +279,15 @@ function Form({ formData, updateFormData, markAsChanged }) {
                         type="text"
                         name="duration"
                         placeholder="Enter the duration"
+                        value={formData.experience?.[0]?.duration || ''}
+                        onChange={(e) => {
+                            const newExperience = [...(formData.experience || [])];
+                            if (newExperience.length === 0) {
+                                newExperience.push({ jobTitle: '', company: '', duration: '', jobDetails: '' });
+                            }
+                            newExperience[0].duration = e.target.value;
+                            handleInputChange('experience', newExperience);
+                        }}
                     />
                 </div>
 
@@ -274,6 +301,15 @@ function Form({ formData, updateFormData, markAsChanged }) {
                         name="jobDetails"
                         placeholder="Enter details about your job"
                         rows={2}
+                        value={formData.experience?.[0]?.jobDetails || ''}
+                        onChange={(e) => {
+                            const newExperience = [...(formData.experience || [])];
+                            if (newExperience.length === 0) {
+                                newExperience.push({ jobTitle: '', company: '', duration: '', jobDetails: '' });
+                            }
+                            newExperience[0].jobDetails = e.target.value;
+                            handleInputChange('experience', newExperience);
+                        }}
                     />
                 </div>
 
