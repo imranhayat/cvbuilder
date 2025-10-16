@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
-import { SupabaseProvider } from './components/Supabase';
+import { SupabaseProvider, AdminPanel } from './components/Supabase';
 import Login from './components/Login/Login';
 import Dashboard from './components/Dashboard/Dashboard';
 import Form1 from './components/template1/Form1';
@@ -58,6 +58,10 @@ function App() {
         onLogout={handleLogout}
       />
     );
+  }
+
+  if (currentView === 'admin') {
+    return <AdminPanel />;
   }
 
   if (currentView === 'cv-builder') {
