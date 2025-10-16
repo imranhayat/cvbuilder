@@ -2,13 +2,20 @@ import React, { useEffect } from 'react';
 import useFormHandler from './FormHandler1';
 import './Form1.css';
 
-function Form() {
+function Form({ formData, updateFormData, markAsChanged }) {
     const { toggleSection, initializeForm, addEducationGroup, addExperienceGroup, addSkillInput, addCertificationInput, addCustomInformation, addLanguageInput, addHobbyInput, addCustomSectionDetail, addReferenceInput } = useFormHandler();
 
     // Initialize form on component mount
     useEffect(() => {
         initializeForm();
     }, []);
+
+    // Handle input changes and trigger auto-save
+    const handleInputChange = (field, value) => {
+        const newFormData = { ...formData, [field]: value };
+        updateFormData(newFormData);
+        markAsChanged();
+    };
     return (
         <div className="left-container">
             <div id="contact-info" className="contact-info-section">
@@ -36,6 +43,8 @@ function Form() {
                         type="text"
                         name="name"
                         placeholder="Enter your name"
+                        value={formData.name || ''}
+                        onChange={(e) => handleInputChange('name', e.target.value)}
                     />
                 </div>
 
@@ -49,6 +58,8 @@ function Form() {
                         type="text"
                         name="position"
                         placeholder="Enter your position or title"
+                        value={formData.position || ''}
+                        onChange={(e) => handleInputChange('position', e.target.value)}
                     />
                 </div>
 

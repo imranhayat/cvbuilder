@@ -7,11 +7,103 @@ import Form1 from './components/template1/Form1';
 import Preview1 from './components/template1/Preview1';
 import Form2 from './components/template2/Form2';
 import Preview2 from './components/template2/Preview2';
+import useAutoSave from './components/template1/useAutoSave';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [selectedTemplate, setSelectedTemplate] = useState('template1');
   const [currentView, setCurrentView] = useState('dashboard');
+  const [formData, setFormData] = useState({});
+  const [autoSaveStatus, setAutoSaveStatus] = useState('');
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
+
+  // Auto-save functionality
+  const autoSave = async () => {
+    if (!hasUnsavedChanges || !formData.name?.trim()) return;
+
+    try {
+      setAutoSaveStatus('Saving...');
+      
+      // Save to localStorage as backup
+      localStorage.setItem('cvBuilderDraft', JSON.stringify(formData));
+      
+      setHasUnsavedChanges(false);
+      setAutoSaveStatus('Auto-saved');
+      
+      // Clear status after 2 seconds
+      setTimeout(() => setAutoSaveStatus(''), 2000);
+    } catch (err) {
+      console.error('Auto-save error:', err);
+      setAutoSaveStatus('Auto-save failed');
+      setTimeout(() => setAutoSaveStatus(''), 3000);
+    }
+  };
+
+  // Set up auto-save interval
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (hasUnsavedChanges && formData.name?.trim()) {
+        autoSave();
+      }
+    }, 10000); // Auto-save every 10 seconds
+
+    return () => clearInterval(interval);
+  }, [hasUnsavedChanges, formData]);
+
+  // Load saved draft on component mount
+  useEffect(() => {
+    const savedDraft = localStorage.getItem('cvBuilderDraft');
+    if (savedDraft) {
+      try {
+        const parsedDraft = JSON.parse(savedDraft);
+        if (parsedDraft.name?.trim()) {
+          setFormData(parsedDraft);
+          setAutoSaveStatus('Draft loaded');
+          setTimeout(() => setAutoSaveStatus(''), 2000);
+        }
+      } catch (err) {
+        console.error('Error loading draft:', err);
+      }
+    }
+  }, []);
+
+  // Save on page unload
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      if (hasUnsavedChanges && formData.name?.trim()) {
+        localStorage.setItem('cvBuilderDraft', JSON.stringify(formData));
+      }
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, [hasUnsavedChanges, formData]);
+
+  // Manual save function
+  const manualSave = async () => {
+    if (hasUnsavedChanges && formData.name?.trim()) {
+      await autoSave();
+    }
+  };
+
+  // Clear draft function
+  const clearDraft = () => {
+    localStorage.removeItem('cvBuilderDraft');
+    setHasUnsavedChanges(false);
+    setAutoSaveStatus('');
+    setFormData({});
+  };
+
+  // Mark as changed
+  const markAsChanged = () => {
+    setHasUnsavedChanges(true);
+  };
+
+  // Update form data
+  const updateFormData = (newData) => {
+    setFormData(newData);
+    setHasUnsavedChanges(true);
+  };
 
   useEffect(() => {
     // Check if user is already authenticated
@@ -86,6 +178,25 @@ function App() {
           </div>
           
           <div className="header-actions">
+            <div className="auto-save-status">
+              {autoSaveStatus && (
+                <span className={`status-indicator ${autoSaveStatus.includes('failed') ? 'error' : 'success'}`}>
+                  {autoSaveStatus}
+                </span>
+              )}
+              {hasUnsavedChanges && !autoSaveStatus && (
+                <span className="status-indicator warning">
+                  Unsaved changes
+                </span>
+              )}
+              <button 
+                onClick={manualSave}
+                disabled={!hasUnsavedChanges || !formData.name?.trim()}
+                className="save-draft-button"
+              >
+                Save Draft
+              </button>
+            </div>
             <button onClick={handleBackToDashboard} className="back-to-dashboard-button">
               Back to Dashboard
             </button>
@@ -96,10 +207,32 @@ function App() {
         </div>
         <div className="container">
           {/* Form Side */}
-          {selectedTemplate === 'template1' ? <Form1 /> : <Form2 />}
+          {selectedTemplate === 'template1' ? 
+            <Form1 
+              formData={formData}
+              updateFormData={updateFormData}
+              markAsChanged={markAsChanged}
+            /> : 
+            <Form2 
+              formData={formData}
+              updateFormData={updateFormData}
+              markAsChanged={markAsChanged}
+            />
+          }
 
           {/* Preview Side */}
-          {selectedTemplate === 'template1' ? <Preview1 /> : <Preview2 />}
+          {selectedTemplate === 'template1' ? 
+            <Preview1 
+              formData={formData}
+              autoSaveStatus={autoSaveStatus}
+              hasUnsavedChanges={hasUnsavedChanges}
+            /> : 
+            <Preview2 
+              formData={formData}
+              autoSaveStatus={autoSaveStatus}
+              hasUnsavedChanges={hasUnsavedChanges}
+            />
+          }
         </div>
       </div>
     );

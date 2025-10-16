@@ -3,13 +3,29 @@ import usePreviewHandler from './PreviewHandler1';
 import generatePDF from './pdf1';
 import './Preview1.css';
 
-function Preview1() {
-  const { formData, getProfileImageUrl, formatContactInfo } = usePreviewHandler();
+function Preview1({ formData: propFormData, autoSaveStatus, hasUnsavedChanges }) {
+  const { formData: hookFormData, getProfileImageUrl, formatContactInfo } = usePreviewHandler();
+  const formData = propFormData || hookFormData;
   const profileImageUrl = getProfileImageUrl();
   const contactInfo = formatContactInfo();
 
   return (
     <div className="right-container">
+      <div className="preview-header">
+        <h3>CV Preview</h3>
+        <div className="preview-auto-save-status">
+          {autoSaveStatus && (
+            <span className={`status-indicator ${autoSaveStatus.includes('failed') ? 'error' : 'success'}`}>
+              {autoSaveStatus}
+            </span>
+          )}
+          {hasUnsavedChanges && !autoSaveStatus && (
+            <span className="status-indicator warning">
+              Unsaved changes
+            </span>
+          )}
+        </div>
+      </div>
       <div className="cv-preview">
         {/* CV Header */}
         <div className="cv-header">
