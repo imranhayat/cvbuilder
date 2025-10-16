@@ -12,6 +12,8 @@ function Preview1({ formData: propFormData, autoSaveStatus, hasUnsavedChanges })
   // Debug: Log experience data
   console.log('Preview1 - Experience data:', formData.experience);
   console.log('Preview1 - Experience length:', formData.experience?.length);
+  console.log('Preview1 - Experience first item:', formData.experience?.[0]);
+  console.log('Preview1 - Experience condition check:', formData.experience && formData.experience.length > 0);
 
   return (
     <div className="right-container">
@@ -89,7 +91,7 @@ function Preview1({ formData: propFormData, autoSaveStatus, hasUnsavedChanges })
         )}
 
         {/* Experience Section */}
-        {(formData.experience && formData.experience.length > 0) && (
+        {formData.experience && (
           <div className="cv-section">
             <h3 className="section-heading">Experience</h3>
             <div className="section-content">
