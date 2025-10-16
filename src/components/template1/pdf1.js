@@ -35,7 +35,7 @@ const generatePDF = async () => {
 
     // Configure html2canvas options for compact PDF
     const canvas = await html2canvas(cvPreview, {
-      scale: 2.5, // Optimized scale for compact PDF
+      scale: 4, // Higher scale for more compact PDF (more content per page)
       useCORS: true,
       allowTaint: true,
       backgroundColor: '#ffffff',
@@ -58,10 +58,10 @@ const generatePDF = async () => {
       format: 'a4'
     });
 
-    // Calculate dimensions - minimal margins for compact PDF
+    // Calculate dimensions - ultra-minimal margins for maximum content
     const pageWidth = 210; // A4 width in mm
     const pageHeight = 297; // A4 height in mm
-    const margin = 2; // Minimal margins for compact layout
+    const margin = 1; // Ultra-minimal margins for maximum content area
     const contentWidth = pageWidth - (margin * 2); // Content width with minimal margins
     const contentHeight = pageHeight - (margin * 2); // Content height with minimal margins
 

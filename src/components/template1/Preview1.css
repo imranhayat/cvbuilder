@@ -7,64 +7,89 @@
   color: #333;
 }
 
-/* Compact layout for PDF generation */
+/* Ultra-compact layout for PDF generation */
 .cv-preview.pdf-mode {
-  padding: 10px;
+  padding: 5px;
   min-height: auto;
+  line-height: 1.2;
 }
 
 .cv-preview.pdf-mode .cv-header {
-  gap: 20px;
-  margin-bottom: 20px;
-  padding-bottom: 15px;
+  gap: 15px;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
 }
 
 .cv-preview.pdf-mode .profile-image-container {
-  width: 100px;
-  height: 100px;
+  width: 80px;
+  height: 80px;
 }
 
 .cv-preview.pdf-mode .cv-section {
-  margin-bottom: 15px;
+  margin-bottom: 10px;
 }
 
 .cv-preview.pdf-mode .section-heading {
-  margin-bottom: 8px;
-  font-size: 1.1rem;
+  margin-bottom: 5px;
+  font-size: 1rem;
+  padding-bottom: 3px;
 }
 
 .cv-preview.pdf-mode .contact-info {
-  gap: 15px;
+  gap: 10px;
 }
 
 .cv-preview.pdf-mode .contact-item {
-  font-size: 0.9rem;
+  font-size: 0.8rem;
+  margin-bottom: 2px;
 }
 
 .cv-preview.pdf-mode .experience-item,
 .cv-preview.pdf-mode .education-item {
-  margin-bottom: 10px;
-  padding-bottom: 8px;
+  margin-bottom: 6px;
+  padding-bottom: 4px;
 }
 
 .cv-preview.pdf-mode .experience-header,
 .cv-preview.pdf-mode .education-header {
-  margin-bottom: 5px;
+  margin-bottom: 3px;
 }
 
 .cv-preview.pdf-mode .experience-job-title,
 .cv-preview.pdf-mode .education-degree {
-  font-size: 1rem;
+  font-size: 0.9rem;
+  font-weight: 600;
 }
 
 .cv-preview.pdf-mode .experience-company,
 .cv-preview.pdf-mode .education-institution {
-  font-size: 0.9rem;
+  font-size: 0.8rem;
 }
 
 .cv-preview.pdf-mode .experience-duration,
 .cv-preview.pdf-mode .education-duration {
-  font-size: 0.85rem;
+  font-size: 0.75rem;
+}
+
+.cv-preview.pdf-mode .experience-details,
+.cv-preview.pdf-mode .education-details {
+  font-size: 0.8rem;
+  margin-top: 2px;
+}
+
+.cv-preview.pdf-mode .skills-list,
+.cv-preview.pdf-mode .certifications-list,
+.cv-preview.pdf-mode .languages-list,
+.cv-preview.pdf-mode .hobbies-list {
+  font-size: 0.8rem;
+  margin-bottom: 5px;
+}
+
+.cv-preview.pdf-mode .skills-list li,
+.cv-preview.pdf-mode .certifications-list li,
+.cv-preview.pdf-mode .languages-list li,
+.cv-preview.pdf-mode .hobbies-list li {
+  margin-bottom: 2px;
 }
 
 /* CV Header */
