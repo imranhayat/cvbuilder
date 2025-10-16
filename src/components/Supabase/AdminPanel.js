@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { supabase, useAuth } from './index'
+import AdminBulkCV from './AdminBulkCV'
 import './AdminPanel.css'
 
 const AdminPanel = () => {
@@ -8,6 +9,7 @@ const AdminPanel = () => {
   const [allUsers, setAllUsers] = useState([])
   const [allCVs, setAllCVs] = useState([])
   const [loading, setLoading] = useState(false)
+  const [currentView, setCurrentView] = useState('dashboard')
   const [stats, setStats] = useState({
     totalUsers: 0,
     totalCVs: 0,
@@ -162,11 +164,21 @@ const AdminPanel = () => {
     )
   }
 
+  if (currentView === 'create-cv') {
+    return <AdminBulkCV />
+  }
+
   return (
     <div className="admin-panel">
       <div className="admin-header">
         <h1>Admin Panel</h1>
         <div className="admin-actions">
+          <button 
+            onClick={() => setCurrentView('create-cv')} 
+            className="create-cv-button"
+          >
+            Create CV for Customer
+          </button>
           <button onClick={loadAdminData} className="refresh-button" disabled={loading}>
             {loading ? 'Loading...' : 'Refresh'}
           </button>

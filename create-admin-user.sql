@@ -30,7 +30,13 @@ $$ LANGUAGE plpgsql;
 SELECT create_admin_user();
 
 -- Create admin role and permissions
-CREATE ROLE IF NOT EXISTS admin_role;
+DO $$ 
+BEGIN
+    IF NOT EXISTS (SELECT FROM pg_catalog.pg_roles WHERE rolname = 'admin_role') THEN
+        CREATE ROLE admin_role;
+    END IF;
+END
+$$;
 
 -- Grant admin permissions
 GRANT ALL ON public.users TO admin_role;
@@ -56,7 +62,14 @@ CREATE POLICY "Admin can manage all CVs" ON public.cvs
   FOR ALL USING (is_admin(auth.jwt() ->> 'email'));
 
 -- Add admin flag to users table
-ALTER TABLE public.users ADD COLUMN IF NOT EXISTS is_admin BOOLEAN DEFAULT FALSE;
+DO $$ 
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns 
+                   WHERE table_name = 'users' AND column_name = 'is_admin') THEN
+        ALTER TABLE public.users ADD COLUMN is_admin BOOLEAN DEFAULT FALSE;
+    END IF;
+END
+$$;
 
 -- Update admin user to have admin flag
 UPDATE public.users 
