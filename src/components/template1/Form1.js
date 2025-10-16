@@ -137,6 +137,15 @@ function Form({ formData, updateFormData, markAsChanged }) {
                         type="text"
                         name="degree"
                         placeholder="Enter your degree"
+                        value={formData.education?.[0]?.degree || ''}
+                        onChange={(e) => {
+                            const newEducation = [...(formData.education || [])];
+                            if (newEducation.length === 0) {
+                                newEducation.push({ degree: '', board: '', year: '', marks: '' });
+                            }
+                            newEducation[0].degree = e.target.value;
+                            handleInputChange('education', newEducation);
+                        }}
                     />
                 </div>
 
@@ -150,6 +159,15 @@ function Form({ formData, updateFormData, markAsChanged }) {
                         type="text"
                         name="board"
                         placeholder="Enter your board or university"
+                        value={formData.education?.[0]?.board || ''}
+                        onChange={(e) => {
+                            const newEducation = [...(formData.education || [])];
+                            if (newEducation.length === 0) {
+                                newEducation.push({ degree: '', board: '', year: '', marks: '' });
+                            }
+                            newEducation[0].board = e.target.value;
+                            handleInputChange('education', newEducation);
+                        }}
                     />
                 </div>
 
@@ -163,6 +181,15 @@ function Form({ formData, updateFormData, markAsChanged }) {
                         type="text"
                         name="year"
                         placeholder="Enter the year"
+                        value={formData.education?.[0]?.year || ''}
+                        onChange={(e) => {
+                            const newEducation = [...(formData.education || [])];
+                            if (newEducation.length === 0) {
+                                newEducation.push({ degree: '', board: '', year: '', marks: '' });
+                            }
+                            newEducation[0].year = e.target.value;
+                            handleInputChange('education', newEducation);
+                        }}
                     />
                 </div>
 
@@ -176,6 +203,15 @@ function Form({ formData, updateFormData, markAsChanged }) {
                         type="text"
                         name="marks"
                         placeholder="Enter your marks or CGPA"
+                        value={formData.education?.[0]?.marks || ''}
+                        onChange={(e) => {
+                            const newEducation = [...(formData.education || [])];
+                            if (newEducation.length === 0) {
+                                newEducation.push({ degree: '', board: '', year: '', marks: '' });
+                            }
+                            newEducation[0].marks = e.target.value;
+                            handleInputChange('education', newEducation);
+                        }}
                     />
                 </div>
 
