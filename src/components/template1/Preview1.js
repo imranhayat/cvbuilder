@@ -90,15 +90,15 @@ function Preview1({ formData: propFormData, autoSaveStatus, hasUnsavedChanges })
           </div>
         )}
 
-        {/* Experience Section */}
-        {formData.experience && (
-          <div className="cv-section">
-            <h3 className="section-heading">Experience</h3>
-            <div className="section-content">
-              {formData.experience.map((exp, index) => (
+        {/* Experience Section - Always show for debugging */}
+        <div className="cv-section">
+          <h3 className="section-heading">Experience</h3>
+          <div className="section-content">
+            {formData.experience && formData.experience.length > 0 ? (
+              formData.experience.map((exp, index) => (
                 <div key={index} className="experience-item">
                   <div className="experience-header">
-                    <span className="experience-job-title">{exp.jobTitle}</span>
+                    <span className="experience-job-title">{exp.jobTitle || 'No job title'}</span>
                     {exp.duration && <span className="experience-duration">{exp.duration}</span>}
                   </div>
                   {exp.company && (
@@ -120,10 +120,12 @@ function Preview1({ formData: propFormData, autoSaveStatus, hasUnsavedChanges })
                     </div>
                   )}
                 </div>
-              ))}
-            </div>
+              ))
+            ) : (
+              <p>No experience data available</p>
+            )}
           </div>
-        )}
+        </div>
 
         {/* Certifications Section */}
         {formData.certifications && formData.certifications.length > 0 && (
