@@ -3,126 +3,126 @@ import html2canvas from 'html2canvas';
 
 const generatePDF = async () => {
   try {
+    console.log('Starting PDF generation...');
+    
     // Get the CV preview element
     const cvPreview = document.querySelector('.cv-preview');
     
     if (!cvPreview) {
       console.error('CV preview element not found');
+      alert('CV preview not found. Please make sure the CV is loaded.');
       return;
     }
 
-    // Create a temporary container for PDF generation
-    const tempContainer = document.createElement('div');
-    tempContainer.style.position = 'absolute';
-    tempContainer.style.left = '-9999px';
-    tempContainer.style.top = '0';
-    tempContainer.style.width = '794px'; // A4 width in pixels (210mm at 96 DPI)
-    tempContainer.style.backgroundColor = 'white';
-    tempContainer.style.padding = '0';
-    tempContainer.style.margin = '0';
-    tempContainer.style.fontFamily = 'Arial, sans-serif';
-    tempContainer.style.boxSizing = 'border-box';
-    
-    // Clone the CV preview content but exclude the download button
-    const clonedContent = cvPreview.cloneNode(true);
-    
-    // Remove the download button from the cloned content
-    const downloadContainer = clonedContent.querySelector('.download-pdf-container');
-    if (downloadContainer) {
-      downloadContainer.remove();
-    }
-    
-    tempContainer.appendChild(clonedContent);
-    document.body.appendChild(tempContainer);
+    console.log('CV preview element found, generating canvas...');
 
-    // Wait for any images to load
-    await new Promise(resolve => setTimeout(resolve, 100));
-    
-    // Configure html2canvas options for optimized quality and smaller file size
-    const canvas = await html2canvas(tempContainer, {
-      scale: 3, 
+    // Show loading message
+    const originalButton = document.querySelector('.download-pdf-button');
+    if (originalButton) {
+      originalButton.textContent = 'Generating PDF...';
+      originalButton.disabled = true;
+    }
+
+    // Configure html2canvas options
+    const canvas = await html2canvas(cvPreview, {
+      scale: 2, // Reduced scale for better performance
       useCORS: true,
       allowTaint: true,
       backgroundColor: '#ffffff',
-      width: 794, // A4 width in pixels (210mm)
-      height: tempContainer.scrollHeight,
-      logging: false, // Disable logging for better performance
-      removeContainer: true,
+      logging: false,
       scrollX: 0,
       scrollY: 0,
-      windowWidth: 794,
-      windowHeight: tempContainer.scrollHeight
+      width: cvPreview.scrollWidth,
+      height: cvPreview.scrollHeight
     });
 
-    // Remove temporary container
-    document.body.removeChild(tempContainer);
+    console.log('Canvas generated, creating PDF...');
 
-    // Create PDF with optimized settings
-    const imgData = canvas.toDataURL('image/jpeg', 0.85); // Use JPEG with 85% quality
+    // Create PDF
+    const imgData = canvas.toDataURL('image/jpeg', 0.8);
     const pdf = new jsPDF({
       orientation: 'portrait',
       unit: 'mm',
-      format: 'a4',
-      compress: true // Enable PDF compression
+      format: 'a4'
     });
 
-    // Calculate dimensions with proper margins
+    // Calculate dimensions
     const pageWidth = 210; // A4 width in mm
     const pageHeight = 297; // A4 height in mm
-    const topMargin = 6.35; // 0.25 inches in mm
-    const bottomMargin = 6.35; // 0.25 inches in mm
-    const contentHeight = pageHeight - topMargin - bottomMargin; // Available content height
-    
-    // Calculate image dimensions to fill the entire page width
-    const imgWidth = pageWidth; // Full page width
-    const imgHeight = (canvas.height * pageWidth) / canvas.width;
-    
-    // Calculate how many pages we need
-    const totalPages = Math.ceil(imgHeight / contentHeight);
-    
-    // Add content to each page with proper margins
-    for (let pageNum = 0; pageNum < totalPages; pageNum++) {
-      if (pageNum > 0) {
-        pdf.addPage();
+    const margin = 10; // 10mm margin on all sides
+    const contentWidth = pageWidth - (2 * margin);
+    const contentHeight = pageHeight - (2 * margin);
+
+    // Calculate image dimensions
+    const imgWidth = contentWidth;
+    const imgHeight = (canvas.height * contentWidth) / canvas.width;
+
+    // If content fits in one page
+    if (imgHeight <= contentHeight) {
+      pdf.addImage(imgData, 'JPEG', margin, margin, imgWidth, imgHeight);
+    } else {
+      // Multi-page handling
+      const totalPages = Math.ceil(imgHeight / contentHeight);
+      
+      for (let pageNum = 0; pageNum < totalPages; pageNum++) {
+        if (pageNum > 0) {
+          pdf.addPage();
+        }
+        
+        // Calculate the portion of the image for this page
+        const startY = pageNum * contentHeight;
+        const endY = Math.min((pageNum + 1) * contentHeight, imgHeight);
+        const pageImgHeight = endY - startY;
+        
+        // Create a canvas for this page slice
+        const pageCanvas = document.createElement('canvas');
+        const pageCtx = pageCanvas.getContext('2d');
+        pageCanvas.width = canvas.width;
+        pageCanvas.height = (pageImgHeight / imgHeight) * canvas.height;
+        
+        // Draw the slice
+        pageCtx.drawImage(
+          canvas, 
+          0, (startY / imgHeight) * canvas.height, 
+          canvas.width, (pageImgHeight / imgHeight) * canvas.height,
+          0, 0, 
+          canvas.width, (pageImgHeight / imgHeight) * canvas.height
+        );
+        
+        // Add to PDF
+        const pageImgData = pageCanvas.toDataURL('image/jpeg', 0.8);
+        pdf.addImage(pageImgData, 'JPEG', margin, margin, imgWidth, pageImgHeight);
       }
-      
-      // Calculate the Y position for this page
-      const startY = pageNum * contentHeight;
-      const endY = Math.min((pageNum + 1) * contentHeight, imgHeight);
-      const pageContentHeight = endY - startY;
-      
-      // Calculate the source Y position in the original image
-      const sourceY = (startY / imgHeight) * canvas.height;
-      const sourceHeight = (pageContentHeight / imgHeight) * canvas.height;
-      
-      // Create a new canvas for this page slice
-      const pageCanvas = document.createElement('canvas');
-      const pageCtx = pageCanvas.getContext('2d');
-      pageCanvas.width = canvas.width;
-      pageCanvas.height = sourceHeight;
-      
-      // Draw the slice of the original canvas
-      pageCtx.drawImage(canvas, 0, sourceY, canvas.width, sourceHeight, 0, 0, canvas.width, sourceHeight);
-      
-      // Convert to image data
-      const pageImgData = pageCanvas.toDataURL('image/jpeg', 0.85);
-      
-      // Add to PDF with proper margins
-      let pdfY = topMargin; // Start with top margin
-      if (pageNum > 0) {
-        pdfY = topMargin; // Top margin for subsequent pages
-      }
-      
-      pdf.addImage(pageImgData, 'JPEG', 0, pdfY, imgWidth, pageContentHeight);
     }
 
+    console.log('PDF created, downloading...');
+
+    // Generate filename with user's name if available
+    const nameInput = document.querySelector('#name-input');
+    const userName = nameInput ? nameInput.value.trim() : 'CV';
+    const fileName = userName ? `${userName.replace(/\s+/g, '_')}_CV.pdf` : `CV_${new Date().toISOString().split('T')[0]}.pdf`;
+    
     // Download the PDF
-    const fileName = `CV_${new Date().toISOString().split('T')[0]}.pdf`;
     pdf.save(fileName);
+
+    console.log('PDF download completed');
+
+    // Reset button
+    if (originalButton) {
+      originalButton.textContent = '📄 Download PDF';
+      originalButton.disabled = false;
+    }
 
   } catch (error) {
     console.error('Error generating PDF:', error);
-    alert('Error generating PDF. Please try again.');
+    alert(`Error generating PDF: ${error.message}. Please try again.`);
+    
+    // Reset button on error
+    const originalButton = document.querySelector('.download-pdf-button');
+    if (originalButton) {
+      originalButton.textContent = '📄 Download PDF';
+      originalButton.disabled = false;
+    }
   }
 };
 
