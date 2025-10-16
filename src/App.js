@@ -79,12 +79,7 @@ function App() {
     return () => window.removeEventListener('beforeunload', handleBeforeUnload);
   }, [hasUnsavedChanges, formData]);
 
-  // Manual save function
-  const manualSave = async () => {
-    if (hasUnsavedChanges && formData.name?.trim()) {
-      await autoSave();
-    }
-  };
+  // Auto-save happens automatically every 10 seconds
 
   // Clear draft function
   const clearDraft = () => {
@@ -189,13 +184,11 @@ function App() {
                   Unsaved changes
                 </span>
               )}
-              <button 
-                onClick={manualSave}
-                disabled={!hasUnsavedChanges || !formData.name?.trim()}
-                className="save-draft-button"
-              >
-                Save Draft
-              </button>
+              {!autoSaveStatus && !hasUnsavedChanges && (
+                <span className="status-indicator success">
+                  All changes saved
+                </span>
+              )}
             </div>
             <button onClick={handleBackToDashboard} className="back-to-dashboard-button">
               Back to Dashboard
