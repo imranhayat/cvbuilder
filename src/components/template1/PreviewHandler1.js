@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 
 const usePreviewHandler = (passedFormData = null) => {
   const [formData, setFormData] = useState({
@@ -26,6 +26,15 @@ const usePreviewHandler = (passedFormData = null) => {
       setFormData(passedFormData);
     }
   }, [passedFormData]);
+
+  // Cleanup object URLs to prevent memory leaks
+  useEffect(() => {
+    return () => {
+      if (formData.profileImage) {
+        URL.revokeObjectURL(URL.createObjectURL(formData.profileImage));
+      }
+    };
+  }, [formData.profileImage]);
 
   // Function to get form data from Form1 inputs
   const getFormData = () => {
@@ -207,13 +216,13 @@ const usePreviewHandler = (passedFormData = null) => {
     setFormData(newData);
   };
 
-  // Function to get profile image URL
-  const getProfileImageUrl = () => {
+  // Function to get profile image URL - memoized to prevent flickering
+  const getProfileImageUrl = useMemo(() => {
     if (formData.profileImage) {
       return URL.createObjectURL(formData.profileImage);
     }
     return null;
-  };
+  }, [formData.profileImage]);
 
   // Function to format contact information
   const formatContactInfo = () => {
