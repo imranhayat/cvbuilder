@@ -8,6 +8,10 @@ function Preview1({ formData: propFormData, autoSaveStatus, hasUnsavedChanges })
   const formData = propFormData || hookFormData;
   const profileImageUrl = getProfileImageUrl;
   const contactInfo = formatContactInfo();
+  
+  // Debug: Log experience data
+  console.log('Preview1 - Experience data:', formData.experience);
+  console.log('Preview1 - Experience length:', formData.experience?.length);
 
   return (
     <div className="right-container">

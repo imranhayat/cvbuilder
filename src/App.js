@@ -110,6 +110,8 @@ function App() {
 
   // Update form data
   const updateFormData = (newData) => {
+    console.log('App.js - Updating form data:', newData);
+    console.log('App.js - Experience data:', newData.experience);
     setFormData(newData);
     setHasUnsavedChanges(true);
   };
