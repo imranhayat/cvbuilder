@@ -129,96 +129,110 @@ function Form({ formData, updateFormData, markAsChanged }) {
             <div id="education" className="education-section">
                 <h3 className="section-title" onClick={() => toggleSection('education')} >Education</h3>
 
-                <div className="degree-input-container input-group">
-                    <label htmlFor="degree-input" className="degree-label input-label">
-                        Degree
-                    </label>
-                    <input
-                        id="degree-input"
-                        className="degree-input styled-input"
-                        type="text"
-                        name="degree"
-                        placeholder="Enter your degree"
-                        value={formData.education?.[0]?.degree || ''}
-                        onChange={(e) => {
-                            const newEducation = [...(formData.education || [])];
-                            if (newEducation.length === 0) {
-                                newEducation.push({ degree: '', board: '', year: '', marks: '' });
-                            }
-                            newEducation[0].degree = e.target.value;
-                            handleInputChange('education', newEducation);
-                        }}
-                    />
-                </div>
+                {/* Render all education entries dynamically */}
+                {(formData.education || []).map((edu, index) => (
+                    <div key={index} className="education-group">
+                        <div className="degree-input-container input-group">
+                            <label htmlFor={`degree-input-${index}`} className="degree-label input-label">
+                                Degree
+                            </label>
+                            <input
+                                id={`degree-input-${index}`}
+                                className="degree-input styled-input"
+                                type="text"
+                                name="degree"
+                                placeholder="Enter your degree"
+                                value={edu.degree || ''}
+                                onChange={(e) => {
+                                    const newEducation = [...(formData.education || [])];
+                                    newEducation[index].degree = e.target.value;
+                                    handleInputChange('education', newEducation);
+                                }}
+                            />
+                        </div>
 
-                <div className="board-input-container input-group">
-                    <label htmlFor="board-input" className="board-label input-label">
-                        Board/University
-                    </label>
-                    <input
-                        id="board-input"
-                        className="board-input styled-input"
-                        type="text"
-                        name="board"
-                        placeholder="Enter your board or university"
-                        value={formData.education?.[0]?.board || ''}
-                        onChange={(e) => {
-                            const newEducation = [...(formData.education || [])];
-                            if (newEducation.length === 0) {
-                                newEducation.push({ degree: '', board: '', year: '', marks: '' });
-                            }
-                            newEducation[0].board = e.target.value;
-                            handleInputChange('education', newEducation);
-                        }}
-                    />
-                </div>
+                        <div className="board-input-container input-group">
+                            <label htmlFor={`board-input-${index}`} className="board-label input-label">
+                                Board/University
+                            </label>
+                            <input
+                                id={`board-input-${index}`}
+                                className="board-input styled-input"
+                                type="text"
+                                name="board"
+                                placeholder="Enter your board or university"
+                                value={edu.board || ''}
+                                onChange={(e) => {
+                                    const newEducation = [...(formData.education || [])];
+                                    newEducation[index].board = e.target.value;
+                                    handleInputChange('education', newEducation);
+                                }}
+                            />
+                        </div>
 
-                <div className="year-input-container input-group">
-                    <label htmlFor="year-input" className="year-label input-label">
-                        Year
-                    </label>
-                    <input
-                        id="year-input"
-                        className="year-input styled-input"
-                        type="text"
-                        name="year"
-                        placeholder="Enter the year"
-                        value={formData.education?.[0]?.year || ''}
-                        onChange={(e) => {
-                            const newEducation = [...(formData.education || [])];
-                            if (newEducation.length === 0) {
-                                newEducation.push({ degree: '', board: '', year: '', marks: '' });
-                            }
-                            newEducation[0].year = e.target.value;
-                            handleInputChange('education', newEducation);
-                        }}
-                    />
-                </div>
+                        <div className="year-input-container input-group">
+                            <label htmlFor={`year-input-${index}`} className="year-label input-label">
+                                Year
+                            </label>
+                            <input
+                                id={`year-input-${index}`}
+                                className="year-input styled-input"
+                                type="text"
+                                name="year"
+                                placeholder="Enter the year"
+                                value={edu.year || ''}
+                                onChange={(e) => {
+                                    const newEducation = [...(formData.education || [])];
+                                    newEducation[index].year = e.target.value;
+                                    handleInputChange('education', newEducation);
+                                }}
+                            />
+                        </div>
 
-                <div className="marks-input-container input-group">
-                    <label htmlFor="marks-input" className="marks-label input-label">
-                        Marks/CGPA
-                    </label>
-                    <input
-                        id="marks-input"
-                        className="marks-input styled-input"
-                        type="text"
-                        name="marks"
-                        placeholder="Enter your marks or CGPA"
-                        value={formData.education?.[0]?.marks || ''}
-                        onChange={(e) => {
-                            const newEducation = [...(formData.education || [])];
-                            if (newEducation.length === 0) {
-                                newEducation.push({ degree: '', board: '', year: '', marks: '' });
-                            }
-                            newEducation[0].marks = e.target.value;
-                            handleInputChange('education', newEducation);
-                        }}
-                    />
-                </div>
+                        <div className="marks-input-container input-group">
+                            <label htmlFor={`marks-input-${index}`} className="marks-label input-label">
+                                Marks/CGPA
+                            </label>
+                            <input
+                                id={`marks-input-${index}`}
+                                className="marks-input styled-input"
+                                type="text"
+                                name="marks"
+                                placeholder="Enter your marks or CGPA"
+                                value={edu.marks || ''}
+                                onChange={(e) => {
+                                    const newEducation = [...(formData.education || [])];
+                                    newEducation[index].marks = e.target.value;
+                                    handleInputChange('education', newEducation);
+                                }}
+                            />
+                        </div>
+
+                        {/* Remove button for each education entry */}
+                        {index > 0 && (
+                            <div className="remove-education-container">
+                                <button 
+                                    type="button" 
+                                    onClick={() => {
+                                        const newEducation = [...(formData.education || [])];
+                                        newEducation.splice(index, 1);
+                                        handleInputChange('education', newEducation);
+                                    }} 
+                                    className="remove-education-button"
+                                >
+                                    Remove Education
+                                </button>
+                            </div>
+                        )}
+                    </div>
+                ))}
 
                 <div className="add-education-container">
-                    <button type="button" onClick={addEducationGroup} className="add-education-button">
+                    <button type="button" onClick={() => {
+                        const newEducation = [...(formData.education || [])];
+                        newEducation.push({ degree: '', board: '', year: '', marks: '' });
+                        handleInputChange('education', newEducation);
+                    }} className="add-education-button">
                         Add Education
                     </button>
                 </div>
@@ -227,96 +241,110 @@ function Form({ formData, updateFormData, markAsChanged }) {
             <div id="experience" className="experience-section">
                 <h3 className="section-title" onClick={() => toggleSection('experience')} >Experience</h3>
 
-                <div className="job-title-input-container input-group">
-                    <label htmlFor="job-title-input" className="job-title-label input-label">
-                        Job Title
-                    </label>
-                    <input
-                        id="job-title-input"
-                        className="job-title-input styled-input"
-                        type="text"
-                        name="jobTitle"
-                        placeholder="Enter your job title"
-                        value={formData.experience?.[0]?.jobTitle || ''}
-                        onChange={(e) => {
-                            const newExperience = [...(formData.experience || [])];
-                            if (newExperience.length === 0) {
-                                newExperience.push({ jobTitle: '', company: '', duration: '', jobDetails: '' });
-                            }
-                            newExperience[0].jobTitle = e.target.value;
-                            handleInputChange('experience', newExperience);
-                        }}
-                    />
-                </div>
+                {/* Render all experience entries dynamically */}
+                {(formData.experience || []).map((exp, index) => (
+                    <div key={index} className="experience-group">
+                        <div className="job-title-input-container input-group">
+                            <label htmlFor={`job-title-input-${index}`} className="job-title-label input-label">
+                                Job Title
+                            </label>
+                            <input
+                                id={`job-title-input-${index}`}
+                                className="job-title-input styled-input"
+                                type="text"
+                                name="jobTitle"
+                                placeholder="Enter your job title"
+                                value={exp.jobTitle || ''}
+                                onChange={(e) => {
+                                    const newExperience = [...(formData.experience || [])];
+                                    newExperience[index].jobTitle = e.target.value;
+                                    handleInputChange('experience', newExperience);
+                                }}
+                            />
+                        </div>
 
-                <div className="company-input-container input-group">
-                    <label htmlFor="company-input" className="company-label input-label">
-                        Company
-                    </label>
-                    <input
-                        id="company-input"
-                        className="company-input styled-input"
-                        type="text"
-                        name="company"
-                        placeholder="Enter your company"
-                        value={formData.experience?.[0]?.company || ''}
-                        onChange={(e) => {
-                            const newExperience = [...(formData.experience || [])];
-                            if (newExperience.length === 0) {
-                                newExperience.push({ jobTitle: '', company: '', duration: '', jobDetails: '' });
-                            }
-                            newExperience[0].company = e.target.value;
-                            handleInputChange('experience', newExperience);
-                        }}
-                    />
-                </div>
+                        <div className="company-input-container input-group">
+                            <label htmlFor={`company-input-${index}`} className="company-label input-label">
+                                Company
+                            </label>
+                            <input
+                                id={`company-input-${index}`}
+                                className="company-input styled-input"
+                                type="text"
+                                name="company"
+                                placeholder="Enter your company"
+                                value={exp.company || ''}
+                                onChange={(e) => {
+                                    const newExperience = [...(formData.experience || [])];
+                                    newExperience[index].company = e.target.value;
+                                    handleInputChange('experience', newExperience);
+                                }}
+                            />
+                        </div>
 
-                <div className="duration-input-container input-group">
-                    <label htmlFor="duration-input" className="duration-label input-label">
-                        Duration
-                    </label>
-                    <input
-                        id="duration-input"
-                        className="duration-input styled-input"
-                        type="text"
-                        name="duration"
-                        placeholder="Enter the duration"
-                        value={formData.experience?.[0]?.duration || ''}
-                        onChange={(e) => {
-                            const newExperience = [...(formData.experience || [])];
-                            if (newExperience.length === 0) {
-                                newExperience.push({ jobTitle: '', company: '', duration: '', jobDetails: '' });
-                            }
-                            newExperience[0].duration = e.target.value;
-                            handleInputChange('experience', newExperience);
-                        }}
-                    />
-                </div>
+                        <div className="duration-input-container input-group">
+                            <label htmlFor={`duration-input-${index}`} className="duration-label input-label">
+                                Duration
+                            </label>
+                            <input
+                                id={`duration-input-${index}`}
+                                className="duration-input styled-input"
+                                type="text"
+                                name="duration"
+                                placeholder="Enter the duration"
+                                value={exp.duration || ''}
+                                onChange={(e) => {
+                                    const newExperience = [...(formData.experience || [])];
+                                    newExperience[index].duration = e.target.value;
+                                    handleInputChange('experience', newExperience);
+                                }}
+                            />
+                        </div>
 
-                <div className="job-details-input-container input-group">
-                    <label htmlFor="job-details-textarea" className="job-details-label input-label">
-                        Job Details
-                    </label>
-                    <textarea
-                        id="job-details-textarea"
-                        className="job-details-textarea styled-input"
-                        name="jobDetails"
-                        placeholder="Enter details about your job"
-                        rows={2}
-                        value={formData.experience?.[0]?.jobDetails || ''}
-                        onChange={(e) => {
-                            const newExperience = [...(formData.experience || [])];
-                            if (newExperience.length === 0) {
-                                newExperience.push({ jobTitle: '', company: '', duration: '', jobDetails: '' });
-                            }
-                            newExperience[0].jobDetails = e.target.value;
-                            handleInputChange('experience', newExperience);
-                        }}
-                    />
-                </div>
+                        <div className="job-details-input-container input-group">
+                            <label htmlFor={`job-details-textarea-${index}`} className="job-details-label input-label">
+                                Job Details
+                            </label>
+                            <textarea
+                                id={`job-details-textarea-${index}`}
+                                className="job-details-textarea styled-input"
+                                name="jobDetails"
+                                placeholder="Enter details about your job"
+                                rows={2}
+                                value={exp.jobDetails || ''}
+                                onChange={(e) => {
+                                    const newExperience = [...(formData.experience || [])];
+                                    newExperience[index].jobDetails = e.target.value;
+                                    handleInputChange('experience', newExperience);
+                                }}
+                            />
+                        </div>
+
+                        {/* Remove button for each experience entry */}
+                        {index > 0 && (
+                            <div className="remove-experience-container">
+                                <button 
+                                    type="button" 
+                                    onClick={() => {
+                                        const newExperience = [...(formData.experience || [])];
+                                        newExperience.splice(index, 1);
+                                        handleInputChange('experience', newExperience);
+                                    }} 
+                                    className="remove-experience-button"
+                                >
+                                    Remove Experience
+                                </button>
+                            </div>
+                        )}
+                    </div>
+                ))}
 
                 <div className="add-experience-container">
-                    <button type="button" onClick={addExperienceGroup} className="add-experience-button">
+                    <button type="button" onClick={() => {
+                        const newExperience = [...(formData.experience || [])];
+                        newExperience.push({ jobTitle: '', company: '', duration: '', jobDetails: '' });
+                        handleInputChange('experience', newExperience);
+                    }} className="add-experience-button">
                         Add Experience
                     </button>
                 </div>
