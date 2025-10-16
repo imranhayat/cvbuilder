@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { supabase } from './index'
 import './AdminBulkCV.css'
 
@@ -22,12 +22,17 @@ const AdminBulkCV = () => {
   const [isCreating, setIsCreating] = useState(false)
   const [successMessage, setSuccessMessage] = useState('')
   const [errorMessage, setErrorMessage] = useState('')
+  const [autoSaveStatus, setAutoSaveStatus] = useState('')
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false)
+  const autoSaveTimeoutRef = useRef(null)
+  const lastSavedDataRef = useRef(null)
 
   const handleInputChange = (field, value) => {
     setCvData(prev => ({
       ...prev,
       [field]: value
     }))
+    setHasUnsavedChanges(true)
   }
 
   const handleArrayFieldChange = (field, index, value) => {
@@ -35,6 +40,7 @@ const AdminBulkCV = () => {
       ...prev,
       [field]: prev[field].map((item, i) => i === index ? value : item)
     }))
+    setHasUnsavedChanges(true)
   }
 
   const addArrayItem = (field) => {
@@ -42,6 +48,7 @@ const AdminBulkCV = () => {
       ...prev,
       [field]: [...prev[field], '']
     }))
+    setHasUnsavedChanges(true)
   }
 
   const removeArrayItem = (field, index) => {
@@ -49,7 +56,71 @@ const AdminBulkCV = () => {
       ...prev,
       [field]: prev[field].filter((_, i) => i !== index)
     }))
+    setHasUnsavedChanges(true)
   }
+
+  // Auto-save functionality
+  const autoSave = async () => {
+    if (!hasUnsavedChanges || !cvData.name.trim()) return
+
+    try {
+      setAutoSaveStatus('Saving...')
+      
+      // Save to localStorage as backup
+      localStorage.setItem('adminCvDraft', JSON.stringify(cvData))
+      
+      // Update last saved data reference
+      lastSavedDataRef.current = JSON.stringify(cvData)
+      setHasUnsavedChanges(false)
+      setAutoSaveStatus('Auto-saved')
+      
+      // Clear status after 2 seconds
+      setTimeout(() => setAutoSaveStatus(''), 2000)
+    } catch (err) {
+      console.error('Auto-save error:', err)
+      setAutoSaveStatus('Auto-save failed')
+      setTimeout(() => setAutoSaveStatus(''), 3000)
+    }
+  }
+
+  // Set up auto-save interval
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (hasUnsavedChanges && cvData.name.trim()) {
+        autoSave()
+      }
+    }, 10000) // Auto-save every 10 seconds
+
+    return () => clearInterval(interval)
+  }, [hasUnsavedChanges, cvData])
+
+  // Load saved draft on component mount
+  useEffect(() => {
+    const savedDraft = localStorage.getItem('adminCvDraft')
+    if (savedDraft) {
+      try {
+        const parsedDraft = JSON.parse(savedDraft)
+        setCvData(parsedDraft)
+        lastSavedDataRef.current = savedDraft
+        setAutoSaveStatus('Draft loaded')
+        setTimeout(() => setAutoSaveStatus(''), 2000)
+      } catch (err) {
+        console.error('Error loading draft:', err)
+      }
+    }
+  }, [])
+
+  // Save on page unload
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      if (hasUnsavedChanges && cvData.name.trim()) {
+        localStorage.setItem('adminCvDraft', JSON.stringify(cvData))
+      }
+    }
+
+    window.addEventListener('beforeunload', handleBeforeUnload)
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload)
+  }, [hasUnsavedChanges, cvData])
 
   const createCV = async () => {
     if (!cvData.name.trim()) {
@@ -105,6 +176,11 @@ const AdminBulkCV = () => {
       if (error) throw error
 
       setSuccessMessage(`CV for ${cvData.name} created successfully!`)
+      
+      // Clear saved draft
+      localStorage.removeItem('adminCvDraft')
+      setHasUnsavedChanges(false)
+      setAutoSaveStatus('')
       
       // Reset form
       setCvData({
@@ -168,6 +244,18 @@ const AdminBulkCV = () => {
       <div className="bulk-cv-header">
         <h2>Create CV for Customer</h2>
         <p>Fill in the details to create a CV for a customer</p>
+        <div className="auto-save-status">
+          {autoSaveStatus && (
+            <span className={`status-indicator ${autoSaveStatus.includes('failed') ? 'error' : 'success'}`}>
+              {autoSaveStatus}
+            </span>
+          )}
+          {hasUnsavedChanges && !autoSaveStatus && (
+            <span className="status-indicator warning">
+              Unsaved changes
+            </span>
+          )}
+        </div>
       </div>
 
       <div className="bulk-cv-form">
@@ -299,13 +387,22 @@ const AdminBulkCV = () => {
 
         {/* Submit Button */}
         <div className="form-actions">
-          <button
-            onClick={createCV}
-            disabled={isCreating || !cvData.name.trim()}
-            className="create-cv-button"
-          >
-            {isCreating ? 'Creating CV...' : `Create CV for ${cvData.name || 'Customer'}`}
-          </button>
+          <div className="action-buttons">
+            <button
+              onClick={autoSave}
+              disabled={!hasUnsavedChanges || !cvData.name.trim()}
+              className="save-draft-button"
+            >
+              Save Draft
+            </button>
+            <button
+              onClick={createCV}
+              disabled={isCreating || !cvData.name.trim()}
+              className="create-cv-button"
+            >
+              {isCreating ? 'Creating CV...' : `Create CV for ${cvData.name || 'Customer'}`}
+            </button>
+          </div>
         </div>
 
         {/* Messages */}
