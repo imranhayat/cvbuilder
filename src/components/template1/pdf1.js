@@ -23,9 +23,19 @@ const generatePDF = async () => {
       originalButton.disabled = true;
     }
 
-    // Configure html2canvas options
+    // Hide the download button and apply compact styling before capturing
+    const downloadButton = cvPreview.querySelector('.download-pdf-container');
+    const originalDisplay = downloadButton ? downloadButton.style.display : '';
+    if (downloadButton) {
+      downloadButton.style.display = 'none';
+    }
+
+    // Apply compact PDF mode styling
+    cvPreview.classList.add('pdf-mode');
+
+    // Configure html2canvas options for compact PDF
     const canvas = await html2canvas(cvPreview, {
-      scale: 3, // Reduced scale for better performance
+      scale: 2.5, // Optimized scale for compact PDF
       useCORS: true,
       allowTaint: true,
       backgroundColor: '#ffffff',
@@ -33,7 +43,9 @@ const generatePDF = async () => {
       scrollX: 0,
       scrollY: 0,
       width: cvPreview.scrollWidth,
-      height: cvPreview.scrollHeight
+      height: cvPreview.scrollHeight,
+      removeContainer: true,
+      foreignObjectRendering: true
     });
 
     console.log('Canvas generated, creating PDF...');
@@ -46,12 +58,12 @@ const generatePDF = async () => {
       format: 'a4'
     });
 
-    // Calculate dimensions - no margins, edge-to-edge
+    // Calculate dimensions - minimal margins for compact PDF
     const pageWidth = 210; // A4 width in mm
     const pageHeight = 297; // A4 height in mm
-    const margin = 0; // No margins - edge-to-edge
-    const contentWidth = pageWidth; // Full page width
-    const contentHeight = pageHeight; // Full page height
+    const margin = 2; // Minimal margins for compact layout
+    const contentWidth = pageWidth - (margin * 2); // Content width with minimal margins
+    const contentHeight = pageHeight - (margin * 2); // Content height with minimal margins
 
     // Calculate image dimensions
     const imgWidth = contentWidth;
@@ -59,7 +71,7 @@ const generatePDF = async () => {
 
     // If content fits in one page
     if (imgHeight <= contentHeight) {
-      pdf.addImage(imgData, 'JPEG', 0, 0, imgWidth, imgHeight);
+      pdf.addImage(imgData, 'JPEG', margin, margin, imgWidth, imgHeight);
     } else {
       // Multi-page handling
       const totalPages = Math.ceil(imgHeight / contentHeight);
@@ -89,9 +101,9 @@ const generatePDF = async () => {
           canvas.width, (pageImgHeight / imgHeight) * canvas.height
         );
         
-        // Add to PDF - no margins, edge-to-edge
+        // Add to PDF - minimal margins for compact layout
         const pageImgData = pageCanvas.toDataURL('image/jpeg', 0.8);
-        pdf.addImage(pageImgData, 'JPEG', 0, 0, imgWidth, pageImgHeight);
+        pdf.addImage(pageImgData, 'JPEG', margin, margin, imgWidth, pageImgHeight);
       }
     }
 
@@ -107,6 +119,12 @@ const generatePDF = async () => {
 
     console.log('PDF download completed');
 
+    // Restore the download button visibility and remove compact styling
+    if (downloadButton) {
+      downloadButton.style.display = originalDisplay;
+    }
+    cvPreview.classList.remove('pdf-mode');
+
     // Reset button
     if (originalButton) {
       originalButton.textContent = '📄 Download PDF';
@@ -116,6 +134,16 @@ const generatePDF = async () => {
   } catch (error) {
     console.error('Error generating PDF:', error);
     alert(`Error generating PDF: ${error.message}. Please try again.`);
+    
+    // Restore the download button visibility and remove compact styling on error
+    const downloadButton = document.querySelector('.download-pdf-container');
+    const cvPreview = document.querySelector('.cv-preview');
+    if (downloadButton) {
+      downloadButton.style.display = '';
+    }
+    if (cvPreview) {
+      cvPreview.classList.remove('pdf-mode');
+    }
     
     // Reset button on error
     const originalButton = document.querySelector('.download-pdf-button');
