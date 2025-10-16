@@ -350,7 +350,15 @@ function Form({ formData, updateFormData, markAsChanged }) {
                         className="communication-skills-input styled-input"
                         type="text"
                         name="communicationSkills"
-                        defaultValue="Communication Skills"
+                        value={formData.skills?.[0] || "Communication Skills"}
+                        onChange={(e) => {
+                            const newSkills = [...(formData.skills || [])];
+                            if (newSkills.length === 0) {
+                                newSkills.push("Communication Skills");
+                            }
+                            newSkills[0] = e.target.value;
+                            handleInputChange('skills', newSkills);
+                        }}
                     />
                 </div>
 
@@ -361,7 +369,15 @@ function Form({ formData, updateFormData, markAsChanged }) {
                         className="time-management-input styled-input"
                         type="text"
                         name="timeManagement"
-                        defaultValue="Time Management"
+                        value={formData.skills?.[1] || "Time Management"}
+                        onChange={(e) => {
+                            const newSkills = [...(formData.skills || [])];
+                            if (newSkills.length < 2) {
+                                newSkills.push("Time Management");
+                            }
+                            newSkills[1] = e.target.value;
+                            handleInputChange('skills', newSkills);
+                        }}
                     />
                 </div>
 
@@ -372,7 +388,15 @@ function Form({ formData, updateFormData, markAsChanged }) {
                         className="problem-solving-input styled-input"
                         type="text"
                         name="problemSolving"
-                        defaultValue="Problem Solving"
+                        value={formData.skills?.[2] || "Problem Solving"}
+                        onChange={(e) => {
+                            const newSkills = [...(formData.skills || [])];
+                            if (newSkills.length < 3) {
+                                newSkills.push("Problem Solving");
+                            }
+                            newSkills[2] = e.target.value;
+                            handleInputChange('skills', newSkills);
+                        }}
                     />
                 </div>
 
@@ -383,7 +407,15 @@ function Form({ formData, updateFormData, markAsChanged }) {
                         className="hardworking-input styled-input"
                         type="text"
                         name="hardworking"
-                        defaultValue="Hardworking"
+                        value={formData.skills?.[3] || "Hardworking"}
+                        onChange={(e) => {
+                            const newSkills = [...(formData.skills || [])];
+                            if (newSkills.length < 4) {
+                                newSkills.push("Hardworking");
+                            }
+                            newSkills[3] = e.target.value;
+                            handleInputChange('skills', newSkills);
+                        }}
                     />
                 </div>
 
@@ -492,7 +524,15 @@ function Form({ formData, updateFormData, markAsChanged }) {
                         className="english-language-input styled-input"
                         type="text"
                         name="englishLanguage"
-                        defaultValue="English"
+                        value={formData.languages?.[0] || "English"}
+                        onChange={(e) => {
+                            const newLanguages = [...(formData.languages || [])];
+                            if (newLanguages.length === 0) {
+                                newLanguages.push("English");
+                            }
+                            newLanguages[0] = e.target.value;
+                            handleInputChange('languages', newLanguages);
+                        }}
                     />
                 </div>
 
@@ -502,7 +542,15 @@ function Form({ formData, updateFormData, markAsChanged }) {
                         className="urdu-language-input styled-input"
                         type="text"
                         name="urduLanguage"
-                        defaultValue="Urdu"
+                        value={formData.languages?.[1] || "Urdu"}
+                        onChange={(e) => {
+                            const newLanguages = [...(formData.languages || [])];
+                            if (newLanguages.length < 2) {
+                                newLanguages.push("Urdu");
+                            }
+                            newLanguages[1] = e.target.value;
+                            handleInputChange('languages', newLanguages);
+                        }}
                     />
                 </div>
 
@@ -512,7 +560,15 @@ function Form({ formData, updateFormData, markAsChanged }) {
                         className="punjabi-language-input styled-input"
                         type="text"
                         name="punjabiLanguage"
-                        defaultValue="Punjabi"
+                        value={formData.languages?.[2] || "Punjabi"}
+                        onChange={(e) => {
+                            const newLanguages = [...(formData.languages || [])];
+                            if (newLanguages.length < 3) {
+                                newLanguages.push("Punjabi");
+                            }
+                            newLanguages[2] = e.target.value;
+                            handleInputChange('languages', newLanguages);
+                        }}
                     />
                 </div>
 
