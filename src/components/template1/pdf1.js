@@ -25,7 +25,7 @@ const generatePDF = async () => {
 
     // Configure html2canvas options
     const canvas = await html2canvas(cvPreview, {
-      scale: 2, // Reduced scale for better performance
+      scale: 3, // Reduced scale for better performance
       useCORS: true,
       allowTaint: true,
       backgroundColor: '#ffffff',

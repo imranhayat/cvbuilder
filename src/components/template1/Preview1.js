@@ -85,7 +85,7 @@ function Preview1({ formData: propFormData, autoSaveStatus, hasUnsavedChanges })
         )}
 
         {/* Experience Section */}
-        {formData.experience && formData.experience.length > 0 && (
+        {(formData.experience && formData.experience.length > 0) && (
           <div className="cv-section">
             <h3 className="section-heading">Experience</h3>
             <div className="section-content">

@@ -13,7 +13,21 @@ function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [selectedTemplate, setSelectedTemplate] = useState('template1');
   const [currentView, setCurrentView] = useState('dashboard');
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState({
+    name: '',
+    position: '',
+    phone: '',
+    email: '',
+    address: '',
+    professionalSummary: '',
+    education: [],
+    experience: [],
+    skills: [],
+    certifications: [],
+    languages: [],
+    hobbies: [],
+    references: []
+  });
   const [autoSaveStatus, setAutoSaveStatus] = useState('');
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
 
