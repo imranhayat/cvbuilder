@@ -23,14 +23,12 @@ function Form({ formData, updateFormData, markAsChanged }) {
         initializeForm();
     }, [initializeForm]);
 
-    // Sync local reference input with form data
+    // Initialize local reference input with form data on mount
     useEffect(() => {
         if (formData.references && formData.references.length > 0) {
             setReferenceInput(formData.references[0]);
-        } else {
-            setReferenceInput('');
         }
-    }, [formData.references]);
+    }, []); // Only run on mount
 
     // Listen for references updates from dynamically added inputs
     useEffect(() => {
@@ -707,9 +705,10 @@ function Form({ formData, updateFormData, markAsChanged }) {
                         placeholder="References would be furnished on demand."
                         value={referenceInput}
                         onChange={(e) => {
-                            setReferenceInput(e.target.value);
+                            const value = e.target.value;
+                            setReferenceInput(value);
                             // Update form data with the new reference
-                            const newReferences = e.target.value.trim() ? [e.target.value] : [];
+                            const newReferences = value.trim() ? [value] : [];
                             handleInputChange('references', newReferences);
                         }}
                     />
