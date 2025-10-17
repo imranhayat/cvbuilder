@@ -16,7 +16,7 @@ function Preview1({ formData: propFormData, autoSaveStatus, hasUnsavedChanges })
     phone: formData.phone || '+1 234 567 8900',
     email: formData.email || 'john.doe@email.com',
     address: formData.address || '123 Main St, City, State',
-    professionalSummary: formData.professionalSummary || 'Experienced software developer with expertise in modern web technologies.',
+    professionalSummary: formData.professionalSummary || 'To work with a organization that offers a creative, dynamic and professional environment, where my education, knowledge, skills and proven abilities can be fully utilized and which also offers learning opportunities for my career development in the long run.',
     education: formData.education && formData.education.length > 0 ? formData.education : [
       { degree: 'Bachelor of Computer Science', board: 'University of Technology', year: '2020', marks: '3.8/4.0' }
     ],
