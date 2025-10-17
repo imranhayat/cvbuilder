@@ -27,7 +27,7 @@ function Preview1({ formData: propFormData, autoSaveStatus, hasUnsavedChanges })
     certifications: formData.certifications && formData.certifications.length > 0 ? formData.certifications : [],
     languages: formData.languages && formData.languages.length > 0 ? formData.languages : ['English', 'Urdu', 'Punjabi'],
     hobbies: formData.hobbies && formData.hobbies.length > 0 ? formData.hobbies : [],
-    otherInfo: formData.otherInfo && formData.otherInfo.length > 0 ? formData.otherInfo : [],
+    otherInfo: formData.otherInfo && formData.otherInfo.length > 0 ? formData.otherInfo.filter(info => info.value && info.value.trim() !== '') : [],
     customSection: formData.customSection && formData.customSection.length > 0 ? formData.customSection : [],
     references: formData.references && formData.references.length > 0 ? formData.references : ['References would be furnished on demand.']
   };
