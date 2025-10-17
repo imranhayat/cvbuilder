@@ -1,5 +1,35 @@
 
-const useFormHandler = () => {
+import { useState, useEffect } from 'react';
+
+const useFormHandler = (formData, updateFormData, markAsChanged) => {
+    // Local state for references input
+    const [referenceText, setReferenceText] = useState('References would be furnished on demand.');
+
+    // Handle input changes and trigger auto-save
+    const handleInputChange = (field, value) => {
+        console.log('Form1 - handleInputChange called:', field, value);
+        const newFormData = { ...formData, [field]: value };
+        console.log('Form1 - newFormData:', newFormData);
+        console.log('Form1 - References in newFormData:', newFormData.references);
+        updateFormData(newFormData);
+        markAsChanged();
+    };
+
+    // Handle references input change
+    const handleReferenceChange = (e) => {
+        const value = e.target.value;
+        setReferenceText(value);
+        const newFormData = { ...formData, references: value.trim() ? [value] : [] };
+        updateFormData(newFormData);
+        markAsChanged();
+    };
+
+    // Sync local reference text with form data
+    useEffect(() => {
+        if (formData.references && formData.references.length > 0) {
+            setReferenceText(formData.references[0]);
+        }
+    }, [formData.references]);
     // Function to toggle section visibility with beautiful list style
     const toggleSection = (sectionId) => {
         // Get all sections
@@ -288,7 +318,10 @@ const useFormHandler = () => {
         addLanguageInput,
         addHobbyInput,
         addCustomSectionDetail,
-        addReferenceInput
+        addReferenceInput,
+        handleInputChange,
+        handleReferenceChange,
+        referenceText
     };
 };
 

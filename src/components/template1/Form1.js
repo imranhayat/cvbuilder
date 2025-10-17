@@ -1,43 +1,27 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import useFormHandler from './FormHandler1';
 import './Form1.css';
 
 function Form({ formData, updateFormData, markAsChanged }) {
-    const { toggleSection, initializeForm, addSkillInput, addCertificationInput, addCustomInformation, addLanguageInput, addHobbyInput, addCustomSectionDetail, addReferenceInput } = useFormHandler();
-    
-    // Local state for references input
-    const [referenceText, setReferenceText] = useState('References would be furnished on demand.');
-
-    // Handle input changes and trigger auto-save
-    const handleInputChange = (field, value) => {
-        console.log('Form1 - handleInputChange called:', field, value);
-        const newFormData = { ...formData, [field]: value };
-        console.log('Form1 - newFormData:', newFormData);
-        console.log('Form1 - References in newFormData:', newFormData.references);
-        updateFormData(newFormData);
-        markAsChanged();
-    };
-
-    // Handle references input change
-    const handleReferenceChange = (e) => {
-        const value = e.target.value;
-        setReferenceText(value);
-        const newFormData = { ...formData, references: value.trim() ? [value] : [] };
-        updateFormData(newFormData);
-        markAsChanged();
-    };
+    const { 
+        toggleSection, 
+        initializeForm, 
+        addSkillInput, 
+        addCertificationInput, 
+        addCustomInformation, 
+        addLanguageInput, 
+        addHobbyInput, 
+        addCustomSectionDetail, 
+        addReferenceInput,
+        handleInputChange,
+        handleReferenceChange,
+        referenceText
+    } = useFormHandler(formData, updateFormData, markAsChanged);
 
     // Initialize form on component mount
     useEffect(() => {
         initializeForm();
     }, [initializeForm]);
-
-    // Sync local reference text with form data
-    useEffect(() => {
-        if (formData.references && formData.references.length > 0) {
-            setReferenceText(formData.references[0]);
-        }
-    }, [formData.references]);
     return (
         <div className="left-container">
             <div id="contact-info" className="contact-info-section">
@@ -689,13 +673,13 @@ function Form({ formData, updateFormData, markAsChanged }) {
                 <h3 className="section-title" onClick={() => toggleSection('references')}>References</h3>
 
                 <div className="reference-input-container input-group">
-                    <textarea
+                    <input
                         id="reference-input"
                         className="reference-input styled-input"
+                        type="text"
                         name="reference"
                         placeholder="References would be furnished on demand."
                         value={referenceText}
-                        rows="3"
                         onChange={handleReferenceChange}
                     />
                 </div>
