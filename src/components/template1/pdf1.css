@@ -58,9 +58,13 @@
   font-family: 'Arial', sans-serif;
 }
 
-.cv-preview.pdf-mode .experience-company,
-.cv-preview.pdf-mode .education-institution {
+.cv-preview.pdf-mode .experience-company {
   font-size: 1rem;
+  font-family: 'Arial', sans-serif;
+}
+
+.cv-preview.pdf-mode .education-institution {
+  font-size: 1.1rem;
   font-family: 'Arial', sans-serif;
 }
 
