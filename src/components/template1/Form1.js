@@ -1,9 +1,19 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import useFormHandler from './FormHandler1';
 import './Form1.css';
 
 function Form({ formData, updateFormData, markAsChanged }) {
-    const { toggleSection, initializeForm, addEducationGroup, addExperienceGroup, addSkillInput, addCertificationInput, addCustomInformation, addLanguageInput, addHobbyInput, addCustomSectionDetail, addReferenceInput } = useFormHandler();
+    const { toggleSection, initializeForm, addSkillInput, addCertificationInput, addCustomInformation, addLanguageInput, addHobbyInput, addCustomSectionDetail, addReferenceInput } = useFormHandler();
+
+    // Handle input changes and trigger auto-save
+    const handleInputChange = useCallback((field, value) => {
+        console.log('Form1 - handleInputChange called:', field, value);
+        const newFormData = { ...formData, [field]: value };
+        console.log('Form1 - newFormData:', newFormData);
+        console.log('Form1 - References in newFormData:', newFormData.references);
+        updateFormData(newFormData);
+        markAsChanged();
+    }, [formData, updateFormData, markAsChanged]);
 
     // Initialize form on component mount
     useEffect(() => {
@@ -23,16 +33,6 @@ function Form({ formData, updateFormData, markAsChanged }) {
             document.removeEventListener('referencesUpdated', handleReferencesUpdate);
         };
     }, [handleInputChange]);
-
-    // Handle input changes and trigger auto-save
-    const handleInputChange = (field, value) => {
-        console.log('Form1 - handleInputChange called:', field, value);
-        const newFormData = { ...formData, [field]: value };
-        console.log('Form1 - newFormData:', newFormData);
-        console.log('Form1 - References in newFormData:', newFormData.references);
-        updateFormData(newFormData);
-        markAsChanged();
-    };
     return (
         <div className="left-container">
             <div id="contact-info" className="contact-info-section">
