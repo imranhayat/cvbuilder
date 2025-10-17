@@ -600,14 +600,17 @@ function Form({ formData, updateFormData, markAsChanged }) {
                     />
                 </div>
 
-                {/* Custom information fields */}
-                {formData.otherInfo && formData.otherInfo.map((info, index) => (
-                    <div key={index} className="custom-info-container input-group">
+                {/* Custom information fields - only show non-standard fields */}
+                {formData.otherInfo && formData.otherInfo
+                    .map((info, originalIndex) => ({ info, originalIndex }))
+                    .filter(({ info }) => !['Father\'s Name', 'Husband\'s Name', 'CNIC', 'Date of Birth', 'Marital Status', 'Religion'].includes(info.label))
+                    .map(({ info, originalIndex }, displayIndex) => (
+                    <div key={originalIndex} className="custom-info-container input-group">
                         <div className="custom-info-wrapper">
                             <div className="custom-label-input">
-                                <label htmlFor={`custom-label-${index}`} className="custom-label">Label:</label>
+                                <label htmlFor={`custom-label-${originalIndex}`} className="custom-label">Label:</label>
                                 <input
-                                    id={`custom-label-${index}`}
+                                    id={`custom-label-${originalIndex}`}
                                     className="custom-label-input-field styled-input"
                                     type="text"
                                     name="customLabel"
@@ -615,15 +618,15 @@ function Form({ formData, updateFormData, markAsChanged }) {
                                     value={info.label || ''}
                                     onChange={(e) => {
                                         const newOtherInfo = [...(formData.otherInfo || [])];
-                                        newOtherInfo[index].label = e.target.value;
+                                        newOtherInfo[originalIndex].label = e.target.value;
                                         handleInputChange('otherInfo', newOtherInfo);
                                     }}
                                 />
                             </div>
                             <div className="custom-value-input">
-                                <label htmlFor={`custom-value-${index}`} className="custom-label">Value:</label>
+                                <label htmlFor={`custom-value-${originalIndex}`} className="custom-label">Value:</label>
                                 <input
-                                    id={`custom-value-${index}`}
+                                    id={`custom-value-${originalIndex}`}
                                     className="custom-value-input-field styled-input"
                                     type="text"
                                     name="customValue"
@@ -631,7 +634,7 @@ function Form({ formData, updateFormData, markAsChanged }) {
                                     value={info.value || ''}
                                     onChange={(e) => {
                                         const newOtherInfo = [...(formData.otherInfo || [])];
-                                        newOtherInfo[index].value = e.target.value;
+                                        newOtherInfo[originalIndex].value = e.target.value;
                                         handleInputChange('otherInfo', newOtherInfo);
                                     }}
                                 />
@@ -641,7 +644,7 @@ function Form({ formData, updateFormData, markAsChanged }) {
                                 className="remove-custom-button"
                                 onClick={() => {
                                     const newOtherInfo = [...(formData.otherInfo || [])];
-                                    newOtherInfo.splice(index, 1);
+                                    newOtherInfo.splice(originalIndex, 1);
                                     handleInputChange('otherInfo', newOtherInfo);
                                 }}
                             >
