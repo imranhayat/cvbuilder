@@ -51,6 +51,9 @@ function Preview1({ formData: propFormData, autoSaveStatus, hasUnsavedChanges })
   console.log('Preview1 - Form Data References Length:', formData.references?.length);
   console.log('Preview1 - Display Data References:', displayData.references);
   console.log('Preview1 - References condition check:', formData.references && formData.references.length > 0);
+  console.log('Preview1 - References section should render:', displayData.references && displayData.references.length > 0);
+  console.log('Preview1 - References displayData content:', displayData.references);
+  console.log('Preview1 - References formData content:', formData.references);
   console.log('Preview1 - Experience data:', formData.experience);
   console.log('Preview1 - Experience length:', formData.experience?.length);
   console.log('Preview1 - Experience first item:', formData.experience?.[0]);

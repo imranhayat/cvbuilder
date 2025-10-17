@@ -8,7 +8,7 @@ function Form({ formData, updateFormData, markAsChanged }) {
     // Initialize form on component mount
     useEffect(() => {
         initializeForm();
-    }, []);
+    }, [initializeForm]);
 
     // Listen for references updates from dynamically added inputs
     useEffect(() => {
@@ -22,13 +22,14 @@ function Form({ formData, updateFormData, markAsChanged }) {
         return () => {
             document.removeEventListener('referencesUpdated', handleReferencesUpdate);
         };
-    }, []);
+    }, [handleInputChange]);
 
     // Handle input changes and trigger auto-save
     const handleInputChange = (field, value) => {
         console.log('Form1 - handleInputChange called:', field, value);
         const newFormData = { ...formData, [field]: value };
         console.log('Form1 - newFormData:', newFormData);
+        console.log('Form1 - References in newFormData:', newFormData.references);
         updateFormData(newFormData);
         markAsChanged();
     };
@@ -688,10 +689,12 @@ function Form({ formData, updateFormData, markAsChanged }) {
                         className="reference-input styled-input"
                         type="text"
                         name="reference"
-                        defaultValue="References would be furnished on demand."
+                        value={formData.references && formData.references.length > 0 ? formData.references[0] : "References would be furnished on demand."}
                         onChange={(e) => {
+                            console.log('Form1 - Reference input changed:', e.target.value);
                             const allRefInputs = document.querySelectorAll('.references-section .reference-input');
                             const references = Array.from(allRefInputs).map(input => input.value).filter(value => value.trim() !== '');
+                            console.log('Form1 - All references:', references);
                             handleInputChange('references', references);
                         }}
                     />
