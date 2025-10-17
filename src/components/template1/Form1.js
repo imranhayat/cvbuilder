@@ -1,10 +1,12 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import useFormHandler from './FormHandler1';
 import './Form1.css';
 
 function Form({ formData, updateFormData, markAsChanged }) {
     const { toggleSection, initializeForm, addSkillInput, addCertificationInput, addCustomInformation, addLanguageInput, addHobbyInput, addCustomSectionDetail, addReferenceInput } = useFormHandler();
     
+    // Local state for references input
+    const [referenceText, setReferenceText] = useState('References would be furnished on demand.');
 
     // Handle input changes and trigger auto-save
     const handleInputChange = (field, value) => {
@@ -16,10 +18,26 @@ function Form({ formData, updateFormData, markAsChanged }) {
         markAsChanged();
     };
 
+    // Handle references input change
+    const handleReferenceChange = (e) => {
+        const value = e.target.value;
+        setReferenceText(value);
+        const newFormData = { ...formData, references: value.trim() ? [value] : [] };
+        updateFormData(newFormData);
+        markAsChanged();
+    };
+
     // Initialize form on component mount
     useEffect(() => {
         initializeForm();
     }, [initializeForm]);
+
+    // Sync local reference text with form data
+    useEffect(() => {
+        if (formData.references && formData.references.length > 0) {
+            setReferenceText(formData.references[0]);
+        }
+    }, [formData.references]);
     return (
         <div className="left-container">
             <div id="contact-info" className="contact-info-section">
@@ -672,19 +690,13 @@ function Form({ formData, updateFormData, markAsChanged }) {
 
                 <div className="reference-input-container input-group">
                     <textarea
-                        key="reference-textarea"
                         id="reference-input"
                         className="reference-input styled-input"
                         name="reference"
                         placeholder="References would be furnished on demand."
-                        defaultValue="References would be furnished on demand."
+                        value={referenceText}
                         rows="3"
-                        onChange={(e) => {
-                            const value = e.target.value;
-                            const newFormData = { ...formData, references: value.trim() ? [value] : [] };
-                            updateFormData(newFormData);
-                            markAsChanged();
-                        }}
+                        onChange={handleReferenceChange}
                     />
                 </div>
 
