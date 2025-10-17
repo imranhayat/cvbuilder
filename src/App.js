@@ -38,9 +38,6 @@ function App() {
     try {
       setAutoSaveStatus('Saving...');
       
-      // Save to localStorage as backup
-      localStorage.setItem('cvBuilderDraft', JSON.stringify(formData));
-      
       setHasUnsavedChanges(false);
       setAutoSaveStatus('Auto-saved');
       
@@ -65,39 +62,14 @@ function App() {
   }, [hasUnsavedChanges, formData]);
 
   // Load saved draft on component mount
-  useEffect(() => {
-    const savedDraft = localStorage.getItem('cvBuilderDraft');
-    if (savedDraft) {
-      try {
-        const parsedDraft = JSON.parse(savedDraft);
-        if (parsedDraft.name?.trim()) {
-          setFormData(parsedDraft);
-          setAutoSaveStatus('Draft loaded');
-          setTimeout(() => setAutoSaveStatus(''), 2000);
-        }
-      } catch (err) {
-        console.error('Error loading draft:', err);
-      }
-    }
-  }, []);
+  // Removed localStorage loading - form data will reset on page reload
 
-  // Save on page unload
-  useEffect(() => {
-    const handleBeforeUnload = () => {
-      if (hasUnsavedChanges && formData.name?.trim()) {
-        localStorage.setItem('cvBuilderDraft', JSON.stringify(formData));
-      }
-    };
-
-    window.addEventListener('beforeunload', handleBeforeUnload);
-    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
-  }, [hasUnsavedChanges, formData]);
+  // Removed localStorage saving on page unload - form data will reset on page reload
 
   // Auto-save happens automatically every 10 seconds
 
   // Clear draft function
   const clearDraft = () => {
-    localStorage.removeItem('cvBuilderDraft');
     setHasUnsavedChanges(false);
     setAutoSaveStatus('');
     setFormData({});
