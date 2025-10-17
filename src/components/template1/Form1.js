@@ -407,7 +407,7 @@ function Form({ formData, updateFormData, markAsChanged }) {
             <div id="skills" className={`skills-section ${activeSection === 'skills' ? 'active' : ''}`}>
                 <h3 className="section-title" onClick={() => toggleSection('skills')} >Skills</h3>
 
-                {formData.skills && formData.skills.map((skill, index) => (
+                {(formData.skills && formData.skills.length > 0 ? formData.skills : ['Communication Skills', 'Time Management', 'Problem Solving', 'Hardworking']).map((skill, index) => (
                     <div key={index} className="skill-input-container input-group">
                         <div className="skill-input-wrapper">
                             <input
@@ -418,7 +418,8 @@ function Form({ formData, updateFormData, markAsChanged }) {
                                 placeholder="Enter a skill"
                                 value={skill}
                                 onChange={(e) => {
-                                    const newSkills = [...(formData.skills || [])];
+                                    const currentSkills = formData.skills && formData.skills.length > 0 ? formData.skills : ['Communication Skills', 'Time Management', 'Problem Solving', 'Hardworking'];
+                                    const newSkills = [...currentSkills];
                                     newSkills[index] = e.target.value;
                                     handleInputChange('skills', newSkills);
                                 }}
@@ -427,7 +428,8 @@ function Form({ formData, updateFormData, markAsChanged }) {
                                 type="button" 
                                 className="remove-skill-button"
                                 onClick={() => {
-                                    const newSkills = [...(formData.skills || [])];
+                                    const currentSkills = formData.skills && formData.skills.length > 0 ? formData.skills : ['Communication Skills', 'Time Management', 'Problem Solving', 'Hardworking'];
+                                    const newSkills = [...currentSkills];
                                     newSkills.splice(index, 1);
                                     handleInputChange('skills', newSkills);
                                 }}
