@@ -421,7 +421,9 @@ function Form({ formData, updateFormData, markAsChanged }) {
                                     const currentSkills = formData.skills && formData.skills.length > 0 ? formData.skills : ['Communication Skills', 'Time Management', 'Problem Solving', 'Hardworking'];
                                     const newSkills = [...currentSkills];
                                     newSkills[index] = e.target.value;
-                                    handleInputChange('skills', newSkills);
+                                    // Filter out empty skills
+                                    const filteredSkills = newSkills.filter(skill => skill && skill.trim() !== '');
+                                    handleInputChange('skills', filteredSkills);
                                 }}
                             />
                             <button 
@@ -431,7 +433,9 @@ function Form({ formData, updateFormData, markAsChanged }) {
                                     const currentSkills = formData.skills && formData.skills.length > 0 ? formData.skills : ['Communication Skills', 'Time Management', 'Problem Solving', 'Hardworking'];
                                     const newSkills = [...currentSkills];
                                     newSkills.splice(index, 1);
-                                    handleInputChange('skills', newSkills);
+                                    // Filter out empty skills
+                                    const filteredSkills = newSkills.filter(skill => skill && skill.trim() !== '');
+                                    handleInputChange('skills', filteredSkills);
                                 }}
                             >
                                 Remove
