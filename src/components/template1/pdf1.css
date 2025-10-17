@@ -15,8 +15,8 @@
 }
 
 .cv-preview.pdf-mode .profile-image-container {
-  width: 60px;
-  height: 60px;
+  width: 100px;
+  height: 100px;
 }
 
 .cv-preview.pdf-mode .cv-section {
@@ -127,5 +127,35 @@
 
 .cv-preview.pdf-mode .references-list li {
   margin-bottom: 1px;
+  font-family: 'Arial', sans-serif;
+}
+
+/* Compact pill styles for PDF */
+.cv-preview.pdf-mode .skill-pill,
+.cv-preview.pdf-mode .language-pill,
+.cv-preview.pdf-mode .hobby-pill {
+  padding: 2px 6px;
+  border-radius: 12px;
+  font-size: 0.6rem;
+  margin: 1px 2px 1px 0;
+  display: inline-block;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  font-family: 'Arial', sans-serif;
+  line-height: 1.2;
+}
+
+.cv-preview.pdf-mode .skill-pill:hover,
+.cv-preview.pdf-mode .language-pill:hover,
+.cv-preview.pdf-mode .hobby-pill:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+.cv-preview.pdf-mode .skill-name,
+.cv-preview.pdf-mode .language-name,
+.cv-preview.pdf-mode .hobby-name {
+  color: white;
+  font-size: 0.6rem;
   font-family: 'Arial', sans-serif;
 }
