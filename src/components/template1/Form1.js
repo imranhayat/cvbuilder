@@ -23,6 +23,8 @@ function Form({ formData, updateFormData, markAsChanged }) {
     useEffect(() => {
         initializeForm();
     }, [initializeForm]);
+
+    // Debug logs removed for cleaner console
     return (
         <div className="left-container">
             <div id="contact-info" className={`contact-info-section ${activeSection === 'contact-info' ? 'active' : ''}`}>
