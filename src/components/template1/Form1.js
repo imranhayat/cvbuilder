@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import useFormHandler from './FormHandler1';
 import './Form1.css';
 
 function Form({ formData, updateFormData, markAsChanged }) {
     const { toggleSection, initializeForm, addSkillInput, addCertificationInput, addCustomInformation, addLanguageInput, addHobbyInput, addCustomSectionDetail, addReferenceInput } = useFormHandler();
     
-    // Local state for reference input to prevent disappearing text
-    const [referenceInput, setReferenceInput] = useState('');
+    // Ref for reference input to prevent disappearing text
+    const referenceInputRef = useRef(null);
 
     // Handle input changes and trigger auto-save
     const handleInputChange = (field, value) => {
@@ -23,10 +23,10 @@ function Form({ formData, updateFormData, markAsChanged }) {
         initializeForm();
     }, [initializeForm]);
 
-    // Initialize local reference input with form data on mount
+    // Initialize reference input with form data on mount
     useEffect(() => {
-        if (formData.references && formData.references.length > 0) {
-            setReferenceInput(formData.references[0]);
+        if (referenceInputRef.current && formData.references && formData.references.length > 0) {
+            referenceInputRef.current.value = formData.references[0];
         }
     }, []); // Only run on mount
 
@@ -698,15 +698,15 @@ function Form({ formData, updateFormData, markAsChanged }) {
 
                 <div className="reference-input-container input-group">
                     <input
+                        ref={referenceInputRef}
                         id="reference-input"
                         className="reference-input styled-input"
                         type="text"
                         name="reference"
                         placeholder="References would be furnished on demand."
-                        value={referenceInput}
+                        defaultValue={formData.references && formData.references.length > 0 ? formData.references[0] : ""}
                         onChange={(e) => {
                             const value = e.target.value;
-                            setReferenceInput(value);
                             // Update form data with the new reference
                             const newReferences = value.trim() ? [value] : [];
                             handleInputChange('references', newReferences);
