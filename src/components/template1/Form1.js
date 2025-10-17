@@ -692,12 +692,11 @@ function Form({ formData, updateFormData, markAsChanged }) {
                         className="reference-input styled-input"
                         type="text"
                         name="reference"
-                        value={formData.references && formData.references.length > 0 ? formData.references[0] : "References would be furnished on demand."}
+                        placeholder="References would be furnished on demand."
+                        value={formData.references && formData.references.length > 0 ? formData.references[0] : ""}
                         onChange={(e) => {
-                            console.log('Form1 - Reference input changed:', e.target.value);
                             const allRefInputs = document.querySelectorAll('.references-section .reference-input');
                             const references = Array.from(allRefInputs).map(input => input.value).filter(value => value.trim() !== '');
-                            console.log('Form1 - All references:', references);
                             handleInputChange('references', references);
                         }}
                     />

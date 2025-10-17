@@ -37,27 +37,7 @@ function Preview1({ formData: propFormData, autoSaveStatus, hasUnsavedChanges })
   const contactInfo = formatContactInfo();
   
   // Debug: Log all form data
-  console.log('Preview1 - Full form data:', formData);
-  console.log('Preview1 - Name:', formData.name);
-  console.log('Preview1 - Professional Summary:', formData.professionalSummary);
-  console.log('Preview1 - Display Data Professional Summary:', displayData.professionalSummary);
-  console.log('Preview1 - References data:', formData.references);
-  console.log('Preview1 - References length:', formData.references?.length);
-  console.log('Preview1 - Display Data References:', displayData.references);
-  console.log('Preview1 - Certifications data:', formData.certifications);
-  console.log('Preview1 - Certifications length:', formData.certifications?.length);
-  console.log('Preview1 - Display Data Certifications:', displayData.certifications);
-  console.log('Preview1 - Form Data References:', formData.references);
-  console.log('Preview1 - Form Data References Length:', formData.references?.length);
-  console.log('Preview1 - Display Data References:', displayData.references);
-  console.log('Preview1 - References condition check:', formData.references && formData.references.length > 0);
-  console.log('Preview1 - References section should render:', displayData.references && displayData.references.length > 0);
-  console.log('Preview1 - References displayData content:', displayData.references);
-  console.log('Preview1 - References formData content:', formData.references);
-  console.log('Preview1 - Experience data:', formData.experience);
-  console.log('Preview1 - Experience length:', formData.experience?.length);
-  console.log('Preview1 - Experience first item:', formData.experience?.[0]);
-  console.log('Preview1 - Experience condition check:', formData.experience && formData.experience.length > 0);
+  // Debug logs removed for cleaner console
 
   return (
     <div className="right-container">
