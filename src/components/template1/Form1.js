@@ -1,12 +1,16 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import useFormHandler from './FormHandler1';
 import './Form1.css';
 
 function Form({ formData, updateFormData, markAsChanged }) {
     const { toggleSection, initializeForm, addSkillInput, addCertificationInput, addCustomInformation, addLanguageInput, addHobbyInput, addCustomSectionDetail, addReferenceInput } = useFormHandler();
     
-    // Ref for reference input to prevent disappearing text
-    const referenceInputRef = useRef(null);
+    // Simple reference input handler
+    const handleReferenceChange = (value) => {
+        const newFormData = { ...formData, references: value.trim() ? [value] : [] };
+        updateFormData(newFormData);
+        markAsChanged();
+    };
 
     // Handle input changes and trigger auto-save
     const handleInputChange = (field, value) => {
@@ -22,25 +26,6 @@ function Form({ formData, updateFormData, markAsChanged }) {
     useEffect(() => {
         initializeForm();
     }, [initializeForm]);
-
-    // No need to sync with form data - let the input manage its own value
-
-    // Listen for references updates from dynamically added inputs
-    useEffect(() => {
-        const handleReferencesUpdate = (event) => {
-            console.log('Form1 - References updated:', event.detail.references);
-            const newFormData = { ...formData, references: event.detail.references };
-            console.log('Form1 - newFormData from event:', newFormData);
-            updateFormData(newFormData);
-            markAsChanged();
-        };
-
-        document.addEventListener('referencesUpdated', handleReferencesUpdate);
-        
-        return () => {
-            document.removeEventListener('referencesUpdated', handleReferencesUpdate);
-        };
-    }, [formData, updateFormData, markAsChanged]);
     return (
         <div className="left-container">
             <div id="contact-info" className="contact-info-section">
@@ -689,23 +674,17 @@ function Form({ formData, updateFormData, markAsChanged }) {
             </div>
 
             <div id="references" className="references-section">
-                <h3 className="section-title" onClick={() => toggleSection('references')} >References</h3>
+                <h3 className="section-title" onClick={() => toggleSection('references')}>References</h3>
 
                 <div className="reference-input-container input-group">
                     <input
-                        ref={referenceInputRef}
                         id="reference-input"
                         className="reference-input styled-input"
                         type="text"
                         name="reference"
                         placeholder="References would be furnished on demand."
                         defaultValue="References would be furnished on demand."
-                        onChange={(e) => {
-                            const value = e.target.value;
-                            // Update form data with the new reference
-                            const newReferences = value.trim() ? [value] : [];
-                            handleInputChange('references', newReferences);
-                        }}
+                        onChange={(e) => handleReferenceChange(e.target.value)}
                     />
                 </div>
 
