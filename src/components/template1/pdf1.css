@@ -1,0 +1,131 @@
+/* PDF Generation Styles for Template 1 */
+
+/* Ultra-compact layout for PDF generation */
+.cv-preview.pdf-mode {
+  padding: 3px;
+  min-height: auto;
+  line-height: 1.1;
+  font-family: 'Arial', sans-serif;
+}
+
+.cv-preview.pdf-mode .cv-header {
+  gap: 10px;
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+}
+
+.cv-preview.pdf-mode .profile-image-container {
+  width: 60px;
+  height: 60px;
+}
+
+.cv-preview.pdf-mode .cv-section {
+  margin-bottom: 8px;
+}
+
+.cv-preview.pdf-mode .section-heading {
+  margin-bottom: 3px;
+  font-size: 0.85rem;
+  padding-bottom: 2px;
+  font-family: 'Arial', sans-serif;
+}
+
+.cv-preview.pdf-mode .contact-info {
+  gap: 8px;
+}
+
+.cv-preview.pdf-mode .contact-item {
+  font-size: 0.7rem;
+  margin-bottom: 1px;
+  font-family: 'Arial', sans-serif;
+}
+
+.cv-preview.pdf-mode .experience-item,
+.cv-preview.pdf-mode .education-item {
+  margin-bottom: 4px;
+  padding-bottom: 3px;
+}
+
+.cv-preview.pdf-mode .experience-header,
+.cv-preview.pdf-mode .education-header {
+  margin-bottom: 2px;
+}
+
+.cv-preview.pdf-mode .experience-job-title,
+.cv-preview.pdf-mode .education-degree {
+  font-size: 0.8rem;
+  font-weight: 600;
+  font-family: 'Arial', sans-serif;
+}
+
+.cv-preview.pdf-mode .experience-company,
+.cv-preview.pdf-mode .education-institution {
+  font-size: 0.7rem;
+  font-family: 'Arial', sans-serif;
+}
+
+.cv-preview.pdf-mode .experience-duration,
+.cv-preview.pdf-mode .education-duration {
+  font-size: 0.65rem;
+  font-family: 'Arial', sans-serif;
+}
+
+.cv-preview.pdf-mode .experience-details,
+.cv-preview.pdf-mode .education-details {
+  font-size: 0.7rem;
+  margin-top: 1px;
+  font-family: 'Arial', sans-serif;
+}
+
+.cv-preview.pdf-mode .skills-list,
+.cv-preview.pdf-mode .certifications-list,
+.cv-preview.pdf-mode .languages-list,
+.cv-preview.pdf-mode .hobbies-list {
+  font-size: 0.7rem;
+  margin-bottom: 3px;
+  font-family: 'Arial', sans-serif;
+}
+
+.cv-preview.pdf-mode .skills-list li,
+.cv-preview.pdf-mode .certifications-list li,
+.cv-preview.pdf-mode .languages-list li,
+.cv-preview.pdf-mode .hobbies-list li {
+  margin-bottom: 1px;
+  font-family: 'Arial', sans-serif;
+}
+
+.cv-preview.pdf-mode .cv-name {
+  font-size: 1.2rem;
+  margin-bottom: 3px;
+  font-family: 'Arial', sans-serif;
+}
+
+.cv-preview.pdf-mode .cv-position {
+  font-size: 0.8rem;
+  margin-bottom: 5px;
+  font-family: 'Arial', sans-serif;
+}
+
+.cv-preview.pdf-mode .professional-summary-text {
+  font-size: 0.7rem;
+  line-height: 1.3;
+  margin: 0;
+  font-family: 'Arial', sans-serif;
+}
+
+.cv-preview.pdf-mode .other-info-item {
+  font-size: 0.7rem;
+  margin-bottom: 1px;
+  font-family: 'Arial', sans-serif;
+}
+
+.cv-preview.pdf-mode .references-list {
+  font-size: 0.7rem;
+  margin-bottom: 3px;
+  font-family: 'Arial', sans-serif;
+}
+
+.cv-preview.pdf-mode .references-list li {
+  margin-bottom: 1px;
+  font-family: 'Arial', sans-serif;
+}
