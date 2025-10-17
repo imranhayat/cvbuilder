@@ -600,6 +600,57 @@ function Form({ formData, updateFormData, markAsChanged }) {
                     />
                 </div>
 
+                {/* Custom information fields */}
+                {formData.otherInfo && formData.otherInfo.map((info, index) => (
+                    <div key={index} className="custom-info-container input-group">
+                        <div className="custom-info-wrapper">
+                            <div className="custom-label-input">
+                                <label htmlFor={`custom-label-${index}`} className="custom-label">Label:</label>
+                                <input
+                                    id={`custom-label-${index}`}
+                                    className="custom-label-input-field styled-input"
+                                    type="text"
+                                    name="customLabel"
+                                    placeholder="Enter label"
+                                    value={info.label || ''}
+                                    onChange={(e) => {
+                                        const newOtherInfo = [...(formData.otherInfo || [])];
+                                        newOtherInfo[index].label = e.target.value;
+                                        handleInputChange('otherInfo', newOtherInfo);
+                                    }}
+                                />
+                            </div>
+                            <div className="custom-value-input">
+                                <label htmlFor={`custom-value-${index}`} className="custom-label">Value:</label>
+                                <input
+                                    id={`custom-value-${index}`}
+                                    className="custom-value-input-field styled-input"
+                                    type="text"
+                                    name="customValue"
+                                    placeholder="Enter value"
+                                    value={info.value || ''}
+                                    onChange={(e) => {
+                                        const newOtherInfo = [...(formData.otherInfo || [])];
+                                        newOtherInfo[index].value = e.target.value;
+                                        handleInputChange('otherInfo', newOtherInfo);
+                                    }}
+                                />
+                            </div>
+                            <button 
+                                type="button" 
+                                className="remove-custom-button"
+                                onClick={() => {
+                                    const newOtherInfo = [...(formData.otherInfo || [])];
+                                    newOtherInfo.splice(index, 1);
+                                    handleInputChange('otherInfo', newOtherInfo);
+                                }}
+                            >
+                                Remove
+                            </button>
+                        </div>
+                    </div>
+                ))}
+
                 <div className="add-information-container">
                     <button type="button" onClick={addCustomInformation} className="add-information-button">
                         Add Information

@@ -127,33 +127,10 @@ const useFormHandler = (formData, updateFormData, markAsChanged) => {
 
     // Function to add new custom information field
     const addCustomInformation = () => {
-        const otherInfoSection = document.getElementById('other-information');
-        if (otherInfoSection) {
-            const timestamp = Date.now();
-            const newCustomField = document.createElement('div');
-            newCustomField.className = 'custom-info-container input-group';
-            
-            newCustomField.innerHTML = `
-                <div class="custom-info-wrapper">
-                    <div class="custom-label-input">
-                        <label for="custom-label-${timestamp}" class="custom-label">Label:</label>
-                        <input id="custom-label-${timestamp}" class="custom-label-input-field styled-input" type="text" name="customLabel" placeholder="Enter label" />
-                    </div>
-                    <div class="custom-value-input">
-                        <label for="custom-value-${timestamp}" class="custom-label">Value:</label>
-                        <input id="custom-value-${timestamp}" class="custom-value-input-field styled-input" type="text" name="customValue" placeholder="Enter value" />
-                    </div>
-                    <button type="button" class="remove-custom-button" onclick="this.parentElement.parentElement.remove()">Remove</button>
-                </div>
-            `;
-            
-            const addInfoContainer = otherInfoSection.querySelector('.add-information-container');
-            if (addInfoContainer) {
-                otherInfoSection.insertBefore(newCustomField, addInfoContainer);
-            } else {
-                otherInfoSection.appendChild(newCustomField);
-            }
-        }
+        const newOtherInfo = [...(formData.otherInfo || [])];
+        newOtherInfo.push({ label: '', value: '' });
+        updateFormData({ ...formData, otherInfo: newOtherInfo });
+        markAsChanged();
     };
 
     // Function to add new language input
