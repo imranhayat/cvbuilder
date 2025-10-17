@@ -15,6 +15,7 @@ function Preview1({ formData: propFormData, autoSaveStatus, hasUnsavedChanges })
   // Fallback data if form is empty (for testing)
   const displayData = {
     name: formData.name || 'John Doe',
+    position: formData.position || '',
     phone: formData.phone || '+1 234 567 8900',
     email: formData.email || 'john.doe@email.com',
     address: formData.address || '123 Main St, City, State',
@@ -65,6 +66,13 @@ function Preview1({ formData: propFormData, autoSaveStatus, hasUnsavedChanges })
             <h1 className="header-name">
               {displayData.name}
             </h1>
+
+            {/* Position/Title */}
+            {displayData.position && (
+              <h2 className="header-position">
+                {displayData.position}
+              </h2>
+            )}
 
 
             {/* Contact Information */}
