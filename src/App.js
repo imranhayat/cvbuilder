@@ -22,7 +22,7 @@ function App() {
     professionalSummary: '',
     education: [],
     experience: [],
-    skills: [],
+    skills: ['Communication Skills', 'Time Management', 'Problem Solving', 'Hardworking'],
     certifications: [],
     languages: [],
     hobbies: [],

@@ -111,8 +111,7 @@ const useFormHandler = (formData, updateFormData, markAsChanged) => {
 
     // Function to add new skill input
     const addSkillInput = () => {
-        const currentSkills = formData.skills && formData.skills.length > 0 ? formData.skills : ['Communication Skills', 'Time Management', 'Problem Solving', 'Hardworking'];
-        const newSkills = [...currentSkills];
+        const newSkills = [...(formData.skills || [])];
         newSkills.push('');
         updateFormData({ ...formData, skills: newSkills });
         markAsChanged();
