@@ -23,12 +23,7 @@ function Form({ formData, updateFormData, markAsChanged }) {
         initializeForm();
     }, [initializeForm]);
 
-    // Initialize reference input with form data on mount
-    useEffect(() => {
-        if (referenceInputRef.current && formData.references && formData.references.length > 0) {
-            referenceInputRef.current.value = formData.references[0];
-        }
-    }, []); // Only run on mount
+    // No need to sync with form data - let the input manage its own value
 
     // Listen for references updates from dynamically added inputs
     useEffect(() => {
@@ -704,7 +699,7 @@ function Form({ formData, updateFormData, markAsChanged }) {
                         type="text"
                         name="reference"
                         placeholder="References would be furnished on demand."
-                        defaultValue={formData.references && formData.references.length > 0 ? formData.references[0] : ""}
+                        defaultValue="References would be furnished on demand."
                         onChange={(e) => {
                             const value = e.target.value;
                             // Update form data with the new reference
