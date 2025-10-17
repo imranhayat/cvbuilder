@@ -25,7 +25,7 @@ function Preview1({ formData: propFormData, autoSaveStatus, hasUnsavedChanges })
     ],
     skills: formData.skills && formData.skills.length > 0 ? formData.skills : ['Communication Skills', 'Time Management', 'Problem Solving', 'Hardworking'],
     certifications: formData.certifications && formData.certifications.length > 0 ? formData.certifications : [],
-    languages: formData.languages && formData.languages.length > 0 ? formData.languages : ['English', 'Spanish'],
+    languages: formData.languages && formData.languages.length > 0 ? formData.languages : ['English', 'Urdu', 'Punjabi'],
     hobbies: formData.hobbies && formData.hobbies.length > 0 ? formData.hobbies : [],
     otherInfo: formData.otherInfo && formData.otherInfo.length > 0 ? formData.otherInfo : [],
     customSection: formData.customSection && formData.customSection.length > 0 ? formData.customSection : [],
