@@ -366,15 +366,36 @@ function Form({ formData, updateFormData, markAsChanged }) {
             <div id="certifications" className={`certifications-section ${activeSection === 'certifications' ? 'active' : ''}`}>
                 <h3 className="section-title" onClick={() => toggleSection('certifications')} >Certifications</h3>
 
-                <div className="certification-input-container input-group">
-                    <input
-                        id="certification-input"
-                        className="certification-input styled-input"
-                        type="text"
-                        name="certification"
-                        placeholder="Enter a certification"
-                    />
-                </div>
+                {formData.certifications && formData.certifications.map((certification, index) => (
+                    <div key={index} className="certification-input-container input-group">
+                        <div className="certification-input-wrapper">
+                            <input
+                                id={`certification-input-${index}`}
+                                className="certification-input styled-input"
+                                type="text"
+                                name="certification"
+                                placeholder="Enter a certification"
+                                value={certification}
+                                onChange={(e) => {
+                                    const newCertifications = [...(formData.certifications || [])];
+                                    newCertifications[index] = e.target.value;
+                                    handleInputChange('certifications', newCertifications);
+                                }}
+                            />
+                            <button 
+                                type="button" 
+                                className="remove-certification-button"
+                                onClick={() => {
+                                    const newCertifications = [...(formData.certifications || [])];
+                                    newCertifications.splice(index, 1);
+                                    handleInputChange('certifications', newCertifications);
+                                }}
+                            >
+                                Remove
+                            </button>
+                        </div>
+                    </div>
+                ))}
 
                 <div className="add-certification-container">
                     <button type="button" onClick={addCertificationInput} className="add-certification-button">
@@ -386,81 +407,37 @@ function Form({ formData, updateFormData, markAsChanged }) {
             <div id="skills" className={`skills-section ${activeSection === 'skills' ? 'active' : ''}`}>
                 <h3 className="section-title" onClick={() => toggleSection('skills')} >Skills</h3>
 
-                <div className="communication-skills-container input-group">
+                {formData.skills && formData.skills.map((skill, index) => (
+                    <div key={index} className="skill-input-container input-group">
+                        <div className="skill-input-wrapper">
+                            <input
+                                id={`skill-input-${index}`}
+                                className="skill-input styled-input"
+                                type="text"
+                                name="skill"
+                                placeholder="Enter a skill"
+                                value={skill}
+                                onChange={(e) => {
+                                    const newSkills = [...(formData.skills || [])];
+                                    newSkills[index] = e.target.value;
+                                    handleInputChange('skills', newSkills);
+                                }}
+                            />
+                            <button 
+                                type="button" 
+                                className="remove-skill-button"
+                                onClick={() => {
+                                    const newSkills = [...(formData.skills || [])];
+                                    newSkills.splice(index, 1);
+                                    handleInputChange('skills', newSkills);
+                                }}
+                            >
+                                Remove
+                            </button>
+                        </div>
+                    </div>
+                ))}
 
-                    <input
-                        id="communication-skills-input"
-                        className="communication-skills-input styled-input"
-                        type="text"
-                        name="communicationSkills"
-                        value={formData.skills?.[0] || "Communication Skills"}
-                        onChange={(e) => {
-                            const newSkills = [...(formData.skills || [])];
-                            if (newSkills.length === 0) {
-                                newSkills.push("Communication Skills");
-                            }
-                            newSkills[0] = e.target.value;
-                            handleInputChange('skills', newSkills);
-                        }}
-                    />
-                </div>
-
-                <div className="time-management-container input-group">
-
-                    <input
-                        id="time-management-input"
-                        className="time-management-input styled-input"
-                        type="text"
-                        name="timeManagement"
-                        value={formData.skills?.[1] || "Time Management"}
-                        onChange={(e) => {
-                            const newSkills = [...(formData.skills || [])];
-                            if (newSkills.length < 2) {
-                                newSkills.push("Time Management");
-                            }
-                            newSkills[1] = e.target.value;
-                            handleInputChange('skills', newSkills);
-                        }}
-                    />
-                </div>
-
-                <div className="problem-solving-container input-group">
-
-                    <input
-                        id="problem-solving-input"
-                        className="problem-solving-input styled-input"
-                        type="text"
-                        name="problemSolving"
-                        value={formData.skills?.[2] || "Problem Solving"}
-                        onChange={(e) => {
-                            const newSkills = [...(formData.skills || [])];
-                            if (newSkills.length < 3) {
-                                newSkills.push("Problem Solving");
-                            }
-                            newSkills[2] = e.target.value;
-                            handleInputChange('skills', newSkills);
-                        }}
-                    />
-                </div>
-
-                <div className="hardworking-container input-group">
-
-                    <input
-                        id="hardworking-input"
-                        className="hardworking-input styled-input"
-                        type="text"
-                        name="hardworking"
-                        value={formData.skills?.[3] || "Hardworking"}
-                        onChange={(e) => {
-                            const newSkills = [...(formData.skills || [])];
-                            if (newSkills.length < 4) {
-                                newSkills.push("Hardworking");
-                            }
-                            newSkills[3] = e.target.value;
-                            handleInputChange('skills', newSkills);
-                        }}
-                    />
-                </div>
 
                 <div className="add-skill-container">
                     <button type="button" onClick={addSkillInput} className="add-skill-button">
@@ -483,6 +460,17 @@ function Form({ formData, updateFormData, markAsChanged }) {
                         type="text"
                         name="fatherName"
                         placeholder="Enter father's name"
+                        value={formData.otherInfo?.find(info => info.label === "Father's Name")?.value || ''}
+                        onChange={(e) => {
+                            const newOtherInfo = [...(formData.otherInfo || [])];
+                            const existingIndex = newOtherInfo.findIndex(info => info.label === "Father's Name");
+                            if (existingIndex >= 0) {
+                                newOtherInfo[existingIndex].value = e.target.value;
+                            } else {
+                                newOtherInfo.push({ label: "Father's Name", value: e.target.value });
+                            }
+                            handleInputChange('otherInfo', newOtherInfo);
+                        }}
                     />
                 </div>
 
@@ -496,6 +484,17 @@ function Form({ formData, updateFormData, markAsChanged }) {
                         type="text"
                         name="husbandName"
                         placeholder="Enter husband's name"
+                        value={formData.otherInfo?.find(info => info.label === "Husband's Name")?.value || ''}
+                        onChange={(e) => {
+                            const newOtherInfo = [...(formData.otherInfo || [])];
+                            const existingIndex = newOtherInfo.findIndex(info => info.label === "Husband's Name");
+                            if (existingIndex >= 0) {
+                                newOtherInfo[existingIndex].value = e.target.value;
+                            } else {
+                                newOtherInfo.push({ label: "Husband's Name", value: e.target.value });
+                            }
+                            handleInputChange('otherInfo', newOtherInfo);
+                        }}
                     />
                 </div>
 
@@ -509,6 +508,17 @@ function Form({ formData, updateFormData, markAsChanged }) {
                         type="text"
                         name="cnic"
                         placeholder="Enter CNIC number"
+                        value={formData.otherInfo?.find(info => info.label === "CNIC")?.value || ''}
+                        onChange={(e) => {
+                            const newOtherInfo = [...(formData.otherInfo || [])];
+                            const existingIndex = newOtherInfo.findIndex(info => info.label === "CNIC");
+                            if (existingIndex >= 0) {
+                                newOtherInfo[existingIndex].value = e.target.value;
+                            } else {
+                                newOtherInfo.push({ label: "CNIC", value: e.target.value });
+                            }
+                            handleInputChange('otherInfo', newOtherInfo);
+                        }}
                     />
                 </div>
 
@@ -522,6 +532,17 @@ function Form({ formData, updateFormData, markAsChanged }) {
                         type="text"
                         name="dateOfBirth"
                         placeholder="Enter date of birth"
+                        value={formData.otherInfo?.find(info => info.label === "Date of Birth")?.value || ''}
+                        onChange={(e) => {
+                            const newOtherInfo = [...(formData.otherInfo || [])];
+                            const existingIndex = newOtherInfo.findIndex(info => info.label === "Date of Birth");
+                            if (existingIndex >= 0) {
+                                newOtherInfo[existingIndex].value = e.target.value;
+                            } else {
+                                newOtherInfo.push({ label: "Date of Birth", value: e.target.value });
+                            }
+                            handleInputChange('otherInfo', newOtherInfo);
+                        }}
                     />
                 </div>
 
@@ -535,6 +556,17 @@ function Form({ formData, updateFormData, markAsChanged }) {
                         type="text"
                         name="maritalStatus"
                         placeholder="Enter marital status"
+                        value={formData.otherInfo?.find(info => info.label === "Marital Status")?.value || ''}
+                        onChange={(e) => {
+                            const newOtherInfo = [...(formData.otherInfo || [])];
+                            const existingIndex = newOtherInfo.findIndex(info => info.label === "Marital Status");
+                            if (existingIndex >= 0) {
+                                newOtherInfo[existingIndex].value = e.target.value;
+                            } else {
+                                newOtherInfo.push({ label: "Marital Status", value: e.target.value });
+                            }
+                            handleInputChange('otherInfo', newOtherInfo);
+                        }}
                     />
                 </div>
 
@@ -548,6 +580,17 @@ function Form({ formData, updateFormData, markAsChanged }) {
                         type="text"
                         name="religion"
                         placeholder="Enter religion"
+                        value={formData.otherInfo?.find(info => info.label === "Religion")?.value || ''}
+                        onChange={(e) => {
+                            const newOtherInfo = [...(formData.otherInfo || [])];
+                            const existingIndex = newOtherInfo.findIndex(info => info.label === "Religion");
+                            if (existingIndex >= 0) {
+                                newOtherInfo[existingIndex].value = e.target.value;
+                            } else {
+                                newOtherInfo.push({ label: "Religion", value: e.target.value });
+                            }
+                            handleInputChange('otherInfo', newOtherInfo);
+                        }}
                     />
                 </div>
 
