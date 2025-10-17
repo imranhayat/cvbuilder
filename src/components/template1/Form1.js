@@ -671,13 +671,14 @@ function Form({ formData, updateFormData, markAsChanged }) {
                 <h3 className="section-title" onClick={() => toggleSection('references')}>References</h3>
 
                 <div className="reference-input-container input-group">
-                    <input
+                    <textarea
+                        key="reference-textarea"
                         id="reference-input"
                         className="reference-input styled-input"
-                        type="text"
                         name="reference"
                         placeholder="References would be furnished on demand."
                         defaultValue="References would be furnished on demand."
+                        rows="3"
                         onChange={(e) => {
                             const value = e.target.value;
                             const newFormData = { ...formData, references: value.trim() ? [value] : [] };
