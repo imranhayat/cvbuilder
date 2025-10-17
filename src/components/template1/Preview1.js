@@ -23,7 +23,7 @@ function Preview1({ formData: propFormData, autoSaveStatus, hasUnsavedChanges })
     experience: formData.experience && formData.experience.length > 0 ? formData.experience : [
       { jobTitle: 'Senior Developer', company: 'Tech Corp', duration: '2020-2023', jobDetails: 'Led development of web applications\nImplemented modern frameworks\nMentored junior developers' }
     ],
-    skills: formData.skills && formData.skills.length > 0 ? formData.skills : ['JavaScript', 'React', 'Node.js', 'Python'],
+    skills: formData.skills && formData.skills.length > 0 ? formData.skills : ['Communication Skills', 'Time Management', 'Problem Solving', 'Hardworking'],
     certifications: formData.certifications && formData.certifications.length > 0 ? formData.certifications : [],
     languages: formData.languages && formData.languages.length > 0 ? formData.languages : ['English', 'Spanish'],
     hobbies: formData.hobbies && formData.hobbies.length > 0 ? formData.hobbies : [],
