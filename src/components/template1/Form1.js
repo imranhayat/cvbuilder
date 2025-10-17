@@ -5,12 +5,6 @@ import './Form1.css';
 function Form({ formData, updateFormData, markAsChanged }) {
     const { toggleSection, initializeForm, addSkillInput, addCertificationInput, addCustomInformation, addLanguageInput, addHobbyInput, addCustomSectionDetail, addReferenceInput } = useFormHandler();
     
-    // Simple reference input handler
-    const handleReferenceChange = (value) => {
-        const newFormData = { ...formData, references: value.trim() ? [value] : [] };
-        updateFormData(newFormData);
-        markAsChanged();
-    };
 
     // Handle input changes and trigger auto-save
     const handleInputChange = (field, value) => {
@@ -684,7 +678,12 @@ function Form({ formData, updateFormData, markAsChanged }) {
                         name="reference"
                         placeholder="References would be furnished on demand."
                         defaultValue="References would be furnished on demand."
-                        onChange={(e) => handleReferenceChange(e.target.value)}
+                        onChange={(e) => {
+                            const value = e.target.value;
+                            const newFormData = { ...formData, references: value.trim() ? [value] : [] };
+                            updateFormData(newFormData);
+                            markAsChanged();
+                        }}
                     />
                 </div>
 

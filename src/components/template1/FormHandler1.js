@@ -253,7 +253,7 @@ const useFormHandler = () => {
         }
     };
 
-    // Function to add new reference input
+    // Simple function to add new reference input
     const addReferenceInput = () => {
         const referencesSection = document.getElementById('references');
         if (referencesSection) {
@@ -267,22 +267,6 @@ const useFormHandler = () => {
                     <button type="button" class="remove-reference-button" onclick="this.parentElement.parentElement.remove()">Remove</button>
                 </div>
             `;
-            
-            // Add event listener to the new input
-            const newInput = newReferenceContainer.querySelector('.reference-input');
-            if (newInput) {
-                newInput.addEventListener('input', function() {
-                    // Trigger form data update for references
-                    const allRefInputs = document.querySelectorAll('.references-section .reference-input');
-                    const references = Array.from(allRefInputs).map(input => input.value).filter(value => value.trim() !== '');
-                    
-                    // Dispatch custom event to update form data
-                    const event = new CustomEvent('referencesUpdated', { 
-                        detail: { references } 
-                    });
-                    document.dispatchEvent(event);
-                });
-            }
             
             const addReferenceContainer = referencesSection.querySelector('.add-reference-container');
             if (addReferenceContainer) {

@@ -246,23 +246,21 @@ function Preview1({ formData: propFormData, autoSaveStatus, hasUnsavedChanges })
           </div>
         )}
 
-        {/* References Section */}
-        <div className="cv-section">
-          <h3 className="section-heading">References</h3>
-          <div className="section-content">
-            <div className="references-content">
-              {displayData.references && displayData.references.length > 0 ? (
-                displayData.references.map((reference, index) => (
+        {/* References Section - Only show if there are references */}
+        {displayData.references && displayData.references.length > 0 && (
+          <div className="cv-section">
+            <h3 className="section-heading">References</h3>
+            <div className="section-content">
+              <div className="references-content">
+                {displayData.references.map((reference, index) => (
                   <div key={index} className="reference-item">
                     <p className="reference-text">{reference}</p>
                   </div>
-                ))
-              ) : (
-                <p className="reference-text">No references added</p>
-              )}
+                ))}
+              </div>
             </div>
           </div>
-        </div>
+        )}
 
         {/* Download PDF Button */}
         <div className="download-pdf-container">
