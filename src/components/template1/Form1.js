@@ -15,7 +15,8 @@ function Form({ formData, updateFormData, markAsChanged }) {
         addReferenceInput,
         handleInputChange,
         handleReferenceChange,
-        referenceText
+        referenceText,
+        activeSection
     } = useFormHandler(formData, updateFormData, markAsChanged);
 
     // Initialize form on component mount
@@ -24,7 +25,7 @@ function Form({ formData, updateFormData, markAsChanged }) {
     }, [initializeForm]);
     return (
         <div className="left-container">
-            <div id="contact-info" className="contact-info-section">
+            <div id="contact-info" className={`contact-info-section ${activeSection === 'contact-info' ? 'active' : ''}`}>
                 <h3 className="section-title" onClick={() => toggleSection('contact-info')}>Contact Information</h3>
 
                 <div className="file-input-container">
@@ -115,7 +116,7 @@ function Form({ formData, updateFormData, markAsChanged }) {
                 </div>
             </div>
 
-            <div id="professional-summary" className="professional-summary-section">
+            <div id="professional-summary" className={`professional-summary-section ${activeSection === 'professional-summary' ? 'active' : ''}`}>
                 <h3 className="section-title" onClick={() => toggleSection('professional-summary')} >Professional Summary</h3>
 
                 <div className="professional-summary-textarea-container input-group">
@@ -130,7 +131,7 @@ function Form({ formData, updateFormData, markAsChanged }) {
                 </div>
             </div>
 
-            <div id="education" className="education-section">
+            <div id="education" className={`education-section ${activeSection === 'education' ? 'active' : ''}`}>
                 <h3 className="section-title" onClick={() => toggleSection('education')} >Education</h3>
 
                 {/* Render all education entries dynamically */}
@@ -242,7 +243,7 @@ function Form({ formData, updateFormData, markAsChanged }) {
                 </div>
             </div>
 
-            <div id="experience" className="experience-section">
+            <div id="experience" className={`experience-section ${activeSection === 'experience' ? 'active' : ''}`}>
                 <h3 className="section-title" onClick={() => toggleSection('experience')} >Experience</h3>
 
                 {/* Render all experience entries dynamically */}
@@ -354,7 +355,7 @@ function Form({ formData, updateFormData, markAsChanged }) {
                 </div>
             </div>
 
-            <div id="certifications" className="certifications-section">
+            <div id="certifications" className={`certifications-section ${activeSection === 'certifications' ? 'active' : ''}`}>
                 <h3 className="section-title" onClick={() => toggleSection('certifications')} >Certifications</h3>
 
                 <div className="certification-input-container input-group">
@@ -374,7 +375,7 @@ function Form({ formData, updateFormData, markAsChanged }) {
                 </div>
             </div>
 
-            <div id="skills" className="skills-section">
+            <div id="skills" className={`skills-section ${activeSection === 'skills' ? 'active' : ''}`}>
                 <h3 className="section-title" onClick={() => toggleSection('skills')} >Skills</h3>
 
                 <div className="communication-skills-container input-group">
@@ -461,7 +462,7 @@ function Form({ formData, updateFormData, markAsChanged }) {
 
             </div>
 
-            <div id="other-information" className="other-information-section">
+            <div id="other-information" className={`other-information-section ${activeSection === 'other-information' ? 'active' : ''}`}>
                 <h3 className="section-title" onClick={() => toggleSection('other-information')} >Other Information</h3>
 
                 <div className="father-name-input-container input-group">
@@ -549,7 +550,7 @@ function Form({ formData, updateFormData, markAsChanged }) {
                 </div>
             </div>
 
-            <div id="languages" className="languages-section">
+            <div id="languages" className={`languages-section ${activeSection === 'languages' ? 'active' : ''}`}>
                 <h3 className="section-title" onClick={() => toggleSection('languages')} >Languages</h3>
 
                 <div className="english-language-container input-group">
@@ -613,7 +614,7 @@ function Form({ formData, updateFormData, markAsChanged }) {
                 </div>
             </div>
 
-            <div id="hobbies" className="hobbies-section">
+            <div id="hobbies" className={`hobbies-section ${activeSection === 'hobbies' ? 'active' : ''}`}>
                 <h3 className="section-title" onClick={() => toggleSection('hobbies')} >Hobbies</h3>
 
                 <div className="hobby-input-container input-group">
@@ -633,7 +634,7 @@ function Form({ formData, updateFormData, markAsChanged }) {
                 </div>
             </div>
 
-            <div id="custom-section" className="custom-section">
+            <div id="custom-section" className={`custom-section ${activeSection === 'custom-section' ? 'active' : ''}`}>
                 <h3 className="section-title" onClick={() => toggleSection('custom-section')} >Custom Section</h3>
 
                 <div className="custom-section-heading-input-container input-group">
@@ -669,7 +670,7 @@ function Form({ formData, updateFormData, markAsChanged }) {
                 </div>
             </div>
 
-            <div id="references" className="references-section">
+            <div id="references" className={`references-section ${activeSection === 'references' ? 'active' : ''}`}>
                 <h3 className="section-title" onClick={() => toggleSection('references')}>References</h3>
 
                 <div className="reference-input-container input-group">

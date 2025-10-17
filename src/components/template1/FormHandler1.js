@@ -4,6 +4,9 @@ import { useState, useEffect } from 'react';
 const useFormHandler = (formData, updateFormData, markAsChanged) => {
     // Local state for references input
     const [referenceText, setReferenceText] = useState('References would be furnished on demand.');
+    
+    // State for active section
+    const [activeSection, setActiveSection] = useState('contact-info');
 
     // Handle input changes and trigger auto-save
     const handleInputChange = (field, value) => {
@@ -30,38 +33,15 @@ const useFormHandler = (formData, updateFormData, markAsChanged) => {
             setReferenceText(formData.references[0]);
         }
     }, [formData.references]);
-    // Function to toggle section visibility with beautiful list style
+
+    // React-based toggle section function
     const toggleSection = (sectionId) => {
-        // Get all sections
-        const allSections = document.querySelectorAll('.contact-info-section, .professional-summary-section, .education-section, .experience-section, .certifications-section, .skills-section, .other-information-section, .languages-section, .hobbies-section, .custom-section, .references-section');
-        
-        // Remove active class from all sections
-        allSections.forEach(section => {
-            section.classList.remove('active');
-        });
-        
-        // Add active class to clicked section
-        const targetSection = document.getElementById(sectionId);
-        if (targetSection) {
-            targetSection.classList.add('active');
-        }
+        setActiveSection(sectionId);
     };
 
     // Function to initialize the form - show only Contact Information on page load
     const initializeForm = () => {
-        // Get all sections
-        const allSections = document.querySelectorAll('.contact-info-section, .professional-summary-section, .education-section, .experience-section, .certifications-section, .skills-section, .other-information-section, .languages-section, .hobbies-section, .custom-section, .references-section');
-        
-        // Remove active class from all sections
-        allSections.forEach(section => {
-            section.classList.remove('active');
-        });
-        
-        // Show only Contact Information section
-        const contactSection = document.getElementById('contact-info');
-        if (contactSection) {
-            contactSection.classList.add('active');
-        }
+        setActiveSection('contact-info');
     };
 
     // Function to add new education group
@@ -321,7 +301,8 @@ const useFormHandler = (formData, updateFormData, markAsChanged) => {
         addReferenceInput,
         handleInputChange,
         handleReferenceChange,
-        referenceText
+        referenceText,
+        activeSection
     };
 };
 
