@@ -19,14 +19,20 @@ function App() {
     phone: '',
     email: '',
     address: '',
-    professionalSummary: '',
-    education: [],
-    experience: [],
-    skills: [],
+    professionalSummary: 'To work with a organization that offers a creative, dynamic and professional environment, where my education, knowledge, skills and proven abilities can be fully utilized and which also offers learning opportunities for my career development in the long run.',
+    education: [
+      { degree: 'Bachelor of Computer Science', board: 'University of Technology', year: '2020', marks: '3.8/4.0' }
+    ],
+    experience: [
+      { jobTitle: 'Senior Developer', company: 'Tech Corp', duration: '2020-2023', jobDetails: 'Led development of web applications\nImplemented modern frameworks\nMentored junior developers' }
+    ],
+    skills: ['Communication Skills', 'Time Management', 'Problem Solving', 'Hardworking'],
     certifications: [],
-    languages: [],
+    languages: ['English', 'Urdu', 'Punjabi'],
     hobbies: [],
-    references: []
+    otherInfo: [],
+    customSection: [],
+    references: ['References would be furnished on demand.']
   });
   const [autoSaveStatus, setAutoSaveStatus] = useState('');
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
