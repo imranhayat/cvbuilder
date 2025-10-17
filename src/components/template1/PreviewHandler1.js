@@ -22,7 +22,7 @@ const usePreviewHandler = (passedFormData = null) => {
 
   // Use passed form data if available
   useEffect(() => {
-    if (passedFormData && Object.keys(passedFormData).length > 0) {
+    if (passedFormData) {
       setFormData(passedFormData);
     }
   }, [passedFormData]);

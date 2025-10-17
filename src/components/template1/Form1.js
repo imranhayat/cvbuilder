@@ -39,6 +39,12 @@ function Form({ formData, updateFormData, markAsChanged }) {
                         className="file-input"
                         type="file"
                         accept="image/*"
+                        onChange={(e) => {
+                            const file = e.target.files[0];
+                            if (file) {
+                                handleInputChange('profileImage', file);
+                            }
+                        }}
                     />
                 </div>
 

@@ -10,10 +10,7 @@ const useFormHandler = (formData, updateFormData, markAsChanged) => {
 
     // Handle input changes and trigger auto-save
     const handleInputChange = (field, value) => {
-        console.log('Form1 - handleInputChange called:', field, value);
         const newFormData = { ...formData, [field]: value };
-        console.log('Form1 - newFormData:', newFormData);
-        console.log('Form1 - References in newFormData:', newFormData.references);
         updateFormData(newFormData);
         markAsChanged();
     };
