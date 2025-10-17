@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 const useFormHandler = (formData, updateFormData, markAsChanged) => {
     // Local state for references input
@@ -40,9 +40,9 @@ const useFormHandler = (formData, updateFormData, markAsChanged) => {
     };
 
     // Function to initialize the form - show only Contact Information on page load
-    const initializeForm = () => {
+    const initializeForm = useCallback(() => {
         setActiveSection('contact-info');
-    };
+    }, []);
 
     // Function to add new education group
     const addEducationGroup = () => {

@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 
 const usePreviewHandler = (passedFormData = null) => {
   const [formData, setFormData] = useState({
@@ -23,7 +23,6 @@ const usePreviewHandler = (passedFormData = null) => {
   // Use passed form data if available
   useEffect(() => {
     if (passedFormData && Object.keys(passedFormData).length > 0) {
-      console.log('PreviewHandler1 - Using passed form data:', passedFormData);
       setFormData(passedFormData);
     }
   }, [passedFormData]);
@@ -92,8 +91,7 @@ const usePreviewHandler = (passedFormData = null) => {
     
     data.education = educationData;
     
-    // Debug: Log education data
-    console.log('Education data:', data.education);
+    // Debug log removed to prevent console spam
 
     // Get experience data - first get the main experience section, then any additional groups
     const mainJobTitle = document.getElementById('job-title-input')?.value || '';
@@ -211,11 +209,11 @@ const usePreviewHandler = (passedFormData = null) => {
     return data;
   };
 
-  // Function to update preview data
-  const updatePreviewData = () => {
+  // Function to update preview data - memoized to prevent infinite re-renders
+  const updatePreviewData = useCallback(() => {
     const newData = getFormData();
     setFormData(newData);
-  };
+  }, []);
 
   // Function to get profile image URL - memoized to prevent flickering
   const getProfileImageUrl = useMemo(() => {
@@ -242,11 +240,8 @@ const usePreviewHandler = (passedFormData = null) => {
     return contact;
   };
 
-  // Set up real-time updates
-  useEffect(() => {
-    const updateInterval = setInterval(updatePreviewData, 1000);
-    return () => clearInterval(updateInterval);
-  }, [updatePreviewData]);
+  // Real-time updates are now handled by the parent component through props
+  // No need for setInterval which was causing infinite re-renders
 
   return {
     formData,
