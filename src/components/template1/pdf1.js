@@ -14,7 +14,22 @@ const generatePDF = async () => {
       return;
     }
 
+    // Check if CV preview has content
+    const hasContent = cvPreview.textContent && cvPreview.textContent.trim().length > 0;
+    if (!hasContent) {
+      console.error('CV preview has no content');
+      alert('CV preview is empty. Please fill in some information before generating PDF.');
+      return;
+    }
+
     console.log('CV preview element found, generating canvas...');
+    console.log('CV preview content:', cvPreview.innerHTML.substring(0, 500) + '...');
+    console.log('CV preview dimensions:', {
+      width: cvPreview.scrollWidth,
+      height: cvPreview.scrollHeight,
+      offsetWidth: cvPreview.offsetWidth,
+      offsetHeight: cvPreview.offsetHeight
+    });
 
     // Show loading message
     const originalButton = document.querySelector('.download-pdf-button');
@@ -35,23 +50,39 @@ const generatePDF = async () => {
 
     // Configure html2canvas options for compact PDF
     const canvas = await html2canvas(cvPreview, {
-      scale: 4, // Higher scale for more compact PDF (more content per page)
+      scale: 3, // Reduced scale for better compatibility
       useCORS: true,
       allowTaint: true,
       backgroundColor: '#ffffff',
-      logging: false,
+      logging: true, // Enable logging to debug
       scrollX: 0,
       scrollY: 0,
-      width: cvPreview.scrollWidth,
-      height: cvPreview.scrollHeight,
-      removeContainer: true,
-      foreignObjectRendering: true
+      width: cvPreview.offsetWidth || cvPreview.scrollWidth,
+      height: cvPreview.offsetHeight || cvPreview.scrollHeight,
+      removeContainer: false, // Keep container for better rendering
+      foreignObjectRendering: false, // Disable for better compatibility
+      imageTimeout: 15000, // Increase timeout for images
+      onclone: (clonedDoc) => {
+        // Ensure the cloned document has proper styling
+        const clonedPreview = clonedDoc.querySelector('.cv-preview');
+        if (clonedPreview) {
+          clonedPreview.style.visibility = 'visible';
+          clonedPreview.style.display = 'block';
+          clonedPreview.style.width = 'auto';
+          clonedPreview.style.height = 'auto';
+        }
+      }
     });
 
     console.log('Canvas generated, creating PDF...');
+    console.log('Canvas dimensions:', {
+      width: canvas.width,
+      height: canvas.height
+    });
+    console.log('Canvas data URL length:', canvas.toDataURL().length);
 
     // Create PDF
-    const imgData = canvas.toDataURL('image/jpeg', 0.8);
+    const imgData = canvas.toDataURL('image/jpeg', 2);
     const pdf = new jsPDF({
       orientation: 'portrait',
       unit: 'mm',
@@ -102,7 +133,7 @@ const generatePDF = async () => {
         );
         
         // Add to PDF - minimal margins for compact layout
-        const pageImgData = pageCanvas.toDataURL('image/jpeg', 0.8);
+        const pageImgData = pageCanvas.toDataURL('image/jpeg', 2);
         pdf.addImage(pageImgData, 'JPEG', margin, margin, imgWidth, pageImgHeight);
       }
     }

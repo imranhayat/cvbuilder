@@ -10,6 +10,20 @@ function Form({ formData, updateFormData, markAsChanged }) {
         initializeForm();
     }, []);
 
+    // Listen for references updates from dynamically added inputs
+    useEffect(() => {
+        const handleReferencesUpdate = (event) => {
+            console.log('Form1 - References updated:', event.detail.references);
+            handleInputChange('references', event.detail.references);
+        };
+
+        document.addEventListener('referencesUpdated', handleReferencesUpdate);
+        
+        return () => {
+            document.removeEventListener('referencesUpdated', handleReferencesUpdate);
+        };
+    }, []);
+
     // Handle input changes and trigger auto-save
     const handleInputChange = (field, value) => {
         console.log('Form1 - handleInputChange called:', field, value);
@@ -675,6 +689,11 @@ function Form({ formData, updateFormData, markAsChanged }) {
                         type="text"
                         name="reference"
                         defaultValue="References would be furnished on demand."
+                        onChange={(e) => {
+                            const allRefInputs = document.querySelectorAll('.references-section .reference-input');
+                            const references = Array.from(allRefInputs).map(input => input.value).filter(value => value.trim() !== '');
+                            handleInputChange('references', references);
+                        }}
                     />
                 </div>
 

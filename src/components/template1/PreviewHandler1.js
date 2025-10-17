@@ -23,6 +23,7 @@ const usePreviewHandler = (passedFormData = null) => {
   // Use passed form data if available
   useEffect(() => {
     if (passedFormData && Object.keys(passedFormData).length > 0) {
+      console.log('PreviewHandler1 - Using passed form data:', passedFormData);
       setFormData(passedFormData);
     }
   }, [passedFormData]);
@@ -245,7 +246,7 @@ const usePreviewHandler = (passedFormData = null) => {
   useEffect(() => {
     const updateInterval = setInterval(updatePreviewData, 1000);
     return () => clearInterval(updateInterval);
-  }, []);
+  }, [updatePreviewData]);
 
   return {
     formData,
