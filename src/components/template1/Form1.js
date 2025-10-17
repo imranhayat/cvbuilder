@@ -630,14 +630,14 @@ function Form({ formData, updateFormData, markAsChanged }) {
 
                 {/* Always visible input fields for users to start entering data */}
                 <div className="father-name-input-container input-group">
-                    <label htmlFor="father-name-input-new" className="father-name-label input-label">
+                    <label htmlFor="father-name-input-always" className="father-name-label input-label">
                         Father's Name
                     </label>
                     <input
-                        id="father-name-input-new"
+                        id="father-name-input-always"
                         className="father-name-input styled-input"
                         type="text"
-                        name="fatherNameNew"
+                        name="fatherNameAlways"
                         placeholder="Enter father's name"
                         value={formData.otherInfo?.find(info => info.label === "Father's Name")?.value || ''}
                         onChange={(e) => {
@@ -654,14 +654,14 @@ function Form({ formData, updateFormData, markAsChanged }) {
                 </div>
 
                 <div className="husband-name-input-container input-group">
-                    <label htmlFor="husband-name-input-new" className="husband-name-label input-label">
+                    <label htmlFor="husband-name-input-always" className="husband-name-label input-label">
                         Husband's Name
                     </label>
                     <input
-                        id="husband-name-input-new"
+                        id="husband-name-input-always"
                         className="husband-name-input styled-input"
                         type="text"
-                        name="husbandNameNew"
+                        name="husbandNameAlways"
                         placeholder="Enter husband's name"
                         value={formData.otherInfo?.find(info => info.label === "Husband's Name")?.value || ''}
                         onChange={(e) => {
@@ -678,14 +678,14 @@ function Form({ formData, updateFormData, markAsChanged }) {
                 </div>
 
                 <div className="cnic-input-container input-group">
-                    <label htmlFor="cnic-input-new" className="cnic-label input-label">
+                    <label htmlFor="cnic-input-always" className="cnic-label input-label">
                         CNIC
                     </label>
                     <input
-                        id="cnic-input-new"
+                        id="cnic-input-always"
                         className="cnic-input styled-input"
                         type="text"
-                        name="cnicNew"
+                        name="cnicAlways"
                         placeholder="Enter CNIC number"
                         value={formData.otherInfo?.find(info => info.label === "CNIC")?.value || ''}
                         onChange={(e) => {
@@ -695,78 +695,6 @@ function Form({ formData, updateFormData, markAsChanged }) {
                                 newOtherInfo[existingIndex].value = e.target.value;
                             } else {
                                 newOtherInfo.push({ label: "CNIC", value: e.target.value });
-                            }
-                            handleInputChange('otherInfo', newOtherInfo);
-                        }}
-                    />
-                </div>
-
-                <div className="dob-input-container input-group">
-                    <label htmlFor="dob-input-new" className="dob-label input-label">
-                        Date of Birth
-                    </label>
-                    <input
-                        id="dob-input-new"
-                        className="dob-input styled-input"
-                        type="text"
-                        name="dateOfBirthNew"
-                        placeholder="Enter date of birth"
-                        value={formData.otherInfo?.find(info => info.label === "Date of Birth")?.value || ''}
-                        onChange={(e) => {
-                            const newOtherInfo = [...(formData.otherInfo || [])];
-                            const existingIndex = newOtherInfo.findIndex(info => info.label === "Date of Birth");
-                            if (existingIndex >= 0) {
-                                newOtherInfo[existingIndex].value = e.target.value;
-                            } else {
-                                newOtherInfo.push({ label: "Date of Birth", value: e.target.value });
-                            }
-                            handleInputChange('otherInfo', newOtherInfo);
-                        }}
-                    />
-                </div>
-
-                <div className="marital-status-input-container input-group">
-                    <label htmlFor="marital-status-input-new" className="marital-status-label input-label">
-                        Marital Status
-                    </label>
-                    <input
-                        id="marital-status-input-new"
-                        className="marital-status-input styled-input"
-                        type="text"
-                        name="maritalStatusNew"
-                        placeholder="Enter marital status"
-                        value={formData.otherInfo?.find(info => info.label === "Marital Status")?.value || ''}
-                        onChange={(e) => {
-                            const newOtherInfo = [...(formData.otherInfo || [])];
-                            const existingIndex = newOtherInfo.findIndex(info => info.label === "Marital Status");
-                            if (existingIndex >= 0) {
-                                newOtherInfo[existingIndex].value = e.target.value;
-                            } else {
-                                newOtherInfo.push({ label: "Marital Status", value: e.target.value });
-                            }
-                            handleInputChange('otherInfo', newOtherInfo);
-                        }}
-                    />
-                </div>
-
-                <div className="religion-input-container input-group">
-                    <label htmlFor="religion-input-new" className="religion-label input-label">
-                        Religion
-                    </label>
-                    <input
-                        id="religion-input-new"
-                        className="religion-input styled-input"
-                        type="text"
-                        name="religionNew"
-                        placeholder="Enter religion"
-                        value={formData.otherInfo?.find(info => info.label === "Religion")?.value || ''}
-                        onChange={(e) => {
-                            const newOtherInfo = [...(formData.otherInfo || [])];
-                            const existingIndex = newOtherInfo.findIndex(info => info.label === "Religion");
-                            if (existingIndex >= 0) {
-                                newOtherInfo[existingIndex].value = e.target.value;
-                            } else {
-                                newOtherInfo.push({ label: "Religion", value: e.target.value });
                             }
                             handleInputChange('otherInfo', newOtherInfo);
                         }}
