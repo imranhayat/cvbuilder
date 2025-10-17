@@ -89,12 +89,12 @@ const generatePDF = async () => {
       format: 'a4'
     });
 
-    // Calculate dimensions - ultra-minimal margins for maximum content
+    // Calculate dimensions - proper margins to prevent content cutoff
     const pageWidth = 210; // A4 width in mm
     const pageHeight = 297; // A4 height in mm
-    const margin = 1; // Ultra-minimal margins for maximum content area
-    const contentWidth = pageWidth - (margin * 2); // Content width with minimal margins
-    const contentHeight = pageHeight - (margin * 2); // Content height with minimal margins
+    const margin = 10; // Proper margins to prevent content cutoff
+    const contentWidth = pageWidth - (margin * 2); // Content width with proper margins
+    const contentHeight = pageHeight - (margin * 2); // Content height with proper margins
 
     // Calculate image dimensions
     const imgWidth = contentWidth;
@@ -132,7 +132,7 @@ const generatePDF = async () => {
           canvas.width, (pageImgHeight / imgHeight) * canvas.height
         );
         
-        // Add to PDF - minimal margins for compact layout
+        // Add to PDF - proper margins to prevent content cutoff
         const pageImgData = pageCanvas.toDataURL('image/jpeg', 2);
         pdf.addImage(pageImgData, 'JPEG', margin, margin, imgWidth, pageImgHeight);
       }
