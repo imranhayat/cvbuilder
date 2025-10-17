@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect } from 'react';
 import useFormHandler from './FormHandler1';
 import './Form1.css';
 
@@ -6,14 +6,14 @@ function Form({ formData, updateFormData, markAsChanged }) {
     const { toggleSection, initializeForm, addSkillInput, addCertificationInput, addCustomInformation, addLanguageInput, addHobbyInput, addCustomSectionDetail, addReferenceInput } = useFormHandler();
 
     // Handle input changes and trigger auto-save
-    const handleInputChange = useCallback((field, value) => {
+    const handleInputChange = (field, value) => {
         console.log('Form1 - handleInputChange called:', field, value);
         const newFormData = { ...formData, [field]: value };
         console.log('Form1 - newFormData:', newFormData);
         console.log('Form1 - References in newFormData:', newFormData.references);
         updateFormData(newFormData);
         markAsChanged();
-    }, [formData, updateFormData, markAsChanged]);
+    };
 
     // Initialize form on component mount
     useEffect(() => {
@@ -24,7 +24,10 @@ function Form({ formData, updateFormData, markAsChanged }) {
     useEffect(() => {
         const handleReferencesUpdate = (event) => {
             console.log('Form1 - References updated:', event.detail.references);
-            handleInputChange('references', event.detail.references);
+            const newFormData = { ...formData, references: event.detail.references };
+            console.log('Form1 - newFormData from event:', newFormData);
+            updateFormData(newFormData);
+            markAsChanged();
         };
 
         document.addEventListener('referencesUpdated', handleReferencesUpdate);
@@ -32,7 +35,7 @@ function Form({ formData, updateFormData, markAsChanged }) {
         return () => {
             document.removeEventListener('referencesUpdated', handleReferencesUpdate);
         };
-    }, [handleInputChange]);
+    }, [formData, updateFormData, markAsChanged]);
     return (
         <div className="left-container">
             <div id="contact-info" className="contact-info-section">
