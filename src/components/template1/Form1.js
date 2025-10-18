@@ -728,25 +728,37 @@ function Form({ formData, updateFormData, markAsChanged }) {
             <div id="hobbies" className={`hobbies-section ${activeSection === 'hobbies' ? 'active' : ''}`}>
                 <h3 className="section-title" onClick={() => toggleSection('hobbies')} >Hobbies</h3>
 
-                <div className="hobby-input-container input-group">
-                    <input
-                        id="hobby-input"
-                        className="hobby-input styled-input"
-                        type="text"
-                        name="hobby"
-                        placeholder="Enter a hobby"
-                        value={formData.hobbies?.[0] || ''}
-                        onChange={(e) => {
-                            const newHobbies = [...(formData.hobbies || [])];
-                            if (newHobbies.length === 0) {
-                                newHobbies.push(e.target.value);
-                            } else {
-                                newHobbies[0] = e.target.value;
-                            }
-                            handleInputChange('hobbies', newHobbies);
-                        }}
-                    />
-                </div>
+                {formData.hobbies && formData.hobbies.map((hobby, index) => (
+                    <div key={index} className="hobby-input-container input-group">
+                        <div className="hobby-input-wrapper">
+                            <input
+                                id={`hobby-input-${index}`}
+                                className="hobby-input styled-input"
+                                type="text"
+                                name="hobby"
+                                placeholder="Enter a hobby"
+                                value={hobby}
+                                onChange={(e) => {
+                                    const newHobbies = [...(formData.hobbies || [])];
+                                    newHobbies[index] = e.target.value;
+                                    handleInputChange('hobbies', newHobbies);
+                                }}
+                            />
+                            {index > 0 && (
+                                <button 
+                                    type="button" 
+                                    className="remove-hobby-button"
+                                    onClick={() => {
+                                        const newHobbies = formData.hobbies.filter((_, i) => i !== index);
+                                        handleInputChange('hobbies', newHobbies);
+                                    }}
+                                >
+                                    Remove
+                                </button>
+                            )}
+                        </div>
+                    </div>
+                ))}
 
                 <div className="add-hobby-container">
                     <button type="button" onClick={addHobbyInput} className="add-hobby-button">

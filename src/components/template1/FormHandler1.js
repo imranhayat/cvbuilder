@@ -159,26 +159,10 @@ const useFormHandler = (formData, updateFormData, markAsChanged) => {
 
     // Function to add new hobby input
     const addHobbyInput = () => {
-        const hobbiesSection = document.getElementById('hobbies');
-        if (hobbiesSection) {
-            const timestamp = Date.now();
-            const newHobbyContainer = document.createElement('div');
-            newHobbyContainer.className = 'hobby-input-container input-group';
-            
-            newHobbyContainer.innerHTML = `
-                <div class="hobby-input-wrapper">
-                    <input id="hobby-input-${timestamp}" class="hobby-input styled-input" type="text" name="hobby" placeholder="Enter a hobby" />
-                    <button type="button" class="remove-hobby-button" onclick="this.parentElement.parentElement.remove()">Remove</button>
-                </div>
-            `;
-            
-            const addHobbyContainer = hobbiesSection.querySelector('.add-hobby-container');
-            if (addHobbyContainer) {
-                hobbiesSection.insertBefore(newHobbyContainer, addHobbyContainer);
-            } else {
-                hobbiesSection.appendChild(newHobbyContainer);
-            }
-        }
+        const newHobbies = [...(formData.hobbies || [])];
+        newHobbies.push('');
+        updateFormData({ ...formData, hobbies: newHobbies });
+        markAsChanged();
     };
 
     // Function to add new custom section detail

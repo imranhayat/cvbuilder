@@ -139,9 +139,9 @@ const usePreviewHandler = (passedFormData = null) => {
     const langInputs = document.querySelectorAll('.languages-section input[type="text"]');
     data.languages = Array.from(langInputs).map(input => input.value).filter(value => value.trim() !== '');
 
-    // Get hobbies data
-    const hobbyInputs = document.querySelectorAll('.hobby-input');
-    data.hobbies = Array.from(hobbyInputs).map(input => input.value).filter(value => value.trim() !== '');
+    // Get hobbies data - now managed through React state
+    // Since hobbies are now managed in React state, we need to get them from the current formData state
+    data.hobbies = formData.hobbies || [];
 
     // Get references data
     const refInputs = document.querySelectorAll('.references-section input[type="text"]');
