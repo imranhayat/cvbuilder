@@ -7,7 +7,9 @@ function Preview1({ formData: propFormData, autoSaveStatus, hasUnsavedChanges })
   const { formData: hookFormData, getProfileImageUrl, formatContactInfo } = usePreviewHandler(propFormData);
   const formData = propFormData || hookFormData;
   
-  // Debug logs removed to prevent console spam
+  // Debug: Log hobbies data to see what's being passed
+  console.log('Preview1 - formData.hobbies:', formData.hobbies);
+  console.log('Preview1 - propFormData:', propFormData);
   
   // Fallback data if form is empty (for testing)
   const displayData = {
