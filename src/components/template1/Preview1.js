@@ -7,9 +7,7 @@ function Preview1({ formData: propFormData, autoSaveStatus, hasUnsavedChanges })
   const { formData: hookFormData, getProfileImageUrl, formatContactInfo } = usePreviewHandler(propFormData);
   const formData = propFormData || hookFormData;
   
-  // Debug: Log hobbies data to see what's being passed
-  console.log('Preview1 - formData.hobbies:', formData.hobbies);
-  console.log('Preview1 - propFormData:', propFormData);
+  // Debug logs removed for cleaner console
   
   // Fallback data if form is empty (for testing)
   const displayData = {
@@ -26,9 +24,9 @@ function Preview1({ formData: propFormData, autoSaveStatus, hasUnsavedChanges })
       { jobTitle: 'Senior Developer', company: 'Tech Corp', duration: '2020-2023', jobDetails: 'Led development of web applications\nImplemented modern frameworks\nMentored junior developers' }
     ],
     skills: formData.skills && formData.skills.length > 0 ? formData.skills.filter(skill => skill && skill.trim() !== '') : [],
-    certifications: formData.certifications && formData.certifications.length > 0 ? formData.certifications : [],
-    languages: formData.languages && formData.languages.length > 0 ? formData.languages : ['English', 'Urdu', 'Punjabi'],
-    hobbies: formData.hobbies && formData.hobbies.length > 0 ? formData.hobbies : [],
+    certifications: formData.certifications && formData.certifications.length > 0 ? formData.certifications.filter(cert => cert && cert.trim() !== '') : [],
+    languages: formData.languages && formData.languages.length > 0 ? formData.languages.filter(lang => lang && lang.trim() !== '') : ['English', 'Urdu', 'Punjabi'],
+    hobbies: formData.hobbies && formData.hobbies.length > 0 ? formData.hobbies.filter(hobby => hobby && hobby.trim() !== '') : [],
     otherInfo: formData.otherInfo && formData.otherInfo.length > 0 ? formData.otherInfo.filter(info => info.value && info.value.trim() !== '') : [],
     customSection: formData.customSection && formData.customSection.length > 0 ? formData.customSection : [],
     references: formData.references && formData.references.length > 0 ? formData.references : ['References would be furnished on demand.']
