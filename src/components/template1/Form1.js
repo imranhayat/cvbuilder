@@ -735,6 +735,16 @@ function Form({ formData, updateFormData, markAsChanged }) {
                         type="text"
                         name="hobby"
                         placeholder="Enter a hobby"
+                        value={formData.hobbies?.[0] || ''}
+                        onChange={(e) => {
+                            const newHobbies = [...(formData.hobbies || [])];
+                            if (newHobbies.length === 0) {
+                                newHobbies.push(e.target.value);
+                            } else {
+                                newHobbies[0] = e.target.value;
+                            }
+                            handleInputChange('hobbies', newHobbies);
+                        }}
                     />
                 </div>
 

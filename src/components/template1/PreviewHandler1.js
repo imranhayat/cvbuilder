@@ -140,7 +140,7 @@ const usePreviewHandler = (passedFormData = null) => {
     data.languages = Array.from(langInputs).map(input => input.value).filter(value => value.trim() !== '');
 
     // Get hobbies data
-    const hobbyInputs = document.querySelectorAll('.hobbies-section input[type="text"]');
+    const hobbyInputs = document.querySelectorAll('.hobby-input');
     data.hobbies = Array.from(hobbyInputs).map(input => input.value).filter(value => value.trim() !== '');
 
     // Get references data

@@ -10,7 +10,7 @@
 
 .cv-preview.pdf-mode .cv-header {
   gap: 15px;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
   padding-bottom: 12px;
 }
 
@@ -24,7 +24,6 @@
 }
 
 .cv-preview.pdf-mode .section-heading {
-  margin-bottom: 6px;
   font-size: 1.2rem;
   padding-bottom: 4px;
   font-family: 'Arial', sans-serif;
@@ -64,13 +63,13 @@
 }
 
 .cv-preview.pdf-mode .education-institution {
-  font-size: 1.1rem;
+  font-size: 1rem;
   font-family: 'Arial', sans-serif;
 }
 
 .cv-preview.pdf-mode .experience-duration,
 .cv-preview.pdf-mode .education-duration {
-  font-size: 0.95rem;
+  font-size: 1rem;
   font-family: 'Arial', sans-serif;
 }
 
