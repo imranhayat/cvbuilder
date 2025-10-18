@@ -29,7 +29,7 @@ function Preview1({ formData: propFormData, autoSaveStatus, hasUnsavedChanges })
     hobbies: formData.hobbies && formData.hobbies.length > 0 ? formData.hobbies.filter(hobby => hobby && hobby.trim() !== '') : [],
     otherInfo: formData.otherInfo && formData.otherInfo.length > 0 ? formData.otherInfo.filter(info => info.value && info.value.trim() !== '') : [],
     customSection: formData.customSection && formData.customSection.length > 0 ? formData.customSection : [],
-    references: formData.references && formData.references.length > 0 ? formData.references : ['References would be furnished on demand.']
+    references: formData.references && formData.references.length > 0 ? formData.references.filter(ref => ref && ref.trim() !== '') : []
   };
   const profileImageUrl = getProfileImageUrl;
   const contactInfo = formatContactInfo();
@@ -251,19 +251,21 @@ function Preview1({ formData: propFormData, autoSaveStatus, hasUnsavedChanges })
           </div>
         )}
 
-        {/* References Section - Always show with default text */}
-        <div className="cv-section">
-          <h3 className="section-heading">References</h3>
-          <div className="section-content">
-            <div className="references-content">
-              {displayData.references.map((reference, index) => (
-                <div key={index} className="reference-item">
-                  <p className="reference-text">{reference}</p>
-                </div>
-              ))}
+        {/* References Section */}
+        {displayData.references && displayData.references.length > 0 && (
+          <div className="cv-section">
+            <h3 className="section-heading">References</h3>
+            <div className="section-content">
+              <div className="references-content">
+                {displayData.references.map((reference, index) => (
+                  <div key={index} className="reference-item">
+                    <p className="reference-text">{reference}</p>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
-        </div>
+        )}
 
         {/* Download PDF Button */}
         <div className="download-pdf-container">
