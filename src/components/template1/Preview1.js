@@ -7,7 +7,8 @@ function Preview1({ formData: propFormData, autoSaveStatus, hasUnsavedChanges })
   const { formData: hookFormData, getProfileImageUrl, formatContactInfo } = usePreviewHandler(propFormData);
   const formData = propFormData || hookFormData;
   
-  // Debug logs removed for cleaner console
+  // Debug: Log references data to see what's being passed
+  console.log('Preview1 - formData.references:', formData.references);
   
   // Fallback data if form is empty (for testing)
   const displayData = {
@@ -31,6 +32,11 @@ function Preview1({ formData: propFormData, autoSaveStatus, hasUnsavedChanges })
     customSection: formData.customSection && formData.customSection.length > 0 ? formData.customSection : [],
     references: formData.references && formData.references.length > 0 ? formData.references.filter(ref => ref && ref.trim() !== '') : []
   };
+  
+  // Debug: Log displayData references after filtering
+  console.log('Preview1 - displayData.references:', displayData.references);
+  console.log('Preview1 - displayData.references.length:', displayData.references.length);
+  
   const profileImageUrl = getProfileImageUrl;
   const contactInfo = formatContactInfo();
   
