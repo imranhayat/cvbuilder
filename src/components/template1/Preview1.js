@@ -7,35 +7,25 @@ function Preview1({ formData: propFormData, autoSaveStatus, hasUnsavedChanges })
   const { formData: hookFormData, getProfileImageUrl, formatContactInfo } = usePreviewHandler(propFormData);
   const formData = propFormData || hookFormData;
   
-  // Debug: Log references data to see what's being passed
-  console.log('Preview1 - formData.references:', formData.references);
-  
-  // Fallback data if form is empty (for testing)
+  // Default sections to show on page load: professional-summary, skills, languages, references
   const displayData = {
-    name: formData.name || 'John Doe',
+    name: formData.name || '',
     position: formData.position || '',
-    phone: formData.phone || '+1 234 567 8900',
-    email: formData.email || 'john.doe@email.com',
-    address: formData.address || '123 Main St, City, State',
+    phone: formData.phone || '',
+    email: formData.email || '',
+    address: formData.address || '',
     professionalSummary: formData.professionalSummary || 'To work with a organization that offers a creative, dynamic and professional environment, where my education, knowledge, skills and proven abilities can be fully utilized and which also offers learning opportunities for my career development in the long run.',
-    education: formData.education && formData.education.length > 0 ? formData.education : [
-      { degree: 'Bachelor of Computer Science', board: 'University of Technology', year: '2020', marks: '3.8/4.0' }
-    ],
-    experience: formData.experience && formData.experience.length > 0 ? formData.experience : [
-      { jobTitle: 'Senior Developer', company: 'Tech Corp', duration: '2020-2023', jobDetails: 'Led development of web applications\nImplemented modern frameworks\nMentored junior developers' }
-    ],
-    skills: formData.skills && formData.skills.length > 0 ? formData.skills.filter(skill => skill && skill.trim() !== '') : [],
+    education: formData.education && formData.education.length > 0 ? formData.education : [],
+    experience: formData.experience && formData.experience.length > 0 ? formData.experience : [],
+    skills: formData.skills && formData.skills.length > 0 ? formData.skills.filter(skill => skill && skill.trim() !== '') : ['Communication Skills', 'Time Management', 'Problem Solving', 'Hardworking'],
     certifications: formData.certifications && formData.certifications.length > 0 ? formData.certifications.filter(cert => cert && cert.trim() !== '') : [],
     languages: formData.languages && formData.languages.length > 0 ? formData.languages.filter(lang => lang && lang.trim() !== '') : ['English', 'Urdu', 'Punjabi'],
     hobbies: formData.hobbies && formData.hobbies.length > 0 ? formData.hobbies.filter(hobby => hobby && hobby.trim() !== '') : [],
     otherInfo: formData.otherInfo && formData.otherInfo.length > 0 ? formData.otherInfo.filter(info => info.value && info.value.trim() !== '') : [],
     customSection: formData.customSection && formData.customSection.length > 0 ? formData.customSection : [],
-    references: formData.references && formData.references.length > 0 ? formData.references.filter(ref => ref && ref.trim() !== '') : []
+    references: formData.references && formData.references.length > 0 ? formData.references.filter(ref => ref && ref.trim() !== '') : ['References would be furnished on demand.']
   };
   
-  // Debug: Log displayData references after filtering
-  console.log('Preview1 - displayData.references:', displayData.references);
-  console.log('Preview1 - displayData.references.length:', displayData.references.length);
   
   const profileImageUrl = getProfileImageUrl;
   const contactInfo = formatContactInfo();
