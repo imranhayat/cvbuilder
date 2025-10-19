@@ -218,7 +218,14 @@ const usePreviewHandler = (passedFormData = null) => {
   // Function to get profile image URL - memoized to prevent flickering
   const getProfileImageUrl = useMemo(() => {
     if (formData.profileImage) {
-      return URL.createObjectURL(formData.profileImage);
+      // If it's a File object, create object URL
+      if (formData.profileImage instanceof File) {
+        return URL.createObjectURL(formData.profileImage);
+      }
+      // If it's base64 data from database, use it directly
+      if (formData.profileImage.data) {
+        return formData.profileImage.data;
+      }
     }
     return null;
   }, [formData.profileImage]);

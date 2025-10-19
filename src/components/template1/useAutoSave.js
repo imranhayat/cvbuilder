@@ -63,7 +63,7 @@ const useAutoSave = (formData, saveInterval = 10000) => {
       }
 
       // Format CV data for database
-      const cvData = dbHelpers.formatCVData(formData);
+      const cvData = await dbHelpers.formatCVData(formData);
       cvData.user_id = user.id;
       cvData.template_id = 'template1'; // Default template
       

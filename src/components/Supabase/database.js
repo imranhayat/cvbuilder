@@ -156,7 +156,33 @@ export const initializeDatabase = async (supabase) => {
 // Helper functions for database operations
 export const dbHelpers = {
   // Format CV data for database storage
-  formatCVData: (formData) => {
+  formatCVData: async (formData) => {
+    let profileImageData = null;
+    
+    // Handle profile image - convert file to base64 if it exists
+    if (formData.profileImage && formData.profileImage instanceof File) {
+      try {
+        const base64 = await new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(reader.result);
+          reader.onerror = reject;
+          reader.readAsDataURL(formData.profileImage);
+        });
+        profileImageData = {
+          name: formData.profileImage.name,
+          type: formData.profileImage.type,
+          size: formData.profileImage.size,
+          data: base64
+        };
+        console.log('Profile image converted to base64:', profileImageData.name);
+      } catch (error) {
+        console.error('Error converting profile image to base64:', error);
+      }
+    } else if (formData.profileImage && typeof formData.profileImage === 'object') {
+      // If it's already a base64 object, use it directly
+      profileImageData = formData.profileImage;
+    }
+
     return {
       name: formData.name || '',
       title: formData.position || '',
@@ -178,7 +204,8 @@ export const dbHelpers = {
         hobbies: formData.hobbies || [],
         otherInfo: formData.otherInfo || [],
         customSection: formData.customSection || [],
-        references: formData.references || []
+        references: formData.references || [],
+        profileImage: profileImageData
       }
     }
   },
@@ -201,7 +228,8 @@ export const dbHelpers = {
       hobbies: data.hobbies || [],
       otherInfo: data.otherInfo || [],
       customSection: data.customSection || [],
-      references: data.references || []
+      references: data.references || [],
+      profileImage: data.profileImage || null
     }
   }
 }
