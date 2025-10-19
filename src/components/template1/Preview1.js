@@ -29,8 +29,9 @@ function Preview1({ formData: propFormData, autoSaveStatus, hasUnsavedChanges })
   const profileImageUrl = getProfileImageUrl;
   const contactInfo = formatContactInfo();
   
-  // Debug: Log all form data
-  // Debug logs removed for cleaner console
+  // Debug: Log profile image data
+  console.log('🔍 Preview1 - formData.profileImage:', formData.profileImage);
+  console.log('🔍 Preview1 - profileImageUrl:', profileImageUrl);
 
   return (
     <div className="right-container">

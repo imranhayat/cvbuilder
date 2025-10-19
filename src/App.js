@@ -78,6 +78,7 @@ function App() {
   // Update form data
   const updateFormData = (newData) => {
     console.log('App.js - updateFormData called with:', newData);
+    console.log('App.js - profileImage in newData:', newData.profileImage);
     setFormData(newData);
     hookMarkAsChanged(); // Use hook's markAsChanged instead of local state
   };
