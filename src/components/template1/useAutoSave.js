@@ -71,14 +71,15 @@ const useAutoSave = (formData, saveInterval = 10000) => {
 
       let savedCV;
       if (currentCVId) {
-        console.log('Updating existing CV:', currentCVId);
+        console.log('🔄 Updating existing CV:', currentCVId);
         // Update existing CV
         savedCV = await cvService.updateCV(currentCVId, cvData);
+        console.log('✅ CV updated successfully:', savedCV);
       } else {
-        console.log('Creating new CV...');
+        console.log('➕ Creating new CV...');
         // Create new CV
         savedCV = await cvService.createCV(cvData);
-        console.log('New CV created:', savedCV);
+        console.log('✅ New CV created:', savedCV);
         setCurrentCVId(savedCV.id);
       }
       
@@ -137,11 +138,15 @@ const useAutoSave = (formData, saveInterval = 10000) => {
   // Load CV data from Supabase
   const loadCV = async (cvId) => {
     try {
+      console.log('📥 Loading CV with ID:', cvId);
       const cvData = await cvService.getCV(cvId);
       setCurrentCVId(cvId);
-      return dbHelpers.extractFormData(cvData);
+      console.log('✅ CV loaded, currentCVId set to:', cvId);
+      const formData = dbHelpers.extractFormData(cvData);
+      console.log('📋 Extracted form data:', formData);
+      return formData;
     } catch (err) {
-      console.error('Error loading CV:', err);
+      console.error('❌ Error loading CV:', err);
       return null;
     }
   };

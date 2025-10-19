@@ -162,14 +162,26 @@ function App() {
     setCurrentView('dashboard');
   };
 
-  const handleEditCV = (cv) => {
+  const handleEditCV = async (cv) => {
     console.log('App.js - CV selected for editing:', cv);
     // Load the CV data and switch to CV builder view
-    if (cv && cv.cv_data) {
-      const formData = dbHelpers.extractFormData(cv);
-      setFormData(formData);
-      setCurrentView('cv-builder');
-      setSelectedTemplate(cv.template_id || 'template1');
+    if (cv && cv.id) {
+      try {
+        // Use the loadCV function from the hook to properly set currentCVId
+        const loadedFormData = await loadCV(cv.id);
+        if (loadedFormData) {
+          setFormData(loadedFormData);
+          setCurrentView('cv-builder');
+          setSelectedTemplate(cv.template_id || 'template1');
+          console.log('CV loaded for editing, currentCVId should be set in hook');
+        } else {
+          console.error('Failed to load CV data for ID:', cv.id);
+          alert('Failed to load CV data. Please try again.');
+        }
+      } catch (error) {
+        console.error('Error loading CV for editing:', error);
+        alert('An error occurred while loading the CV. Please try again.');
+      }
     }
   };
 
