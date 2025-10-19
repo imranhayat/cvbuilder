@@ -139,11 +139,6 @@ function Login() {
           </p>
         </div>
 
-        <div className="demo-credentials">
-          <h3>Demo Credentials:</h3>
-          <p><strong>Email:</strong> admin@cvbuilder.com</p>
-          <p><strong>Password:</strong> admin123</p>
-        </div>
       </div>
     </div>
   );
