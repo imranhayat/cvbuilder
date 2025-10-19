@@ -176,6 +176,8 @@ export const dbHelpers = {
         certifications: formData.certifications || [],
         languages: formData.languages || [],
         hobbies: formData.hobbies || [],
+        otherInfo: formData.otherInfo || [],
+        customSection: formData.customSection || [],
         references: formData.references || []
       }
     }
@@ -197,6 +199,8 @@ export const dbHelpers = {
       certifications: data.certifications || [],
       languages: data.languages || [],
       hobbies: data.hobbies || [],
+      otherInfo: data.otherInfo || [],
+      customSection: data.customSection || [],
       references: data.references || []
     }
   }
