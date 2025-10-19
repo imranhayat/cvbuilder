@@ -8,7 +8,8 @@ const SearchCV = ({ onBack, onEditCV }) => {
   const [searchResults, setSearchResults] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
   const [useClientSearch, setUseClientSearch] = useState(true);
-  const { cvs, searchCVs, loading, error } = useCVs();
+  const [loadingCV, setLoadingCV] = useState(null);
+  const { cvs, searchCVs, fetchCompleteCV, loading, error } = useCVs();
   const searchTimeoutRef = useRef(null);
   const searchCacheRef = useRef(new Map());
 
@@ -112,9 +113,26 @@ const SearchCV = ({ onBack, onEditCV }) => {
     });
   }, [searchResults]);
 
-  const handleCVClick = (cv) => {
+  const handleCVClick = async (cv) => {
     if (onEditCV) {
-      onEditCV(cv);
+      try {
+        setLoadingCV(cv.id);
+        // Load complete CV data when user clicks to edit
+        const completeCV = await fetchCompleteCV(cv.id);
+        if (completeCV) {
+          onEditCV(completeCV);
+        } else {
+          console.error('Failed to load complete CV data');
+          // Fallback to lightweight data
+          onEditCV(cv);
+        }
+      } catch (error) {
+        console.error('Error loading complete CV:', error);
+        // Fallback to lightweight data
+        onEditCV(cv);
+      } finally {
+        setLoadingCV(null);
+      }
     }
   };
 
@@ -186,6 +204,9 @@ const SearchCV = ({ onBack, onEditCV }) => {
               <span className={`search-mode ${useClientSearch ? 'client-mode' : 'server-mode'}`}>
                 {useClientSearch ? '⚡ Client Search' : '🌐 Server Search'}
               </span>
+              <span className="optimization-indicator">
+                🚀 Lightweight Loading
+              </span>
               {cvs.length >= 100 && (
                 <button 
                   className="toggle-search-mode"
@@ -199,19 +220,23 @@ const SearchCV = ({ onBack, onEditCV }) => {
           </div>
           <div className="results-list">
             {memoizedSearchResults.map((cv) => (
-              <div key={cv.id} className="cv-result-card" onClick={() => handleCVClick(cv)}>
+              <div key={cv.id} className={`cv-result-card ${loadingCV === cv.id ? 'loading' : ''}`} onClick={() => handleCVClick(cv)}>
                 <div className="cv-info">
                   <h4>{cv.name}</h4>
                   <p className="cv-phone">{cv.phoneNumber}</p>
                 </div>
                 <div className="cv-actions">
-                  <button 
-                    className="delete-icon" 
-                    onClick={(e) => handleDeleteCV(cv.id, e)}
-                    title="Delete CV"
-                  >
-                    🗑️
-                  </button>
+                  {loadingCV === cv.id ? (
+                    <div className="loading-spinner-small"></div>
+                  ) : (
+                    <button 
+                      className="delete-icon" 
+                      onClick={(e) => handleDeleteCV(cv.id, e)}
+                      title="Delete CV"
+                    >
+                      🗑️
+                    </button>
+                  )}
                 </div>
               </div>
             ))}

@@ -29,16 +29,25 @@ export const useCVs = () => {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
 
-  // Fetch CVs for current user
+  // Fetch CVs for current user (lightweight version for list display)
   const fetchCVs = async () => {
     if (!user) return
 
     try {
       setLoading(true)
       setError(null)
+      // Only select essential fields for fast loading
       const { data, error } = await supabase
         .from('cvs')
-        .select('*')
+        .select(`
+          id,
+          name,
+          title,
+          company,
+          created_at,
+          updated_at,
+          cv_data!inner(personal_info!inner(phone, email))
+        `)
         .eq('user_id', user.id)
         .order('created_at', { ascending: false })
       
@@ -48,6 +57,26 @@ export const useCVs = () => {
       setError(err.message)
     } finally {
       setLoading(false)
+    }
+  }
+
+  // Fetch complete CV data when needed (for editing)
+  const fetchCompleteCV = async (cvId) => {
+    if (!user) return null
+
+    try {
+      const { data, error } = await supabase
+        .from('cvs')
+        .select('*')
+        .eq('id', cvId)
+        .eq('user_id', user.id)
+        .single()
+      
+      if (error) throw error
+      return data
+    } catch (err) {
+      console.error('Error fetching complete CV:', err)
+      throw err
     }
   }
 
@@ -122,16 +151,25 @@ export const useCVs = () => {
     }
   }
 
-  // Search CVs
+  // Search CVs (lightweight version)
   const searchCVs = async (searchTerm) => {
     if (!user) return []
 
     try {
       setLoading(true)
       setError(null)
+      // Only select essential fields for fast search
       const { data, error } = await supabase
         .from('cvs')
-        .select('*')
+        .select(`
+          id,
+          name,
+          title,
+          company,
+          created_at,
+          updated_at,
+          cv_data!inner(personal_info!inner(phone, email))
+        `)
         .eq('user_id', user.id)
         .or(`name.ilike.%${searchTerm}%,title.ilike.%${searchTerm}%,company.ilike.%${searchTerm}%`)
         .order('created_at', { ascending: false })
@@ -160,6 +198,7 @@ export const useCVs = () => {
     loading,
     error,
     fetchCVs,
+    fetchCompleteCV,
     createCV,
     updateCV,
     deleteCV,
