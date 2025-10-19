@@ -200,14 +200,8 @@ const SearchCV = ({ onBack, onEditCV }) => {
         <div className="search-results">
           <div className="search-results-header">
             <h3>Search Results ({memoizedSearchResults.length})</h3>
-            <div className="search-performance-info">
-              <span className={`search-mode ${useClientSearch ? 'client-mode' : 'server-mode'}`}>
-                {useClientSearch ? '⚡ Client Search' : '🌐 Server Search'}
-              </span>
-              <span className="optimization-indicator">
-                🚀 Lightweight Loading
-              </span>
-              {cvs.length >= 100 && (
+            {cvs.length >= 100 && (
+              <div className="search-performance-info">
                 <button 
                   className="toggle-search-mode"
                   onClick={() => setUseClientSearch(!useClientSearch)}
@@ -215,8 +209,8 @@ const SearchCV = ({ onBack, onEditCV }) => {
                 >
                   {useClientSearch ? 'Switch to Server Search' : 'Switch to Client Search'}
                 </button>
-              )}
-            </div>
+              </div>
+            )}
           </div>
           <div className="results-list">
             {memoizedSearchResults.map((cv) => (
