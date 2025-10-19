@@ -157,11 +157,13 @@ export const initializeDatabase = async (supabase) => {
 export const dbHelpers = {
   // Format CV data for database storage
   formatCVData: async (formData) => {
+    console.log('🔍 formatCVData - formData.profileImage:', formData.profileImage);
     let profileImageData = null;
     
     // Handle profile image - convert file to base64 if it exists
     if (formData.profileImage && formData.profileImage instanceof File) {
       try {
+        console.log('📸 Converting File to base64:', formData.profileImage.name);
         const base64 = await new Promise((resolve, reject) => {
           const reader = new FileReader();
           reader.onload = () => resolve(reader.result);
@@ -174,13 +176,16 @@ export const dbHelpers = {
           size: formData.profileImage.size,
           data: base64
         };
-        console.log('Profile image converted to base64:', profileImageData.name);
+        console.log('✅ Profile image converted to base64:', profileImageData.name);
       } catch (error) {
-        console.error('Error converting profile image to base64:', error);
+        console.error('❌ Error converting profile image to base64:', error);
       }
     } else if (formData.profileImage && typeof formData.profileImage === 'object') {
       // If it's already a base64 object, use it directly
+      console.log('📸 Using existing base64 profile image:', formData.profileImage.name);
       profileImageData = formData.profileImage;
+    } else {
+      console.log('❌ No profile image found in formData');
     }
 
     return {
@@ -213,7 +218,9 @@ export const dbHelpers = {
   // Extract form data from database CV data
   extractFormData: (cvData) => {
     const data = cvData.cv_data
-    return {
+    console.log('🔍 extractFormData - cvData.cv_data.profileImage:', data.profileImage);
+    
+    const extractedData = {
       name: data.personal_info?.name || '',
       position: data.personal_info?.position || '',
       phone: data.personal_info?.phone || '',
@@ -230,7 +237,10 @@ export const dbHelpers = {
       customSection: data.customSection || [],
       references: data.references || [],
       profileImage: data.profileImage || null
-    }
+    };
+    
+    console.log('📋 Extracted profileImage:', extractedData.profileImage);
+    return extractedData;
   }
 }
 
