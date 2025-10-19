@@ -12,6 +12,7 @@ import { authService } from './components/Supabase/supabase';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [selectedTemplate, setSelectedTemplate] = useState('template1');
   const [currentView, setCurrentView] = useState('dashboard');
   const [formData, setFormData] = useState({
@@ -94,48 +95,82 @@ function App() {
   };
 
   useEffect(() => {
+    let mounted = true;
+
     // Check Supabase authentication status
     const checkAuth = async () => {
       try {
+        console.log('Checking authentication status...');
         const user = await authService.getCurrentUser();
-        if (user) {
-          console.log('User already authenticated:', user.email);
-          setIsAuthenticated(true);
-        } else {
-          console.log('No authenticated user found');
-          setIsAuthenticated(false);
+        
+        if (mounted) {
+          if (user) {
+            console.log('User already authenticated:', user.email);
+            setIsAuthenticated(true);
+          } else {
+            console.log('No authenticated user found');
+            setIsAuthenticated(false);
+          }
+          setIsLoading(false);
         }
       } catch (error) {
         console.log('Authentication check failed:', error.message);
-        setIsAuthenticated(false);
+        if (mounted) {
+          setIsAuthenticated(false);
+          setIsLoading(false);
+        }
       }
     };
 
+    // Set up Supabase auth state change listener
+    const { data: { subscription } } = authService.onAuthStateChange((event, session) => {
+      console.log('Auth state changed:', event, session?.user?.email);
+      
+      if (mounted) {
+        if (session?.user) {
+          console.log('User authenticated via auth state change:', session.user.email);
+          setIsAuthenticated(true);
+        } else {
+          console.log('User signed out via auth state change');
+          setIsAuthenticated(false);
+        }
+        setIsLoading(false);
+      }
+    });
+
+    // Initial auth check
     checkAuth();
 
     // Listen for authentication events from Login component
     const handleAuth = () => {
-      setIsAuthenticated(true);
+      if (mounted) {
+        setIsAuthenticated(true);
+        setIsLoading(false);
+      }
     };
 
     window.addEventListener('userAuthenticated', handleAuth);
     
     return () => {
+      mounted = false;
+      subscription?.unsubscribe();
       window.removeEventListener('userAuthenticated', handleAuth);
     };
   }, []);
 
   const handleLogout = async () => {
     try {
+      setIsLoading(true);
       await authService.signOut();
       console.log('User signed out successfully');
     } catch (error) {
       console.error('Logout error:', error);
+    } finally {
+      localStorage.removeItem('cvBuilderAuth');
+      setIsAuthenticated(false);
+      setIsLoading(false);
+      setCurrentView('dashboard');
     }
-    
-    localStorage.removeItem('cvBuilderAuth');
-    setIsAuthenticated(false);
-    setCurrentView('dashboard');
   };
 
   const handleTemplateSelect = (templateId) => {
@@ -148,6 +183,22 @@ function App() {
   const handleBackToDashboard = () => {
     setCurrentView('dashboard');
   };
+
+  // Show loading screen while checking authentication
+  if (isLoading) {
+    return (
+      <div style={{ 
+        display: 'flex', 
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        height: '100vh',
+        fontSize: '18px',
+        color: '#666'
+      }}>
+        Checking authentication...
+      </div>
+    );
+  }
 
   if (!isAuthenticated) {
     return <Login />;
