@@ -38,7 +38,11 @@ const Dashboard = ({ onTemplateSelect, onLogout, onEditCV }) => {
   return (
     <div className="dashboard-container">
       <div className="dashboard-header">
-        <h1>CV Builder Dashboard</h1>
+        <div className="header-content">
+          <h1>My CV Dashboard</h1>
+          <p className="welcome-message">Welcome! Let's create your professional CV</p>
+          <p className="sub-message">Your CVs are automatically saved and secure</p>
+        </div>
         <button onClick={onLogout} className="logout-button">
           Logout
         </button>
@@ -55,8 +59,8 @@ const Dashboard = ({ onTemplateSelect, onLogout, onEditCV }) => {
               <polyline points="10,9 9,9 8,9"/>
             </svg>
           </div>
-          <h3>Make a New CV</h3>
-          <p>Create a new CV from scratch using our templates</p>
+          <h3>Create New CV</h3>
+          <p>Start building your professional CV with our easy-to-use templates</p>
         </div>
 
         <div className="option-card" onClick={handleSearchCV}>
@@ -66,7 +70,7 @@ const Dashboard = ({ onTemplateSelect, onLogout, onEditCV }) => {
               <path d="m21 21-4.35-4.35"/>
             </svg>
           </div>
-          <h3>Search for Existing CV</h3>
+          <h3>My Saved CVs</h3>
           <p>Find and edit your previously created CVs</p>
         </div>
       </div>

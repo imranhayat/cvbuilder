@@ -50,6 +50,28 @@
   margin: 0;
 }
 
+/* Welcome Message for Signup */
+.welcome-message {
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 15px;
+  margin-top: 15px;
+  border-left: 4px solid #667eea;
+}
+
+.welcome-message p {
+  color: #555;
+  font-size: 12px;
+  margin: 4px 0;
+  font-weight: 500;
+}
+
+.welcome-message p:first-child {
+  color: #667eea;
+  font-weight: 600;
+  font-size: 13px;
+}
+
 /* Login Form */
 .login-form {
   margin-bottom: 20px;
@@ -141,6 +163,25 @@
 }
 
 .toggle-button:hover {
+  color: #5a6fd8;
+}
+
+/* Forgot Password Link */
+.forgot-password {
+  margin-top: 15px;
+}
+
+.forgot-password-link {
+  background: none;
+  border: none;
+  color: #667eea;
+  font-size: 12px;
+  cursor: pointer;
+  text-decoration: underline;
+  font-weight: 500;
+}
+
+.forgot-password-link:hover {
   color: #5a6fd8;
 }
 

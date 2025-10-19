@@ -80,8 +80,15 @@ function Login() {
     <div className="login-container">
       <div className="login-card">
         <div className="login-header">
-          <h1>CV Builder</h1>
-          <p>{isLogin ? 'Sign in to your account' : 'Create your account'}</p>
+          <h1>Professional CV Builder</h1>
+          <p>{isLogin ? 'Sign in to create your professional CV' : 'Get Started - It\'s Free!'}</p>
+          {!isLogin && (
+            <div className="welcome-message">
+              <p>Create professional CVs in minutes</p>
+              <p>Your data is automatically saved</p>
+              <p>No experience needed - we guide you through it</p>
+            </div>
+          )}
         </div>
 
         <form onSubmit={handleSubmit} className="login-form">
@@ -126,7 +133,7 @@ function Login() {
           {error && <div className="error-message">{error}</div>}
 
           <button type="submit" className="login-button">
-            {isLogin ? 'Sign In' : 'Sign Up'}
+            {isLogin ? 'Sign In' : 'Get Started'}
           </button>
         </form>
 
@@ -134,9 +141,16 @@ function Login() {
           <p>
             {isLogin ? "Don't have an account? " : "Already have an account? "}
             <button type="button" onClick={toggleMode} className="toggle-button">
-              {isLogin ? 'Sign Up' : 'Sign In'}
+              {isLogin ? 'Get Started' : 'Sign In'}
             </button>
           </p>
+          {isLogin && (
+            <div className="forgot-password">
+              <button type="button" className="forgot-password-link">
+                Forgot your password?
+              </button>
+            </div>
+          )}
         </div>
 
       </div>
