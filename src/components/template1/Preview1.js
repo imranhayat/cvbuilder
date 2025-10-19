@@ -7,9 +7,6 @@ function Preview1({ formData: propFormData, autoSaveStatus, hasUnsavedChanges })
   const { formData: hookFormData, getProfileImageUrl, formatContactInfo } = usePreviewHandler(propFormData);
   const formData = propFormData || hookFormData;
   
-  // Debug: Log experience data to see what's being passed
-  console.log('Preview1 - formData.experience:', formData.experience);
-  
   // Default sections to show on page load: professional-summary, skills, languages, references
   const displayData = {
     name: formData.name || '',
@@ -28,11 +25,6 @@ function Preview1({ formData: propFormData, autoSaveStatus, hasUnsavedChanges })
     customSection: formData.customSection && formData.customSection.length > 0 ? formData.customSection : [],
     references: formData.references && formData.references.length > 0 ? formData.references.filter(ref => ref && ref.trim() !== '') : ['References would be furnished on demand.']
   };
-  
-  // Debug: Log displayData experience after processing
-  console.log('Preview1 - displayData.experience:', displayData.experience);
-  console.log('Preview1 - displayData.experience.length:', displayData.experience.length);
-  
   
   const profileImageUrl = getProfileImageUrl;
   const contactInfo = formatContactInfo();
@@ -121,7 +113,7 @@ function Preview1({ formData: propFormData, autoSaveStatus, hasUnsavedChanges })
           <div className="cv-section">
             <h3 className="section-heading">Experience</h3>
             <div className="section-content">
-              displayData.experience.map((exp, index) => (
+              {displayData.experience.map((exp, index) => (
                 <div key={index} className="experience-item">
                   <div className="experience-header">
                     <span className="experience-job-title">{exp.jobTitle || 'No job title'}</span>
@@ -146,12 +138,10 @@ function Preview1({ formData: propFormData, autoSaveStatus, hasUnsavedChanges })
                     </div>
                   )}
                 </div>
-              ))
-            ) : (
-              <p>No experience data available</p>
-            )}
+              ))}
+            </div>
           </div>
-        </div>
+        )}
 
         {/* Certifications Section */}
         {displayData.certifications && displayData.certifications.length > 0 && (
