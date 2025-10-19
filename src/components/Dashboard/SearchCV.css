@@ -117,21 +117,21 @@
 
 .results-list {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 0.5rem;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 0.4rem;
 }
 
 .cv-result-card {
   background: white;
-  border-radius: 6px;
-  padding: 0.75rem;
+  border-radius: 4px;
+  padding: 0.5rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
   transition: all 0.3s ease;
   cursor: pointer;
-  min-height: 50px;
+  min-height: 40px;
 }
 
 .cv-result-card:hover {
@@ -146,22 +146,24 @@
 }
 
 .cv-info h4 {
-  font-size: 1rem;
-  margin-bottom: 0.2rem;
+  font-size: 0.9rem;
+  margin-bottom: 0.1rem;
   color: #333;
   font-weight: 600;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  line-height: 1.2;
 }
 
 .cv-phone {
   color: #666;
-  font-size: 0.85rem;
+  font-size: 0.75rem;
   margin: 0;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  line-height: 1.2;
 }
 
 .cv-actions {
@@ -171,19 +173,19 @@
 }
 
 .delete-icon {
-  padding: 0.3rem;
+  padding: 0.2rem;
   border: none;
-  border-radius: 4px;
+  border-radius: 3px;
   cursor: pointer;
-  font-size: 1rem;
+  font-size: 0.9rem;
   transition: all 0.3s ease;
   background: transparent;
   color: #dc3545;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 28px;
-  height: 28px;
+  width: 24px;
+  height: 24px;
 }
 
 .delete-icon:hover {
