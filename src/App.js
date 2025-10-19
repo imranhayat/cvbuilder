@@ -28,39 +28,20 @@ function App() {
     hobbies: [],
     references: []
   });
+  // Local state for UI (will be overridden by hook)
   const [autoSaveStatus, setAutoSaveStatus] = useState('');
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
   const [formResetKey, setFormResetKey] = useState(0);
 
-  // Auto-save functionality - Updated for deployment
-  const autoSave = async () => {
-    if (!hasUnsavedChanges || !formData.name?.trim()) return;
-
-    try {
-      setAutoSaveStatus('Saving...');
-      
-      setHasUnsavedChanges(false);
-      setAutoSaveStatus('Auto-saved');
-      
-      // Clear status after 2 seconds
-      setTimeout(() => setAutoSaveStatus(''), 2000);
-    } catch (err) {
-      console.error('Auto-save error:', err);
-      setAutoSaveStatus('Auto-save failed');
-      setTimeout(() => setAutoSaveStatus(''), 3000);
-    }
-  };
-
-  // Set up auto-save interval
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (hasUnsavedChanges && formData.name?.trim()) {
-        autoSave();
-      }
-    }, 10000); // Auto-save every 10 seconds
-
-    return () => clearInterval(interval);
-  }, [hasUnsavedChanges, formData]);
+  // Use the useAutoSave hook for Supabase integration
+  const { 
+    autoSaveStatus: hookAutoSaveStatus, 
+    hasUnsavedChanges: hookHasUnsavedChanges, 
+    currentCVId,
+    manualSave,
+    loadCV,
+    createNewCV 
+  } = useAutoSave(formData);
 
   // Load saved draft on component mount
   // Removed localStorage loading - form data will reset on page reload
@@ -107,6 +88,7 @@ function App() {
     setHasUnsavedChanges(false);
     setAutoSaveStatus('');
     setFormResetKey(prev => prev + 1); // Force form re-render
+    createNewCV(); // Reset the hook state
   };
 
   useEffect(() => {
@@ -185,17 +167,17 @@ function App() {
           
           <div className="header-actions">
             <div className="auto-save-status">
-              {autoSaveStatus && (
-                <span className={`status-indicator ${autoSaveStatus.includes('failed') ? 'error' : 'success'}`}>
-                  {autoSaveStatus}
+              {hookAutoSaveStatus && (
+                <span className={`status-indicator ${hookAutoSaveStatus.includes('failed') ? 'error' : 'success'}`}>
+                  {hookAutoSaveStatus}
                 </span>
               )}
-              {hasUnsavedChanges && !autoSaveStatus && (
+              {hookHasUnsavedChanges && !hookAutoSaveStatus && (
                 <span className="status-indicator warning">
                   Unsaved changes
                 </span>
               )}
-              {!autoSaveStatus && !hasUnsavedChanges && (
+              {!hookAutoSaveStatus && !hookHasUnsavedChanges && (
                 <span className="status-indicator success">
                   All changes saved
                 </span>

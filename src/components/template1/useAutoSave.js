@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { cvService, authService } from '../Supabase/supabase';
+import { cvService, authService, supabase } from '../Supabase/supabase';
 import { dbHelpers } from '../Supabase/database';
 
 const useAutoSave = (formData, saveInterval = 10000) => {
@@ -30,6 +30,28 @@ const useAutoSave = (formData, saveInterval = 10000) => {
         console.log('No authenticated user found');
         setAutoSaveStatus('Please log in to save');
         setTimeout(() => setAutoSaveStatus(''), 3000);
+        return;
+      }
+
+      // Test Supabase connection
+      console.log('Testing Supabase connection...');
+      try {
+        const { data: testData, error: testError } = await supabase
+          .from('cvs')
+          .select('count')
+          .limit(1);
+        
+        if (testError) {
+          console.error('Supabase connection test failed:', testError);
+          setAutoSaveStatus('Database connection failed: ' + testError.message);
+          setTimeout(() => setAutoSaveStatus(''), 5000);
+          return;
+        }
+        console.log('Supabase connection test successful');
+      } catch (testErr) {
+        console.error('Supabase connection test error:', testErr);
+        setAutoSaveStatus('Database connection test failed: ' + testErr.message);
+        setTimeout(() => setAutoSaveStatus(''), 5000);
         return;
       }
 
