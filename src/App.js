@@ -30,6 +30,7 @@ function App() {
   });
   const [autoSaveStatus, setAutoSaveStatus] = useState('');
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
+  const [formResetKey, setFormResetKey] = useState(0);
 
   // Auto-save functionality - Updated for deployment
   const autoSave = async () => {
@@ -105,6 +106,7 @@ function App() {
     });
     setHasUnsavedChanges(false);
     setAutoSaveStatus('');
+    setFormResetKey(prev => prev + 1); // Force form re-render
   };
 
   useEffect(() => {
@@ -211,11 +213,13 @@ function App() {
           {/* Form Side */}
           {selectedTemplate === 'template1' ? 
             <Form1 
+              key={formResetKey}
               formData={formData}
               updateFormData={updateFormData}
               markAsChanged={markAsChanged}
             /> : 
             <Form2 
+              key={formResetKey}
               formData={formData}
               updateFormData={updateFormData}
               markAsChanged={markAsChanged}

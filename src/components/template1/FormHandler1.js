@@ -8,6 +8,15 @@ const useFormHandler = (formData, updateFormData, markAsChanged) => {
     // State for active section
     const [activeSection, setActiveSection] = useState('contact-info');
 
+    // Sync referenceText with formData changes
+    useEffect(() => {
+        if (formData.references && formData.references.length > 0) {
+            setReferenceText(formData.references[0]);
+        } else {
+            setReferenceText('References would be furnished on demand.');
+        }
+    }, [formData.references]);
+
     // Handle input changes and trigger auto-save
     const handleInputChange = (field, value) => {
         const newFormData = { ...formData, [field]: value };
