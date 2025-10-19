@@ -17,6 +17,27 @@ const SearchCV = ({ onBack, onEditCV }) => {
     console.log('🔐 SearchCV - Admin status:', isAdmin);
     console.log('📊 SearchCV - Total CVs loaded:', cvs.length);
   }, [isAdmin, cvs.length]);
+
+  // Debug: Test admin detection directly
+  useEffect(() => {
+    const testAdminDetection = async () => {
+      try {
+        console.log('🧪 Testing admin detection directly...');
+        const { data, error } = await supabase
+          .from('users')
+          .select('is_admin, email, full_name')
+          .eq('email', 'admin@cvbuilder.com')  // Replace with your admin email
+          .single();
+        
+        console.log('🧪 Direct admin check result:', data);
+        console.log('🧪 Is admin (direct check):', data?.is_admin);
+      } catch (err) {
+        console.error('🧪 Direct admin check error:', err);
+      }
+    };
+    
+    testAdminDetection();
+  }, []);
   const searchTimeoutRef = useRef(null);
   const searchCacheRef = useRef(new Map());
 
@@ -210,6 +231,13 @@ const SearchCV = ({ onBack, onEditCV }) => {
           <div className="admin-indicator">
             <span className="admin-badge">🔐 ADMIN MODE</span>
             <small>You can see and manage all CVs from all users</small>
+            <button 
+              onClick={() => window.location.reload()} 
+              className="refresh-button"
+              style={{marginTop: '0.5rem', padding: '0.3rem 0.8rem', fontSize: '0.8rem'}}
+            >
+              🔄 Refresh CVs
+            </button>
           </div>
         )}
       </div>
