@@ -7,6 +7,10 @@ const supabaseAnonKey = process.env.REACT_APP_SUPABASE_ANON_KEY || 'your-anon-ke
 // Create Supabase client
 export const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
+// Debug: Log Supabase configuration
+console.log('Supabase URL:', supabaseUrl);
+console.log('Supabase Anon Key:', supabaseAnonKey ? 'Set' : 'Not set');
+
 // Database table names
 export const TABLES = {
   CVS: 'cvs',

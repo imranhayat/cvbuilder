@@ -11,14 +11,23 @@ const useAutoSave = (formData, saveInterval = 10000) => {
 
   // Auto-save functionality
   const autoSave = async () => {
-    if (!hasUnsavedChanges || !formData.name?.trim()) return;
+    console.log('Auto-save triggered:', { hasUnsavedChanges, name: formData.name?.trim() });
+    
+    if (!hasUnsavedChanges || !formData.name?.trim()) {
+      console.log('Auto-save skipped:', { hasUnsavedChanges, name: formData.name?.trim() });
+      return;
+    }
 
     try {
       setAutoSaveStatus('Saving...');
+      console.log('Starting auto-save process...');
       
       // Get current user
       const user = await authService.getCurrentUser();
+      console.log('Current user:', user);
+      
       if (!user) {
+        console.log('No authenticated user found');
         setAutoSaveStatus('Please log in to save');
         setTimeout(() => setAutoSaveStatus(''), 3000);
         return;
@@ -28,14 +37,19 @@ const useAutoSave = (formData, saveInterval = 10000) => {
       const cvData = dbHelpers.formatCVData(formData);
       cvData.user_id = user.id;
       cvData.template_id = 'template1'; // Default template
+      
+      console.log('Formatted CV data:', cvData);
 
       let savedCV;
       if (currentCVId) {
+        console.log('Updating existing CV:', currentCVId);
         // Update existing CV
         savedCV = await cvService.updateCV(currentCVId, cvData);
       } else {
+        console.log('Creating new CV...');
         // Create new CV
         savedCV = await cvService.createCV(cvData);
+        console.log('New CV created:', savedCV);
         setCurrentCVId(savedCV.id);
       }
       
@@ -48,8 +62,9 @@ const useAutoSave = (formData, saveInterval = 10000) => {
       setTimeout(() => setAutoSaveStatus(''), 2000);
     } catch (err) {
       console.error('Auto-save error:', err);
-      setAutoSaveStatus('Auto-save failed');
-      setTimeout(() => setAutoSaveStatus(''), 3000);
+      console.error('Error details:', err.message, err.details, err.hint);
+      setAutoSaveStatus('Auto-save failed: ' + err.message);
+      setTimeout(() => setAutoSaveStatus(''), 5000);
     }
   };
 
