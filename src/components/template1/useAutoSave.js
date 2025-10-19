@@ -6,6 +6,7 @@ const useAutoSave = (formData, saveInterval = 10000) => {
   const [autoSaveStatus, setAutoSaveStatus] = useState('');
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
   const [currentCVId, setCurrentCVId] = useState(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(true);
   const autoSaveTimeoutRef = useRef(null);
   const lastSavedDataRef = useRef(null);
 
@@ -98,14 +99,54 @@ const useAutoSave = (formData, saveInterval = 10000) => {
     }
   };
 
+  // Monitor authentication status
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const user = await authService.getCurrentUser();
+        setIsAuthenticated(!!user);
+      } catch (error) {
+        setIsAuthenticated(false);
+      }
+    };
+    
+    checkAuth();
+    
+    // Listen for auth state changes
+    const { data: { subscription } } = authService.onAuthStateChange((event, session) => {
+      setIsAuthenticated(!!session?.user);
+    });
+    
+    return () => subscription.unsubscribe();
+  }, []);
+
   // Set up auto-save interval
   useEffect(() => {
-    const interval = setInterval(() => {
+    if (!isAuthenticated) {
+      console.log('Auto-save interval stopped - user not authenticated');
+      return;
+    }
+    
+    const interval = setInterval(async () => {
       console.log('Auto-save interval check:', { 
         hasUnsavedChanges, 
         name: formData.name?.trim(),
         formDataKeys: Object.keys(formData)
       });
+      
+      // Double-check authentication before auto-save
+      try {
+        const user = await authService.getCurrentUser();
+        if (!user) {
+          console.log('Auto-save skipped - user not authenticated');
+          setIsAuthenticated(false);
+          return;
+        }
+      } catch (error) {
+        console.log('Auto-save skipped - authentication check failed:', error.message);
+        setIsAuthenticated(false);
+        return;
+      }
       
       if (formData.name?.trim()) {
         console.log('Auto-save conditions met - triggering save');
@@ -116,7 +157,7 @@ const useAutoSave = (formData, saveInterval = 10000) => {
     }, saveInterval);
 
     return () => clearInterval(interval);
-  }, [formData, saveInterval]);
+  }, [formData, saveInterval, isAuthenticated]);
 
   // Removed localStorage loading - form data will reset on page reload
 
