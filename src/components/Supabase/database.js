@@ -8,6 +8,7 @@ CREATE TABLE IF NOT EXISTS public.users (
   email TEXT UNIQUE NOT NULL,
   full_name TEXT,
   avatar_url TEXT,
+  is_admin BOOLEAN DEFAULT FALSE,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
@@ -56,6 +57,15 @@ CREATE POLICY "Users can view own profile" ON public.users
 CREATE POLICY "Users can update own profile" ON public.users
   FOR UPDATE USING (auth.uid() = id);
 
+-- Admin policies for users table
+CREATE POLICY "Admins can view all users" ON public.users
+  FOR SELECT USING (
+    EXISTS (
+      SELECT 1 FROM public.users 
+      WHERE id = auth.uid() AND is_admin = TRUE
+    )
+  );
+
 -- Create RLS policies for CVs table
 CREATE POLICY "Users can view own CVs" ON public.cvs
   FOR SELECT USING (auth.uid() = user_id);
@@ -68,6 +78,31 @@ CREATE POLICY "Users can update own CVs" ON public.cvs
 
 CREATE POLICY "Users can delete own CVs" ON public.cvs
   FOR DELETE USING (auth.uid() = user_id);
+
+-- Admin policies for CVs table
+CREATE POLICY "Admins can view all CVs" ON public.cvs
+  FOR SELECT USING (
+    EXISTS (
+      SELECT 1 FROM public.users 
+      WHERE id = auth.uid() AND is_admin = TRUE
+    )
+  );
+
+CREATE POLICY "Admins can update all CVs" ON public.cvs
+  FOR UPDATE USING (
+    EXISTS (
+      SELECT 1 FROM public.users 
+      WHERE id = auth.uid() AND is_admin = TRUE
+    )
+  );
+
+CREATE POLICY "Admins can delete all CVs" ON public.cvs
+  FOR DELETE USING (
+    EXISTS (
+      SELECT 1 FROM public.users 
+      WHERE id = auth.uid() AND is_admin = TRUE
+    )
+  );
 
 -- Create RLS policies for templates table (public read access)
 CREATE POLICY "Templates are publicly readable" ON public.templates

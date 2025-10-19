@@ -28,6 +28,26 @@ export const useCVs = () => {
   const [cvs, setCvs] = useState([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
+  const [isAdmin, setIsAdmin] = useState(false)
+
+  // Check admin status
+  const checkAdminStatus = async () => {
+    if (!user) return false
+    
+    try {
+      const { data, error } = await supabase
+        .from('users')
+        .select('is_admin')
+        .eq('email', user.email)
+        .single()
+      
+      if (error) throw error
+      return data?.is_admin || false
+    } catch (err) {
+      console.error('Error checking admin status:', err)
+      return false
+    }
+  }
 
   // Fetch CVs for current user (lightweight version for list display)
   const fetchCVs = async () => {
@@ -36,8 +56,12 @@ export const useCVs = () => {
     try {
       setLoading(true)
       setError(null)
-      // Only select essential fields for fast loading
-      const { data, error } = await supabase
+      
+      // Check if user is admin
+      const adminStatus = await checkAdminStatus()
+      setIsAdmin(adminStatus)
+      
+      let query = supabase
         .from('cvs')
         .select(`
           id,
@@ -46,10 +70,17 @@ export const useCVs = () => {
           company,
           created_at,
           updated_at,
-          cv_data
+          cv_data,
+          user_id
         `)
-        .eq('user_id', user.id)
         .order('created_at', { ascending: false })
+      
+      // If admin, get all CVs; otherwise, get only user's CVs
+      if (!adminStatus) {
+        query = query.eq('user_id', user.id)
+      }
+      
+      const { data, error } = await query
       
       if (error) throw error
       setCvs(data || [])
@@ -65,12 +96,20 @@ export const useCVs = () => {
     if (!user) return null
 
     try {
-      const { data, error } = await supabase
+      // Check if user is admin
+      const adminStatus = await checkAdminStatus()
+      
+      let query = supabase
         .from('cvs')
         .select('*')
         .eq('id', cvId)
-        .eq('user_id', user.id)
-        .single()
+      
+      // If not admin, restrict to user's own CVs
+      if (!adminStatus) {
+        query = query.eq('user_id', user.id)
+      }
+      
+      const { data, error } = await query.single()
       
       if (error) throw error
       return data
@@ -164,8 +203,11 @@ export const useCVs = () => {
     try {
       setLoading(true)
       setError(null)
-      // Only select essential fields for fast search
-      const { data, error } = await supabase
+      
+      // Check if user is admin
+      const adminStatus = await checkAdminStatus()
+      
+      let query = supabase
         .from('cvs')
         .select(`
           id,
@@ -174,11 +216,18 @@ export const useCVs = () => {
           company,
           created_at,
           updated_at,
-          cv_data
+          cv_data,
+          user_id
         `)
-        .eq('user_id', user.id)
         .or(`name.ilike.%${searchTerm}%,title.ilike.%${searchTerm}%,company.ilike.%${searchTerm}%`)
         .order('created_at', { ascending: false })
+      
+      // If not admin, restrict to user's own CVs
+      if (!adminStatus) {
+        query = query.eq('user_id', user.id)
+      }
+      
+      const { data, error } = await query
       
       if (error) throw error
       return data || []
@@ -203,6 +252,7 @@ export const useCVs = () => {
     cvs,
     loading,
     error,
+    isAdmin,
     fetchCVs,
     fetchCompleteCV,
     createCV,

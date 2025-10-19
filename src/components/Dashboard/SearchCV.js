@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import './SearchCV.css';
 import { useCVs } from '../Supabase';
-import { cvService } from '../Supabase/supabase';
+import { cvService, supabase } from '../Supabase/supabase';
 
 const SearchCV = ({ onBack, onEditCV }) => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -9,9 +9,35 @@ const SearchCV = ({ onBack, onEditCV }) => {
   const [isSearching, setIsSearching] = useState(false);
   const [useClientSearch, setUseClientSearch] = useState(true);
   const [loadingCV, setLoadingCV] = useState(null);
-  const { cvs, searchCVs, fetchCompleteCV, loading, error } = useCVs();
+  const [userInfo, setUserInfo] = useState({});
+  const { cvs, searchCVs, fetchCompleteCV, loading, error, isAdmin } = useCVs();
   const searchTimeoutRef = useRef(null);
   const searchCacheRef = useRef(new Map());
+
+  // Fetch user information for admin display
+  const fetchUserInfo = useCallback(async (userId) => {
+    if (!isAdmin || userInfo[userId]) return userInfo[userId];
+    
+    try {
+      const { data, error } = await supabase
+        .from('users')
+        .select('email, full_name')
+        .eq('id', userId)
+        .single();
+      
+      if (error) throw error;
+      
+      setUserInfo(prev => ({
+        ...prev,
+        [userId]: data
+      }));
+      
+      return data;
+    } catch (err) {
+      console.error('Error fetching user info:', err);
+      return null;
+    }
+  }, [isAdmin, userInfo]);
 
   // Client-side search function (much faster for small datasets)
   const performClientSearch = useCallback((term, allCVs) => {
@@ -213,27 +239,43 @@ const SearchCV = ({ onBack, onEditCV }) => {
             )}
           </div>
           <div className="results-list">
-            {memoizedSearchResults.map((cv) => (
-              <div key={cv.id} className={`cv-result-card ${loadingCV === cv.id ? 'loading' : ''}`} onClick={() => handleCVClick(cv)}>
-                <div className="cv-info">
-                  <h4>{cv.name}</h4>
-                  <p className="cv-phone">{cv.phoneNumber}</p>
+            {memoizedSearchResults.map((cv) => {
+              // Fetch user info for admin if needed
+              if (isAdmin && cv.user_id && !userInfo[cv.user_id]) {
+                fetchUserInfo(cv.user_id);
+              }
+              
+              const user = userInfo[cv.user_id];
+              const phoneNumber = cv.cv_data?.personal_info?.phone || 'No phone';
+              
+              return (
+                <div key={cv.id} className={`cv-result-card ${loadingCV === cv.id ? 'loading' : ''}`} onClick={() => handleCVClick(cv)}>
+                  <div className="cv-info">
+                    <h4>{cv.name}</h4>
+                    <p className="cv-phone">{phoneNumber}</p>
+                    {isAdmin && user && (
+                      <div className="cv-user-info">
+                        <small className="user-email">👤 {user.email}</small>
+                        {user.full_name && <small className="user-name">({user.full_name})</small>}
+                      </div>
+                    )}
+                  </div>
+                  <div className="cv-actions">
+                    {loadingCV === cv.id ? (
+                      <div className="loading-spinner-small"></div>
+                    ) : (
+                      <button 
+                        className="delete-icon" 
+                        onClick={(e) => handleDeleteCV(cv.id, e)}
+                        title="Delete CV"
+                      >
+                        🗑️
+                      </button>
+                    )}
+                  </div>
                 </div>
-                <div className="cv-actions">
-                  {loadingCV === cv.id ? (
-                    <div className="loading-spinner-small"></div>
-                  ) : (
-                    <button 
-                      className="delete-icon" 
-                      onClick={(e) => handleDeleteCV(cv.id, e)}
-                      title="Delete CV"
-                    >
-                      🗑️
-                    </button>
-                  )}
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       )}
