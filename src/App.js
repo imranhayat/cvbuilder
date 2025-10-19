@@ -145,7 +145,8 @@ function App() {
       localStorage.removeItem('cvBuilderAuth');
       setIsAuthenticated(false);
       setIsLoading(false);
-      setCurrentView('dashboard');
+      // Don't set currentView to dashboard when logging out
+      // Let the authentication check handle the redirect
     }
   };
 
@@ -195,6 +196,15 @@ function App() {
         color: '#666'
       }}>
         Checking authentication...
+      </div>
+    );
+  }
+
+  if (isLoading) {
+    return (
+      <div className="loading-container">
+        <div className="loading-spinner"></div>
+        <p>Loading...</p>
       </div>
     );
   }
