@@ -186,6 +186,9 @@ function App() {
             <button onClick={handleBackToDashboard} className="back-to-dashboard-button">
               Back to Dashboard
             </button>
+            <button onClick={manualSave} className="test-save-button" style={{backgroundColor: '#007bff', color: 'white', margin: '0 5px'}}>
+              Test Save
+            </button>
             <button onClick={handleLogout} className="logout-button">
               Logout
             </button>
