@@ -13,8 +13,15 @@ const useAutoSave = (formData, saveInterval = 10000) => {
   const autoSave = async () => {
     console.log('Auto-save triggered:', { hasUnsavedChanges, name: formData.name?.trim() });
     
-    if (!hasUnsavedChanges || !formData.name?.trim()) {
-      console.log('Auto-save skipped:', { hasUnsavedChanges, name: formData.name?.trim() });
+    if (!formData.name?.trim()) {
+      console.log('Auto-save skipped - no name provided');
+      return;
+    }
+
+    // Check if data has changed since last save
+    const currentDataString = JSON.stringify(formData);
+    if (lastSavedDataRef.current === currentDataString) {
+      console.log('Auto-save skipped - no changes since last save');
       return;
     }
 
@@ -99,16 +106,16 @@ const useAutoSave = (formData, saveInterval = 10000) => {
         formDataKeys: Object.keys(formData)
       });
       
-      if (hasUnsavedChanges && formData.name?.trim()) {
+      if (formData.name?.trim()) {
         console.log('Auto-save conditions met - triggering save');
         autoSave();
       } else {
-        console.log('Auto-save skipped - conditions not met');
+        console.log('Auto-save skipped - no name provided');
       }
     }, saveInterval);
 
     return () => clearInterval(interval);
-  }, [hasUnsavedChanges, formData, saveInterval]);
+  }, [formData, saveInterval]);
 
   // Removed localStorage loading - form data will reset on page reload
 
@@ -116,8 +123,12 @@ const useAutoSave = (formData, saveInterval = 10000) => {
 
   // Manual save function
   const manualSave = async () => {
-    if (hasUnsavedChanges && formData.name?.trim()) {
+    console.log('Manual save triggered:', { hasUnsavedChanges, name: formData.name?.trim() });
+    if (formData.name?.trim()) {
+      console.log('Manual save - forcing save regardless of hasUnsavedChanges');
       await autoSave();
+    } else {
+      console.log('Manual save skipped - no name provided');
     }
   };
 
