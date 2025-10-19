@@ -46,7 +46,7 @@ export const useCVs = () => {
           company,
           created_at,
           updated_at,
-          cv_data!inner(personal_info!inner(phone, email))
+          cv_data
         `)
         .eq('user_id', user.id)
         .order('created_at', { ascending: false })
@@ -168,7 +168,7 @@ export const useCVs = () => {
           company,
           created_at,
           updated_at,
-          cv_data!inner(personal_info!inner(phone, email))
+          cv_data
         `)
         .eq('user_id', user.id)
         .or(`name.ilike.%${searchTerm}%,title.ilike.%${searchTerm}%,company.ilike.%${searchTerm}%`)
