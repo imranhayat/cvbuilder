@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './SearchCV.css';
 import { useCVs } from '../Supabase';
 import { cvService } from '../Supabase/supabase';
@@ -8,17 +8,18 @@ const SearchCV = ({ onBack, onEditCV }) => {
   const [searchResults, setSearchResults] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
   const { cvs, searchCVs, loading, error } = useCVs();
+  const searchTimeoutRef = useRef(null);
 
-  const handleSearch = async (e) => {
-    e.preventDefault();
-    if (!searchTerm.trim()) {
-      setSearchResults([]);
+  // Live search function
+  const performSearch = async (term) => {
+    if (!term.trim()) {
+      setSearchResults(cvs);
       return;
     }
 
     try {
       setIsSearching(true);
-      const results = await searchCVs(searchTerm);
+      const results = await searchCVs(term);
       setSearchResults(results);
     } catch (err) {
       console.error('Search error:', err);
@@ -26,6 +27,22 @@ const SearchCV = ({ onBack, onEditCV }) => {
     } finally {
       setIsSearching(false);
     }
+  };
+
+  // Handle search input change with debouncing
+  const handleSearchChange = (e) => {
+    const value = e.target.value;
+    setSearchTerm(value);
+    
+    // Clear existing timeout
+    if (searchTimeoutRef.current) {
+      clearTimeout(searchTimeoutRef.current);
+    }
+    
+    // Set new timeout for debounced search
+    searchTimeoutRef.current = setTimeout(() => {
+      performSearch(value);
+    }, 300); // 300ms delay
   };
 
   const handleCVClick = (cv) => {
@@ -55,6 +72,15 @@ const SearchCV = ({ onBack, onEditCV }) => {
     }
   }, [cvs]);
 
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (searchTimeoutRef.current) {
+        clearTimeout(searchTimeoutRef.current);
+      }
+    };
+  }, []);
+
   return (
     <div className="search-cv-container">
       <div className="search-cv-header">
@@ -66,20 +92,22 @@ const SearchCV = ({ onBack, onEditCV }) => {
       </div>
 
       <div className="search-section">
-        <form onSubmit={handleSearch} className="search-form">
+        <div className="search-form">
           <div className="search-input-group">
             <input
               type="text"
               placeholder="Search by name, title, or keywords..."
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={handleSearchChange}
               className="search-input"
             />
-            <button type="submit" className="search-button" disabled={isSearching}>
-              {isSearching ? 'Searching...' : 'Search'}
-            </button>
+            {isSearching && (
+              <div className="search-loading">
+                <div className="search-spinner"></div>
+              </div>
+            )}
           </div>
-        </form>
+        </div>
       </div>
 
       {/* Search Results */}
