@@ -1,8 +1,11 @@
 import { useState, useEffect, useRef } from 'react';
+import { cvService, authService } from '../Supabase/supabase';
+import { dbHelpers } from '../Supabase/database';
 
 const useAutoSave = (formData, saveInterval = 10000) => {
   const [autoSaveStatus, setAutoSaveStatus] = useState('');
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
+  const [currentCVId, setCurrentCVId] = useState(null);
   const autoSaveTimeoutRef = useRef(null);
   const lastSavedDataRef = useRef(null);
 
@@ -13,12 +16,33 @@ const useAutoSave = (formData, saveInterval = 10000) => {
     try {
       setAutoSaveStatus('Saving...');
       
-      // Removed localStorage saving - form data will reset on page reload
+      // Get current user
+      const user = await authService.getCurrentUser();
+      if (!user) {
+        setAutoSaveStatus('Please log in to save');
+        setTimeout(() => setAutoSaveStatus(''), 3000);
+        return;
+      }
+
+      // Format CV data for database
+      const cvData = dbHelpers.formatCVData(formData);
+      cvData.user_id = user.id;
+      cvData.template_id = 'template1'; // Default template
+
+      let savedCV;
+      if (currentCVId) {
+        // Update existing CV
+        savedCV = await cvService.updateCV(currentCVId, cvData);
+      } else {
+        // Create new CV
+        savedCV = await cvService.createCV(cvData);
+        setCurrentCVId(savedCV.id);
+      }
       
       // Update last saved data reference
       lastSavedDataRef.current = JSON.stringify(formData);
       setHasUnsavedChanges(false);
-      setAutoSaveStatus('Auto-saved');
+      setAutoSaveStatus('Auto-saved to Supabase');
       
       // Clear status after 2 seconds
       setTimeout(() => setAutoSaveStatus(''), 2000);
@@ -62,12 +86,34 @@ const useAutoSave = (formData, saveInterval = 10000) => {
     setHasUnsavedChanges(true);
   };
 
+  // Load CV data from Supabase
+  const loadCV = async (cvId) => {
+    try {
+      const cvData = await cvService.getCV(cvId);
+      setCurrentCVId(cvId);
+      return dbHelpers.extractFormData(cvData);
+    } catch (err) {
+      console.error('Error loading CV:', err);
+      return null;
+    }
+  };
+
+  // Create new CV
+  const createNewCV = () => {
+    setCurrentCVId(null);
+    setHasUnsavedChanges(false);
+    setAutoSaveStatus('');
+  };
+
   return {
     autoSaveStatus,
     hasUnsavedChanges,
+    currentCVId,
     manualSave,
     clearDraft,
-    markAsChanged
+    markAsChanged,
+    loadCV,
+    createNewCV
   };
 };
 

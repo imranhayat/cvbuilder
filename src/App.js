@@ -86,6 +86,27 @@ function App() {
     setHasUnsavedChanges(true);
   };
 
+  // Handle "Make a new CV" button
+  const handleMakeNewCV = () => {
+    setFormData({
+      name: '',
+      position: '',
+      phone: '',
+      email: '',
+      address: '',
+      professionalSummary: '',
+      education: [],
+      experience: [],
+      skills: ['Communication Skills', 'Time Management', 'Problem Solving', 'Hardworking'],
+      certifications: [],
+      languages: [],
+      hobbies: [],
+      references: []
+    });
+    setHasUnsavedChanges(false);
+    setAutoSaveStatus('');
+  };
+
   useEffect(() => {
     // Check if user is already authenticated
     const authStatus = localStorage.getItem('cvBuilderAuth');
@@ -114,6 +135,8 @@ function App() {
   const handleTemplateSelect = (templateId) => {
     setSelectedTemplate(templateId);
     setCurrentView('cv-builder');
+    // Reset form data for new CV
+    handleMakeNewCV();
   };
 
   const handleBackToDashboard = () => {
