@@ -74,7 +74,7 @@ const useAutoSave = (formData, saveInterval = 10000) => {
       if (currentCVId) {
         console.log('🔄 Updating existing CV:', currentCVId);
         // Update existing CV
-        savedCV = await cvService.updateCV(currentCVId, cvData);
+        savedCV = await cvService.updateCV(currentCVId, cvData, user.id);
         console.log('✅ CV updated successfully:', savedCV);
       } else {
         console.log('➕ Creating new CV...');
@@ -180,7 +180,14 @@ const useAutoSave = (formData, saveInterval = 10000) => {
   const loadCV = async (cvId) => {
     try {
       console.log('📥 Loading CV with ID:', cvId);
-      const cvData = await cvService.getCV(cvId);
+      // Get current user to ensure we only load user's own CVs
+      const user = await authService.getCurrentUser();
+      if (!user) {
+        console.error('❌ No authenticated user found');
+        return null;
+      }
+      
+      const cvData = await cvService.getCV(cvId, user.id);
       setCurrentCVId(cvId);
       console.log('✅ CV loaded, currentCVId set to:', cvId);
       const formData = dbHelpers.extractFormData(cvData);

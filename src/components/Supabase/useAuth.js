@@ -110,6 +110,8 @@ export const useCVs = () => {
 
   // Update existing CV
   const updateCV = async (cvId, cvData) => {
+    if (!user) throw new Error('User not authenticated')
+    
     try {
       setLoading(true)
       setError(null)
@@ -117,6 +119,7 @@ export const useCVs = () => {
         .from('cvs')
         .update(cvData)
         .eq('id', cvId)
+        .eq('user_id', user.id)
         .select()
         .single()
       
@@ -133,6 +136,8 @@ export const useCVs = () => {
 
   // Delete CV
   const deleteCV = async (cvId) => {
+    if (!user) throw new Error('User not authenticated')
+    
     try {
       setLoading(true)
       setError(null)
@@ -140,6 +145,7 @@ export const useCVs = () => {
         .from('cvs')
         .delete()
         .eq('id', cvId)
+        .eq('user_id', user.id)
       
       if (error) throw error
       setCvs(prev => prev.filter(cv => cv.id !== cvId))

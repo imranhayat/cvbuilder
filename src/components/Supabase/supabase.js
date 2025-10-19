@@ -32,12 +32,13 @@ export const cvService = {
     return data
   },
 
-  // Get a specific CV by ID
-  async getCV(cvId) {
+  // Get a specific CV by ID (user-specific)
+  async getCV(cvId, userId) {
     const { data, error } = await supabase
       .from(TABLES.CVS)
       .select('*')
       .eq('id', cvId)
+      .eq('user_id', userId)
       .single()
     
     if (error) throw error
@@ -56,12 +57,13 @@ export const cvService = {
     return data
   },
 
-  // Update an existing CV
-  async updateCV(cvId, cvData) {
+  // Update an existing CV (user-specific)
+  async updateCV(cvId, cvData, userId) {
     const { data, error } = await supabase
       .from(TABLES.CVS)
       .update(cvData)
       .eq('id', cvId)
+      .eq('user_id', userId)
       .select()
       .single()
     
@@ -69,12 +71,13 @@ export const cvService = {
     return data
   },
 
-  // Delete a CV
-  async deleteCV(cvId) {
+  // Delete a CV (user-specific)
+  async deleteCV(cvId, userId) {
     const { error } = await supabase
       .from(TABLES.CVS)
       .delete()
       .eq('id', cvId)
+      .eq('user_id', userId)
     
     if (error) throw error
   },
