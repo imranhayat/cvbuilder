@@ -40,7 +40,6 @@ function App() {
     autoSaveStatus: hookAutoSaveStatus, 
     hasUnsavedChanges: hookHasUnsavedChanges, 
     currentCVId,
-    manualSave,
     loadCV,
     createNewCV,
     markAsChanged: hookMarkAsChanged
@@ -236,9 +235,6 @@ function App() {
             </div>
             <button onClick={handleBackToDashboard} className="back-to-dashboard-button">
               Back to Dashboard
-            </button>
-            <button onClick={manualSave} className="manual-save-button" style={{backgroundColor: '#28a745', color: 'white', margin: '0 5px'}}>
-              Manual Save
             </button>
             <button onClick={handleLogout} className="logout-button">
               Logout

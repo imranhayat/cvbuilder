@@ -121,16 +121,6 @@ const useAutoSave = (formData, saveInterval = 10000) => {
 
   // Removed localStorage saving on page unload - form data will reset on page reload
 
-  // Manual save function
-  const manualSave = async () => {
-    console.log('Manual save triggered:', { hasUnsavedChanges, name: formData.name?.trim() });
-    if (formData.name?.trim()) {
-      console.log('Manual save - forcing save regardless of hasUnsavedChanges');
-      await autoSave();
-    } else {
-      console.log('Manual save skipped - no name provided');
-    }
-  };
 
   // Clear draft function
   const clearDraft = () => {
@@ -167,7 +157,6 @@ const useAutoSave = (formData, saveInterval = 10000) => {
     autoSaveStatus,
     hasUnsavedChanges,
     currentCVId,
-    manualSave,
     clearDraft,
     markAsChanged,
     loadCV,
