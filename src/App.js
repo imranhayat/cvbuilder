@@ -8,6 +8,8 @@ import Preview1 from './components/template1/Preview1';
 import Form2 from './components/template2/Form2';
 import Preview2 from './components/template2/Preview2';
 import useAutoSave from './components/template1/useAutoSave';
+import { authService, cvService, supabase } from './components/Supabase/supabase';
+import { dbHelpers } from './components/Supabase/database';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -42,6 +44,62 @@ function App() {
     loadCV,
     createNewCV 
   } = useAutoSave(formData);
+
+  // Direct test save function for debugging
+  const testSaveDirect = async () => {
+    console.log('=== DIRECT TEST SAVE STARTED ===');
+    console.log('Form data:', formData);
+    
+    try {
+      // Check authentication
+      console.log('Checking authentication...');
+      const user = await authService.getCurrentUser();
+      console.log('Current user:', user);
+      
+      if (!user) {
+        console.log('❌ No authenticated user found');
+        alert('Please log in first to save CV data');
+        return;
+      }
+      
+      console.log('✅ User authenticated:', user.email);
+      
+      // Format CV data
+      console.log('Formatting CV data...');
+      const cvData = dbHelpers.formatCVData(formData);
+      cvData.user_id = user.id;
+      cvData.template_id = 'template1';
+      
+      console.log('Formatted CV data:', cvData);
+      
+      // Test database connection
+      console.log('Testing database connection...');
+      const { data: testData, error: testError } = await supabase
+        .from('cvs')
+        .select('count')
+        .limit(1);
+      
+      if (testError) {
+        console.error('❌ Database connection failed:', testError);
+        alert('Database connection failed: ' + testError.message);
+        return;
+      }
+      
+      console.log('✅ Database connection successful');
+      
+      // Save CV
+      console.log('Saving CV to database...');
+      const result = await cvService.createCV(cvData);
+      console.log('✅ CV saved successfully:', result);
+      
+      alert('CV saved successfully! Check your Supabase dashboard.');
+      
+    } catch (error) {
+      console.error('❌ Test save failed:', error);
+      console.error('Error details:', error.message, error.details, error.hint);
+      alert('Save failed: ' + error.message);
+    }
+  };
 
   // Load saved draft on component mount
   // Removed localStorage loading - form data will reset on page reload
@@ -186,7 +244,7 @@ function App() {
             <button onClick={handleBackToDashboard} className="back-to-dashboard-button">
               Back to Dashboard
             </button>
-            <button onClick={manualSave} className="test-save-button" style={{backgroundColor: '#007bff', color: 'white', margin: '0 5px'}}>
+            <button onClick={testSaveDirect} className="test-save-button" style={{backgroundColor: '#007bff', color: 'white', margin: '0 5px'}}>
               Test Save
             </button>
             <button onClick={handleLogout} className="logout-button">
