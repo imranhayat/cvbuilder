@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import './SearchCV.css';
 import { useCVs } from '../Supabase';
 import { cvService } from '../Supabase/supabase';
@@ -7,30 +7,83 @@ const SearchCV = ({ onBack, onEditCV }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
+  const [useClientSearch, setUseClientSearch] = useState(true);
   const { cvs, searchCVs, loading, error } = useCVs();
   const searchTimeoutRef = useRef(null);
+  const searchCacheRef = useRef(new Map());
 
-  // Live search function
-  const performSearch = async (term) => {
+  // Client-side search function (much faster for small datasets)
+  const performClientSearch = useCallback((term, allCVs) => {
     if (!term.trim()) {
-      setSearchResults(cvs);
-      return;
+      return allCVs;
+    }
+
+    const lowerTerm = term.toLowerCase();
+    return allCVs.filter(cv => {
+      const name = cv.name?.toLowerCase() || '';
+      const title = cv.title?.toLowerCase() || '';
+      const company = cv.company?.toLowerCase() || '';
+      const phone = cv.cv_data?.personal_info?.phone?.toLowerCase() || '';
+      const email = cv.cv_data?.personal_info?.email?.toLowerCase() || '';
+      
+      return name.includes(lowerTerm) || 
+             title.includes(lowerTerm) || 
+             company.includes(lowerTerm) ||
+             phone.includes(lowerTerm) ||
+             email.includes(lowerTerm);
+    });
+  }, []);
+
+  // Server-side search function (for large datasets or complex queries)
+  const performServerSearch = useCallback(async (term) => {
+    // Check cache first
+    if (searchCacheRef.current.has(term)) {
+      return searchCacheRef.current.get(term);
     }
 
     try {
       setIsSearching(true);
       const results = await searchCVs(term);
-      setSearchResults(results);
+      
+      // Cache the results
+      searchCacheRef.current.set(term, results);
+      
+      // Limit cache size to prevent memory issues
+      if (searchCacheRef.current.size > 50) {
+        const firstKey = searchCacheRef.current.keys().next().value;
+        searchCacheRef.current.delete(firstKey);
+      }
+      
+      return results;
     } catch (err) {
       console.error('Search error:', err);
-      setSearchResults([]);
+      return [];
     } finally {
       setIsSearching(false);
     }
-  };
+  }, [searchCVs]);
 
-  // Handle search input change with debouncing
-  const handleSearchChange = (e) => {
+  // Optimized search function that chooses between client and server search
+  const performSearch = useCallback(async (term) => {
+    if (!term.trim()) {
+      setSearchResults(cvs);
+      return;
+    }
+
+    // Use client-side search for small datasets (< 100 CVs) or short search terms
+    if (useClientSearch && cvs.length < 100) {
+      const results = performClientSearch(term, cvs);
+      setSearchResults(results);
+      return;
+    }
+
+    // Use server-side search for larger datasets or complex queries
+    const results = await performServerSearch(term);
+    setSearchResults(results);
+  }, [cvs, useClientSearch, performClientSearch, performServerSearch]);
+
+  // Handle search input change with optimized debouncing
+  const handleSearchChange = useCallback((e) => {
     const value = e.target.value;
     setSearchTerm(value);
     
@@ -39,11 +92,25 @@ const SearchCV = ({ onBack, onEditCV }) => {
       clearTimeout(searchTimeoutRef.current);
     }
     
+    // Use shorter debounce for client search, longer for server search
+    const debounceDelay = useClientSearch ? 150 : 300;
+    
     // Set new timeout for debounced search
     searchTimeoutRef.current = setTimeout(() => {
       performSearch(value);
-    }, 300); // 300ms delay
-  };
+    }, debounceDelay);
+  }, [performSearch, useClientSearch]);
+
+  // Memoized search results to prevent unnecessary re-renders
+  const memoizedSearchResults = useMemo(() => {
+    return searchResults.map((cv) => {
+      const phoneNumber = cv.cv_data?.personal_info?.phone || 'No phone number';
+      return {
+        ...cv,
+        phoneNumber
+      };
+    });
+  }, [searchResults]);
 
   const handleCVClick = (cv) => {
     if (onEditCV) {
@@ -111,32 +178,43 @@ const SearchCV = ({ onBack, onEditCV }) => {
       </div>
 
       {/* Search Results */}
-      {searchResults.length > 0 && (
+      {memoizedSearchResults.length > 0 && (
         <div className="search-results">
-          <h3>Search Results ({searchResults.length})</h3>
+          <div className="search-results-header">
+            <h3>Search Results ({memoizedSearchResults.length})</h3>
+            <div className="search-performance-info">
+              <span className={`search-mode ${useClientSearch ? 'client-mode' : 'server-mode'}`}>
+                {useClientSearch ? '⚡ Client Search' : '🌐 Server Search'}
+              </span>
+              {cvs.length >= 100 && (
+                <button 
+                  className="toggle-search-mode"
+                  onClick={() => setUseClientSearch(!useClientSearch)}
+                  title="Toggle between client and server search"
+                >
+                  {useClientSearch ? 'Switch to Server Search' : 'Switch to Client Search'}
+                </button>
+              )}
+            </div>
+          </div>
           <div className="results-list">
-            {searchResults.map((cv) => {
-              // Extract phone number from CV data
-              const phoneNumber = cv.cv_data?.personal_info?.phone || 'No phone number';
-              
-              return (
-                <div key={cv.id} className="cv-result-card" onClick={() => handleCVClick(cv)}>
-                  <div className="cv-info">
-                    <h4>{cv.name}</h4>
-                    <p className="cv-phone">{phoneNumber}</p>
-                  </div>
-                  <div className="cv-actions">
-                    <button 
-                      className="delete-icon" 
-                      onClick={(e) => handleDeleteCV(cv.id, e)}
-                      title="Delete CV"
-                    >
-                      🗑️
-                    </button>
-                  </div>
+            {memoizedSearchResults.map((cv) => (
+              <div key={cv.id} className="cv-result-card" onClick={() => handleCVClick(cv)}>
+                <div className="cv-info">
+                  <h4>{cv.name}</h4>
+                  <p className="cv-phone">{cv.phoneNumber}</p>
                 </div>
-              );
-            })}
+                <div className="cv-actions">
+                  <button 
+                    className="delete-icon" 
+                    onClick={(e) => handleDeleteCV(cv.id, e)}
+                    title="Delete CV"
+                  >
+                    🗑️
+                  </button>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       )}
