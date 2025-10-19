@@ -11,6 +11,12 @@ const SearchCV = ({ onBack, onEditCV }) => {
   const [loadingCV, setLoadingCV] = useState(null);
   const [userInfo, setUserInfo] = useState({});
   const { cvs, searchCVs, fetchCompleteCV, loading, error, isAdmin } = useCVs();
+  
+  // Debug: Log admin status
+  useEffect(() => {
+    console.log('🔐 SearchCV - Admin status:', isAdmin);
+    console.log('📊 SearchCV - Total CVs loaded:', cvs.length);
+  }, [isAdmin, cvs.length]);
   const searchTimeoutRef = useRef(null);
   const searchCacheRef = useRef(new Map());
 
@@ -200,6 +206,12 @@ const SearchCV = ({ onBack, onEditCV }) => {
         </button>
         <h2>Search for Existing CV</h2>
         <p className="search-description">Find and edit your previously created CVs</p>
+        {isAdmin && (
+          <div className="admin-indicator">
+            <span className="admin-badge">🔐 ADMIN MODE</span>
+            <small>You can see and manage all CVs from all users</small>
+          </div>
+        )}
       </div>
 
       <div className="search-section">
