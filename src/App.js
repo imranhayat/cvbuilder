@@ -150,13 +150,26 @@ function App() {
   };
 
   useEffect(() => {
-    // Check if user is already authenticated
-    const authStatus = localStorage.getItem('cvBuilderAuth');
-    if (authStatus === 'true') {
-      setIsAuthenticated(true);
-    }
+    // Check Supabase authentication status
+    const checkAuth = async () => {
+      try {
+        const user = await authService.getCurrentUser();
+        if (user) {
+          console.log('User already authenticated:', user.email);
+          setIsAuthenticated(true);
+        } else {
+          console.log('No authenticated user found');
+          setIsAuthenticated(false);
+        }
+      } catch (error) {
+        console.log('Authentication check failed:', error.message);
+        setIsAuthenticated(false);
+      }
+    };
 
-    // Listen for authentication events
+    checkAuth();
+
+    // Listen for authentication events from Login component
     const handleAuth = () => {
       setIsAuthenticated(true);
     };
@@ -168,7 +181,14 @@ function App() {
     };
   }, []);
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    try {
+      await authService.signOut();
+      console.log('User signed out successfully');
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
+    
     localStorage.removeItem('cvBuilderAuth');
     setIsAuthenticated(false);
     setCurrentView('dashboard');

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './Login.css';
+import { authService } from '../Supabase/supabase';
 
 function Login() {
   const [isLogin, setIsLogin] = useState(true);
@@ -9,35 +10,57 @@ function Login() {
   const [error, setError] = useState('');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
 
-    if (isLogin) {
-      // Login logic
-      if (email === 'admin@cvbuilder.com' && password === 'admin123') {
+    try {
+      if (isLogin) {
+        // Real Supabase login
+        console.log('Attempting Supabase login...');
+        const { data, error } = await authService.signIn(email, password);
+        
+        if (error) {
+          console.error('Login error:', error);
+          setError('Login failed: ' + error.message);
+          return;
+        }
+        
+        console.log('Login successful:', data);
         setIsAuthenticated(true);
-        // Store authentication in localStorage
         localStorage.setItem('cvBuilderAuth', 'true');
-        // Trigger a custom event to notify App.js
         window.dispatchEvent(new CustomEvent('userAuthenticated'));
+        
       } else {
-        setError('Invalid email or password');
+        // Real Supabase signup
+        console.log('Attempting Supabase signup...');
+        
+        if (password !== confirmPassword) {
+          setError('Passwords do not match');
+          return;
+        }
+        if (password.length < 6) {
+          setError('Password must be at least 6 characters');
+          return;
+        }
+        
+        const { data, error } = await authService.signUp(email, password, {
+          full_name: email.split('@')[0] // Use email prefix as name
+        });
+        
+        if (error) {
+          console.error('Signup error:', error);
+          setError('Signup failed: ' + error.message);
+          return;
+        }
+        
+        console.log('Signup successful:', data);
+        setError('Signup successful! Please check your email to confirm your account, then login.');
+        setIsLogin(true);
       }
-    } else {
-      // Signup logic
-      if (password !== confirmPassword) {
-        setError('Passwords do not match');
-        return;
-      }
-      if (password.length < 6) {
-        setError('Password must be at least 6 characters');
-        return;
-      }
-      // For demo purposes, any signup will work
-      setIsAuthenticated(true);
-      localStorage.setItem('cvBuilderAuth', 'true');
-      window.dispatchEvent(new CustomEvent('userAuthenticated'));
+    } catch (err) {
+      console.error('Authentication error:', err);
+      setError('Authentication failed: ' + err.message);
     }
   };
 
