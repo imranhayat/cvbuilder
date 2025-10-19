@@ -99,10 +99,11 @@ const SearchCV = ({ onBack, onEditCV }) => {
                   </div>
                   <div className="cv-actions">
                     <button 
-                      className="delete-button" 
+                      className="delete-icon" 
                       onClick={(e) => handleDeleteCV(cv.id, e)}
+                      title="Delete CV"
                     >
-                      Delete
+                      🗑️
                     </button>
                   </div>
                 </div>
