@@ -86,7 +86,7 @@ const useAutoSave = (formData, saveInterval = 10000) => {
       // Update last saved data reference
       lastSavedDataRef.current = JSON.stringify(formData);
       setHasUnsavedChanges(false);
-      setAutoSaveStatus('Auto-saved to Supabase');
+      setAutoSaveStatus('Auto-saved to database');
       
       // Clear status after 2 seconds
       setTimeout(() => setAutoSaveStatus(''), 2000);
