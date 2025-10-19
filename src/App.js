@@ -42,8 +42,17 @@ function App() {
     currentCVId,
     manualSave,
     loadCV,
-    createNewCV 
+    createNewCV,
+    markAsChanged: hookMarkAsChanged
   } = useAutoSave(formData);
+
+  // Debug: Log hook status
+  console.log('App.js - Hook status:', { 
+    hookAutoSaveStatus, 
+    hookHasUnsavedChanges, 
+    currentCVId,
+    formDataName: formData.name 
+  });
 
 
   // Load saved draft on component mount
@@ -62,13 +71,15 @@ function App() {
 
   // Mark as changed
   const markAsChanged = () => {
+    console.log('App.js - markAsChanged called');
     setHasUnsavedChanges(true);
   };
 
   // Update form data
   const updateFormData = (newData) => {
+    console.log('App.js - updateFormData called with:', newData);
     setFormData(newData);
-    setHasUnsavedChanges(true);
+    hookMarkAsChanged(); // Use hook's markAsChanged instead of local state
   };
 
   // Handle "Make a new CV" button
@@ -236,20 +247,20 @@ function App() {
         </div>
         <div className="container">
           {/* Form Side */}
-          {selectedTemplate === 'template1' ? 
-            <Form1 
-              key={formResetKey}
-              formData={formData}
-              updateFormData={updateFormData}
-              markAsChanged={markAsChanged}
-            /> : 
-            <Form2 
-              key={formResetKey}
-              formData={formData}
-              updateFormData={updateFormData}
-              markAsChanged={markAsChanged}
-            />
-          }
+                    {selectedTemplate === 'template1' ? 
+                      <Form1 
+                        key={formResetKey}
+                        formData={formData}
+                        updateFormData={updateFormData}
+                        markAsChanged={hookMarkAsChanged}
+                      /> : 
+                      <Form2 
+                        key={formResetKey}
+                        formData={formData}
+                        updateFormData={updateFormData}
+                        markAsChanged={hookMarkAsChanged}
+                      />
+                    }
 
           {/* Preview Side */}
           {selectedTemplate === 'template1' ? 
