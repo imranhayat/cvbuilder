@@ -77,7 +77,6 @@ const SearchCV = ({ onBack }) => {
                 </div>
                 <div className="cv-actions">
                   <button className="edit-button">Edit</button>
-                  <button className="preview-button">Preview</button>
                   <button className="download-button">Download</button>
                 </div>
               </div>

@@ -158,7 +158,7 @@
   gap: 0.5rem;
 }
 
-.edit-button, .preview-button, .download-button {
+.edit-button, .download-button {
   padding: 0.5rem 1rem;
   border: none;
   border-radius: 6px;
@@ -173,17 +173,12 @@
   color: white;
 }
 
-.preview-button {
-  background: #28a745;
-  color: white;
-}
-
 .download-button {
   background: #17a2b8;
   color: white;
 }
 
-.edit-button:hover, .preview-button:hover, .download-button:hover {
+.edit-button:hover, .download-button:hover {
   transform: translateY(-1px);
   opacity: 0.9;
 }
