@@ -95,65 +95,32 @@ function App() {
   };
 
   useEffect(() => {
-    let mounted = true;
-
-    // Check Supabase authentication status
-    const checkAuth = async () => {
+    // Force logout on page reload - clear any existing session
+    const forceLogout = async () => {
       try {
-        console.log('Checking authentication status...');
-        const user = await authService.getCurrentUser();
-        
-        if (mounted) {
-          if (user) {
-            console.log('User already authenticated:', user.email);
-            setIsAuthenticated(true);
-          } else {
-            console.log('No authenticated user found');
-            setIsAuthenticated(false);
-          }
-          setIsLoading(false);
-        }
+        console.log('Page reload detected - forcing logout...');
+        await authService.signOut();
+        localStorage.removeItem('cvBuilderAuth');
+        console.log('Session cleared on page reload');
       } catch (error) {
-        console.log('Authentication check failed:', error.message);
-        if (mounted) {
-          setIsAuthenticated(false);
-          setIsLoading(false);
-        }
+        console.log('Error clearing session:', error);
       }
     };
 
-    // Set up Supabase auth state change listener
-    const { data: { subscription } } = authService.onAuthStateChange((event, session) => {
-      console.log('Auth state changed:', event, session?.user?.email);
-      
-      if (mounted) {
-        if (session?.user) {
-          console.log('User authenticated via auth state change:', session.user.email);
-          setIsAuthenticated(true);
-        } else {
-          console.log('User signed out via auth state change');
-          setIsAuthenticated(false);
-        }
-        setIsLoading(false);
-      }
-    });
-
-    // Initial auth check
-    checkAuth();
+    // Always logout on page reload
+    forceLogout();
+    setIsAuthenticated(false);
+    setIsLoading(false);
 
     // Listen for authentication events from Login component
     const handleAuth = () => {
-      if (mounted) {
-        setIsAuthenticated(true);
-        setIsLoading(false);
-      }
+      setIsAuthenticated(true);
+      setIsLoading(false);
     };
 
     window.addEventListener('userAuthenticated', handleAuth);
     
     return () => {
-      mounted = false;
-      subscription?.unsubscribe();
       window.removeEventListener('userAuthenticated', handleAuth);
     };
   }, []);
@@ -258,6 +225,9 @@ function App() {
             </div>
             <button onClick={handleBackToDashboard} className="back-to-dashboard-button">
               Back to Dashboard
+            </button>
+            <button onClick={manualSave} className="manual-save-button" style={{backgroundColor: '#28a745', color: 'white', margin: '0 5px'}}>
+              Manual Save
             </button>
             <button onClick={handleLogout} className="logout-button">
               Logout

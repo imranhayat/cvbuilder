@@ -93,8 +93,17 @@ const useAutoSave = (formData, saveInterval = 10000) => {
   // Set up auto-save interval
   useEffect(() => {
     const interval = setInterval(() => {
+      console.log('Auto-save interval check:', { 
+        hasUnsavedChanges, 
+        name: formData.name?.trim(),
+        formDataKeys: Object.keys(formData)
+      });
+      
       if (hasUnsavedChanges && formData.name?.trim()) {
+        console.log('Auto-save conditions met - triggering save');
         autoSave();
+      } else {
+        console.log('Auto-save skipped - conditions not met');
       }
     }, saveInterval);
 
@@ -120,6 +129,7 @@ const useAutoSave = (formData, saveInterval = 10000) => {
 
   // Mark as changed
   const markAsChanged = () => {
+    console.log('markAsChanged called - setting hasUnsavedChanges to true');
     setHasUnsavedChanges(true);
   };
 
