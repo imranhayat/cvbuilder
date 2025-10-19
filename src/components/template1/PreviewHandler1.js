@@ -30,7 +30,7 @@ const usePreviewHandler = (passedFormData = null) => {
   // Cleanup object URLs to prevent memory leaks
   useEffect(() => {
     return () => {
-      if (formData.profileImage) {
+      if (formData.profileImage && formData.profileImage instanceof File) {
         URL.revokeObjectURL(URL.createObjectURL(formData.profileImage));
       }
     };
