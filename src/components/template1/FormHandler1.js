@@ -19,6 +19,10 @@ const useFormHandler = (formData, updateFormData, markAsChanged) => {
 
     // Handle input changes and trigger auto-save
     const handleInputChange = (field, value) => {
+        console.log('🔧 FormHandler1 - handleInputChange called:', { field, value });
+        if (field === 'profileImage') {
+            console.log('📸 Profile image change detected:', value);
+        }
         const newFormData = { ...formData, [field]: value };
         updateFormData(newFormData);
         markAsChanged();
