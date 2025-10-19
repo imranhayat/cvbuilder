@@ -9,6 +9,7 @@ import Form2 from './components/template2/Form2';
 import Preview2 from './components/template2/Preview2';
 import useAutoSave from './components/template1/useAutoSave';
 import { authService } from './components/Supabase/supabase';
+import { dbHelpers } from './components/Supabase/database';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -161,6 +162,17 @@ function App() {
     setCurrentView('dashboard');
   };
 
+  const handleEditCV = (cv) => {
+    console.log('App.js - CV selected for editing:', cv);
+    // Load the CV data and switch to CV builder view
+    if (cv && cv.cv_data) {
+      const formData = dbHelpers.extractFormData(cv);
+      setFormData(formData);
+      setCurrentView('cv-builder');
+      setSelectedTemplate(cv.template_id || 'template1');
+    }
+  };
+
   // Show loading screen while checking authentication
   if (isLoading) {
     return (
@@ -186,6 +198,7 @@ function App() {
       <Dashboard 
         onTemplateSelect={handleTemplateSelect}
         onLogout={handleLogout}
+        onEditCV={handleEditCV}
       />
     );
   }

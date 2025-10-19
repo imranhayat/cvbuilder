@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './Dashboard.css';
 import SearchCV from './SearchCV';
 
-const Dashboard = ({ onTemplateSelect, onLogout }) => {
+const Dashboard = ({ onTemplateSelect, onLogout, onEditCV }) => {
   const [currentView, setCurrentView] = useState('dashboard');
 
   const handleMakeNewCV = () => {
@@ -17,12 +17,20 @@ const Dashboard = ({ onTemplateSelect, onLogout }) => {
     setCurrentView('dashboard');
   };
 
+  const handleEditCV = (cv) => {
+    console.log('Dashboard - CV selected for editing:', cv);
+    if (onEditCV) {
+      onEditCV(cv);
+    }
+  };
+
 
 
   if (currentView === 'search-cv') {
     return (
       <SearchCV 
         onBack={handleBackToDashboard}
+        onEditCV={handleEditCV}
       />
     );
   }

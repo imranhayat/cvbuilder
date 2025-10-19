@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './SearchCV.css';
 import { useCVs } from '../Supabase';
 
-const SearchCV = ({ onBack }) => {
+const SearchCV = ({ onBack, onEditCV }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
@@ -24,6 +24,13 @@ const SearchCV = ({ onBack }) => {
       setSearchResults([]);
     } finally {
       setIsSearching(false);
+    }
+  };
+
+  const handleCVClick = (cv) => {
+    console.log('CV clicked for editing:', cv);
+    if (onEditCV) {
+      onEditCV(cv);
     }
   };
 
@@ -67,7 +74,7 @@ const SearchCV = ({ onBack }) => {
           <h3>Search Results ({searchResults.length})</h3>
           <div className="results-list">
             {searchResults.map((cv) => (
-              <div key={cv.id} className="cv-result-card">
+              <div key={cv.id} className="cv-result-card" onClick={() => handleCVClick(cv)}>
                 <div className="cv-info">
                   <h4>{cv.name}</h4>
                   <p>{cv.title}</p>
@@ -76,8 +83,7 @@ const SearchCV = ({ onBack }) => {
                   </span>
                 </div>
                 <div className="cv-actions">
-                  <button className="edit-button">Edit</button>
-                  <button className="download-button">Download</button>
+                  <button className="download-button" onClick={(e) => e.stopPropagation()}>Download</button>
                 </div>
               </div>
             ))}
