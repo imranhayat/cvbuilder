@@ -71,17 +71,11 @@ function App() {
 
   // Mark as changed
   const markAsChanged = () => {
-    console.log('App.js - markAsChanged called');
     setHasUnsavedChanges(true);
   };
 
   // Update form data
   const updateFormData = (newData) => {
-    console.log('App.js - updateFormData called with:', newData);
-    console.log('App.js - profileImage in newData:', newData.profileImage);
-    if (newData.profileImage) {
-      console.log('📸 App.js - Profile image detected:', newData.profileImage.name, newData.profileImage.type);
-    }
     setFormData(newData);
     hookMarkAsChanged(); // Use hook's markAsChanged instead of local state
   };

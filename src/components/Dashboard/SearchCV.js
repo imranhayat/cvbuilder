@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './SearchCV.css';
 import { useCVs } from '../Supabase';
+import { cvService } from '../Supabase/supabase';
 
 const SearchCV = ({ onBack, onEditCV }) => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -28,9 +29,22 @@ const SearchCV = ({ onBack, onEditCV }) => {
   };
 
   const handleCVClick = (cv) => {
-    console.log('CV clicked for editing:', cv);
     if (onEditCV) {
       onEditCV(cv);
+    }
+  };
+
+  const handleDeleteCV = async (cvId, e) => {
+    e.stopPropagation();
+    if (window.confirm('Are you sure you want to delete this CV? This action cannot be undone.')) {
+      try {
+        await cvService.deleteCV(cvId);
+        // Remove from search results
+        setSearchResults(prev => prev.filter(cv => cv.id !== cvId));
+      } catch (error) {
+        console.error('Error deleting CV:', error);
+        alert('Failed to delete CV. Please try again.');
+      }
     }
   };
 
@@ -73,20 +87,27 @@ const SearchCV = ({ onBack, onEditCV }) => {
         <div className="search-results">
           <h3>Search Results ({searchResults.length})</h3>
           <div className="results-list">
-            {searchResults.map((cv) => (
-              <div key={cv.id} className="cv-result-card" onClick={() => handleCVClick(cv)}>
-                <div className="cv-info">
-                  <h4>{cv.name}</h4>
-                  <p>{cv.title}</p>
-                  <span className="cv-date">
-                    Created: {new Date(cv.created_at).toLocaleDateString()}
-                  </span>
+            {searchResults.map((cv) => {
+              // Extract phone number from CV data
+              const phoneNumber = cv.cv_data?.personal_info?.phone || 'No phone number';
+              
+              return (
+                <div key={cv.id} className="cv-result-card" onClick={() => handleCVClick(cv)}>
+                  <div className="cv-info">
+                    <h4>{cv.name}</h4>
+                    <p className="cv-phone">{phoneNumber}</p>
+                  </div>
+                  <div className="cv-actions">
+                    <button 
+                      className="delete-button" 
+                      onClick={(e) => handleDeleteCV(cv.id, e)}
+                    >
+                      Delete
+                    </button>
+                  </div>
                 </div>
-                <div className="cv-actions">
-                  <button className="download-button" onClick={(e) => e.stopPropagation()}>Download</button>
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       )}
