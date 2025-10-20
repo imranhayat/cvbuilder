@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
-import { cvService, authService, supabase } from '../Supabase/supabase';
-import { dbHelpers } from '../Supabase/database';
+import { cvService, authService, supabase } from './supabase';
+import { dbHelpers } from './database';
 
 const useAutoSave = (formData, saveInterval = 10000) => {
   const [autoSaveStatus, setAutoSaveStatus] = useState('');
