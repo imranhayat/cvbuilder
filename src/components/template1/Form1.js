@@ -802,8 +802,10 @@ function Form({ formData, updateFormData, markAsChanged }) {
                                 placeholder="Enter custom section detail"
                                 value={custom.detail || ''}
                                 onChange={(e) => {
+                                    console.log('Custom detail input changed:', { index, value: e.target.value });
                                     const newCustomSection = [...(formData.customSection || [])];
                                     newCustomSection[index] = { ...newCustomSection[index], detail: e.target.value };
+                                    console.log('New custom section array:', newCustomSection);
                                     handleInputChange('customSection', newCustomSection);
                                 }}
                             />
