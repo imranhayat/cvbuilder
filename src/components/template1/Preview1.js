@@ -13,10 +13,20 @@ function Preview1({ formData: propFormData, autoSaveStatus, hasUnsavedChanges })
     updatePreviewData();
   }, [propFormData, updatePreviewData]);
 
-  // Ensure dynamic Custom Section detail inputs update preview on typing
+  // Ensure dynamic Custom Section detail inputs and Other Information inputs update preview on typing
   useEffect(() => {
     const onInput = (e) => {
-      if (e && e.target && e.target.classList && e.target.classList.contains('custom-detail-input')) {
+      if (e && e.target && e.target.classList && (
+        e.target.classList.contains('custom-detail-input') ||
+        e.target.classList.contains('father-name-input') ||
+        e.target.classList.contains('husband-name-input') ||
+        e.target.classList.contains('cnic-input') ||
+        e.target.classList.contains('dob-input') ||
+        e.target.classList.contains('marital-status-input') ||
+        e.target.classList.contains('religion-input') ||
+        e.target.classList.contains('custom-label-input-field') ||
+        e.target.classList.contains('custom-value-input-field')
+      )) {
         updatePreviewData();
       }
     };
