@@ -213,17 +213,17 @@ function Preview2({ formData: propFormData, autoSaveStatus, hasUnsavedChanges })
           {displayData.certifications && displayData.certifications.length > 0 && (
             <div className="cv-section right-column">
               <h3 className="section-heading right-column">Certifications</h3>
-            <div className="section-content">
-              <div className="certifications-content">
-                {displayData.certifications.map((cert, index) => (
-                  <div key={index} className="certification-item">
-                    <p className="certification-text">{cert}</p>
-                  </div>
-                ))}
+              <div className="section-content">
+                <div className="certifications-content">
+                  {displayData.certifications.map((cert, index) => (
+                    <div key={index} className="certification-item">
+                      <p className="certification-text">{cert}</p>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
-          </div>
-        )}
+          )}
 
 
           {/* Custom Section */}
@@ -232,34 +232,34 @@ function Preview2({ formData: propFormData, autoSaveStatus, hasUnsavedChanges })
               <h3 className="section-heading right-column">
                 {displayData.customSection[0]?.heading || 'Custom Section'}
               </h3>
-            <div className="section-content">
-              <div className="custom-section-content">
-                {displayData.customSection.map((custom, index) => (
-                  <div key={index} className="custom-section-item">
-                    {custom.detail && (
-                      <p className="custom-section-detail">{custom.detail}</p>
-                    )}
-                  </div>
-                ))}
+              <div className="section-content">
+                <div className="custom-section-content">
+                  {displayData.customSection.map((custom, index) => (
+                    <div key={index} className="custom-section-item">
+                      {custom.detail && (
+                        <p className="custom-section-detail">{custom.detail}</p>
+                      )}
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
-          </div>
-        )}
+          )}
 
           {/* References Section */}
           {displayData.references && displayData.references.length > 0 && (
             <div className="cv-section right-column">
               <h3 className="section-heading right-column">References</h3>
-            <div className="section-content">
-              <div className="references-content">
-                {displayData.references.map((reference, index) => (
-                  <div key={index} className="reference-item">
-                    <p className="reference-text">{reference}</p>
-                  </div>
-                ))}
+              <div className="section-content">
+                <div className="references-content">
+                  {displayData.references.map((reference, index) => (
+                    <div key={index} className="reference-item">
+                      <p className="reference-text">{reference}</p>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
-          </div>
           )}
 
           {/* Download PDF Button */}

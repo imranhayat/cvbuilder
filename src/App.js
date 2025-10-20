@@ -153,12 +153,16 @@ function App() {
   const handleTemplateSelect = (templateId) => {
     setSelectedTemplate(templateId);
     setCurrentView('cv-builder');
-    // Reset form data for new CV
-    handleMakeNewCV();
+    // Don't reset form data - preserve it when switching templates
   };
 
   const handleBackToDashboard = () => {
     setCurrentView('dashboard');
+  };
+
+  // Handle template switching without resetting form data
+  const handleTemplateSwitch = (templateId) => {
+    setSelectedTemplate(templateId);
   };
 
   const handleEditCV = async (cv) => {
@@ -236,13 +240,13 @@ function App() {
           <div className="template-selector">
             <button 
               className={`template-button ${selectedTemplate === 'template1' ? 'active' : ''}`}
-              onClick={() => setSelectedTemplate('template1')}
+              onClick={() => handleTemplateSwitch('template1')}
             >
               Template 1
             </button>
             <button 
               className={`template-button ${selectedTemplate === 'template2' ? 'active' : ''}`}
-              onClick={() => setSelectedTemplate('template2')}
+              onClick={() => handleTemplateSwitch('template2')}
             >
               Template 2
             </button>
