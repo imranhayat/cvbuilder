@@ -17,7 +17,7 @@ function Preview2({ formData: propFormData, autoSaveStatus, hasUnsavedChanges })
     professionalSummary: formData.professionalSummary || 'To work with a organization that offers a creative, dynamic and professional environment, where my education, knowledge, skills and proven abilities can be fully utilized and which also offers learning opportunities for my career development in the long run.',
     education: formData.education && formData.education.length > 0 ? formData.education : [],
     experience: formData.experience && formData.experience.length > 0 ? formData.experience : [],
-    skills: formData.skills && formData.skills.length > 0 ? formData.skills.filter(skill => skill && skill.trim() !== '') : ['Communication Skills', 'Time Management', 'Problem Solving', 'Hardworking'],
+    skills: Array.isArray(formData.skills) ? formData.skills.filter(skill => skill && skill.trim() !== '') : [],
     certifications: formData.certifications && formData.certifications.length > 0 ? formData.certifications.filter(cert => cert && cert.trim() !== '') : [],
     languages: formData.languages && formData.languages.length > 0 ? formData.languages.filter(lang => lang && lang.trim() !== '') : ['English', 'Urdu', 'Punjabi'],
     hobbies: formData.hobbies && formData.hobbies.length > 0 ? formData.hobbies.filter(hobby => hobby && hobby.trim() !== '') : [],
