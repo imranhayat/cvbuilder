@@ -30,7 +30,7 @@ function Preview2({ formData: propFormData, autoSaveStatus, hasUnsavedChanges })
   const contactInfo = formatContactInfo();
 
   return (
-    <div className="right-container">
+    <div className="right-container template2-root">
       <div className="cv-preview">
         {/* Left Column */}
         <div className="cv-left-column">
