@@ -1,6 +1,6 @@
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
-import './pdf1.css';
+import './pdf2.css';
 
 // PDF Generation Configuration
 const PDF_CONFIG = {
