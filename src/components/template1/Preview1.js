@@ -6,7 +6,12 @@ import './Preview1.css';
 function Preview1({ formData: propFormData, autoSaveStatus, hasUnsavedChanges }) {
   const { formData: hookFormData, getProfileImageUrl, formatContactInfo, updatePreviewData } = usePreviewHandler(propFormData);
   // Merge with hook data taking precedence (ensures DOM-derived fields like customSection appear)
-  const formData = { ...(propFormData || {}), ...(hookFormData || {}) };
+  // But prioritize propFormData for profileImage to handle database-loaded images
+  const formData = { 
+    ...(hookFormData || {}), 
+    ...(propFormData || {}),
+    profileImage: propFormData?.profileImage || hookFormData?.profileImage
+  };
 
   // Refresh preview data from form inputs whenever app form data changes
   useEffect(() => {
