@@ -174,6 +174,24 @@ const useFormHandler = (formData, updateFormData, markAsChanged) => {
         markAsChanged();
     };
 
+    // Function to remove custom section detail
+    const removeCustomDetail = (button, timestamp) => {
+        // Remove from DOM
+        button.parentElement.parentElement.remove();
+        
+        // Update React state - remove the detail at the corresponding index
+        const newCustomSection = [...(formData.customSection || [])];
+        // Find the index based on timestamp or remove the last one
+        if (newCustomSection.length > 1) {
+            newCustomSection.pop(); // Remove the last added detail
+            updateFormData({ ...formData, customSection: newCustomSection });
+            markAsChanged();
+        }
+    };
+
+    // Make removeCustomDetail globally available
+    window.removeCustomDetail = removeCustomDetail;
+
     // Function to add new custom section detail
     const addCustomSectionDetail = () => {
         const customSection = document.getElementById('custom-section');
@@ -185,7 +203,7 @@ const useFormHandler = (formData, updateFormData, markAsChanged) => {
             newDetailContainer.innerHTML = `
                 <div class="custom-detail-wrapper">
                     <input id="custom-detail-input-${timestamp}" class="custom-detail-input styled-input" type="text" name="customDetail" placeholder="Enter custom section detail" />
-                    <button type="button" class="remove-detail-button" onclick="this.parentElement.parentElement.remove()">Remove</button>
+                    <button type="button" class="remove-detail-button" onclick="removeCustomDetail(this, ${timestamp})">Remove</button>
                 </div>
             `;
             
@@ -195,6 +213,12 @@ const useFormHandler = (formData, updateFormData, markAsChanged) => {
             } else {
                 customSection.appendChild(newDetailContainer);
             }
+            
+            // Update React state to include the new empty detail
+            const newCustomSection = [...(formData.customSection || [])];
+            newCustomSection.push({ heading: '', detail: '' });
+            updateFormData({ ...formData, customSection: newCustomSection });
+            markAsChanged();
         }
     };
 
