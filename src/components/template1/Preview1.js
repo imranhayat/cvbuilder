@@ -28,6 +28,10 @@ function Preview1({ formData: propFormData, autoSaveStatus, hasUnsavedChanges })
   
   const profileImageUrl = getProfileImageUrl;
   const contactInfo = formatContactInfo();
+  
+  // Debug: Log contact information
+  console.log('Template1 - Contact Info:', contactInfo);
+  console.log('Template1 - Form Data:', formData);
 
   return (
     <div className="right-container">
@@ -65,12 +69,19 @@ function Preview1({ formData: propFormData, autoSaveStatus, hasUnsavedChanges })
 
             {/* Contact Information */}
             <div className="header-contact">
-              {contactInfo.map((contact, index) => (
-                <div key={index} className="contact-item">
-                  <span className="contact-icon">{contact.icon}</span>
-                  <span>{contact.value}</span>
+              {contactInfo && contactInfo.length > 0 ? (
+                contactInfo.map((contact, index) => (
+                  <div key={index} className="contact-item">
+                    <span className="contact-icon">{contact.icon}</span>
+                    <span>{contact.value}</span>
+                  </div>
+                ))
+              ) : (
+                <div className="contact-item">
+                  <span className="contact-icon">📞</span>
+                  <span>No phone number</span>
                 </div>
-              ))}
+              )}
             </div>
           </div>
         </div>
