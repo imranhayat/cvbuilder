@@ -73,6 +73,15 @@ function Preview1({ formData: propFormData, autoSaveStatus, hasUnsavedChanges })
     hasDetail: !!item.detail
   })));
   console.log('Template1 - Full Custom Section Array:', JSON.stringify(displayData.customSection, null, 2));
+  console.log('Template1 - Individual Items:');
+  displayData.customSection.forEach((item, index) => {
+    console.log(`Item ${index}:`, {
+      heading: item.heading,
+      detail: item.detail,
+      headingLength: item.heading?.length || 0,
+      detailLength: item.detail?.length || 0
+    });
+  });
 
   return (
     <div className="right-container">
