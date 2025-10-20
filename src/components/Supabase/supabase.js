@@ -32,14 +32,19 @@ export const cvService = {
     return data
   },
 
-  // Get a specific CV by ID (user-specific)
-  async getCV(cvId, userId) {
-    const { data, error } = await supabase
+  // Get a specific CV by ID (user-specific, or admin can access any CV)
+  async getCV(cvId, userId, isAdmin = false) {
+    let query = supabase
       .from(TABLES.CVS)
       .select('*')
       .eq('id', cvId)
-      .eq('user_id', userId)
-      .single()
+    
+    // Only filter by user_id if not admin
+    if (!isAdmin) {
+      query = query.eq('user_id', userId)
+    }
+    
+    const { data, error } = await query.single()
     
     if (error) throw error
     return data
@@ -57,15 +62,19 @@ export const cvService = {
     return data
   },
 
-  // Update an existing CV (user-specific)
-  async updateCV(cvId, cvData, userId) {
-    const { data, error } = await supabase
+  // Update an existing CV (user-specific, or admin can update any CV)
+  async updateCV(cvId, cvData, userId, isAdmin = false) {
+    let query = supabase
       .from(TABLES.CVS)
       .update(cvData)
       .eq('id', cvId)
-      .eq('user_id', userId)
-      .select()
-      .single()
+    
+    // Only filter by user_id if not admin
+    if (!isAdmin) {
+      query = query.eq('user_id', userId)
+    }
+    
+    const { data, error } = await query.select().single()
     
     if (error) throw error
     return data

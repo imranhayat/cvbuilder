@@ -70,11 +70,21 @@ const useAutoSave = (formData, saveInterval = 10000) => {
       
       console.log('Formatted CV data:', cvData);
 
+      // Check if user is admin for update operations
+      const { data: userData, error: userError } = await supabase
+        .from('users')
+        .select('is_admin')
+        .eq('email', user.email)
+        .single();
+      
+      const isAdmin = userData?.is_admin || false;
+      console.log('🔐 Admin status for CV update:', isAdmin);
+
       let savedCV;
       if (currentCVId) {
         console.log('🔄 Updating existing CV:', currentCVId);
         // Update existing CV
-        savedCV = await cvService.updateCV(currentCVId, cvData, user.id);
+        savedCV = await cvService.updateCV(currentCVId, cvData, user.id, isAdmin);
         console.log('✅ CV updated successfully:', savedCV);
       } else {
         console.log('➕ Creating new CV...');
@@ -187,7 +197,17 @@ const useAutoSave = (formData, saveInterval = 10000) => {
         return null;
       }
       
-      const cvData = await cvService.getCV(cvId, user.id);
+      // Check if user is admin
+      const { data: userData, error: userError } = await supabase
+        .from('users')
+        .select('is_admin')
+        .eq('email', user.email)
+        .single();
+      
+      const isAdmin = userData?.is_admin || false;
+      console.log('🔐 Admin status for CV loading:', isAdmin);
+      
+      const cvData = await cvService.getCV(cvId, user.id, isAdmin);
       setCurrentCVId(cvId);
       console.log('✅ CV loaded, currentCVId set to:', cvId);
       const formData = dbHelpers.extractFormData(cvData);
