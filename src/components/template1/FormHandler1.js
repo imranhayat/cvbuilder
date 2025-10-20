@@ -174,53 +174,75 @@ const useFormHandler = (formData, updateFormData, markAsChanged) => {
         markAsChanged();
     };
 
-    // Function to remove custom section detail
-    const removeCustomDetail = (button, timestamp) => {
-        // Remove from DOM
-        button.parentElement.parentElement.remove();
-        
-        // Update React state - remove the detail at the corresponding index
-        const newCustomSection = [...(formData.customSection || [])];
-        // Find the index based on timestamp or remove the last one
-        if (newCustomSection.length > 1) {
-            newCustomSection.pop(); // Remove the last added detail
-            updateFormData({ ...formData, customSection: newCustomSection });
-            markAsChanged();
-        }
-    };
+  // Function to remove custom section detail
+  const removeCustomDetail = (button, timestamp) => {
+    // Get the input element to find the index
+    const inputElement = button.parentElement.querySelector('.custom-detail-input');
+    const inputId = inputElement.id;
+    const index = parseInt(inputId.split('-').pop());
+    
+    // Remove from DOM
+    button.parentElement.parentElement.remove();
+    
+    // Update React state - remove the detail at the specific index
+    const newCustomSection = [...(formData.customSection || [])];
+    if (index >= 0 && index < newCustomSection.length) {
+      newCustomSection.splice(index, 1);
+      updateFormData({ ...formData, customSection: newCustomSection });
+      markAsChanged();
+    }
+  };
 
     // Make removeCustomDetail globally available
     window.removeCustomDetail = removeCustomDetail;
 
-    // Function to add new custom section detail
-    const addCustomSectionDetail = () => {
-        const customSection = document.getElementById('custom-section');
-        if (customSection) {
-            const timestamp = Date.now();
-            const newDetailContainer = document.createElement('div');
-            newDetailContainer.className = 'custom-detail-container input-group';
-            
-            newDetailContainer.innerHTML = `
-                <div class="custom-detail-wrapper">
-                    <input id="custom-detail-input-${timestamp}" class="custom-detail-input styled-input" type="text" name="customDetail" placeholder="Enter custom section detail" />
-                    <button type="button" class="remove-detail-button" onclick="removeCustomDetail(this, ${timestamp})">Remove</button>
-                </div>
-            `;
-            
-            const addDetailContainer = customSection.querySelector('.add-detail-container');
-            if (addDetailContainer) {
-                customSection.insertBefore(newDetailContainer, addDetailContainer);
-            } else {
-                customSection.appendChild(newDetailContainer);
-            }
-            
-            // Update React state to include the new empty detail
-            const newCustomSection = [...(formData.customSection || [])];
-            newCustomSection.push({ heading: '', detail: '' });
-            updateFormData({ ...formData, customSection: newCustomSection });
+  // Function to add new custom section detail
+  const addCustomSectionDetail = () => {
+    const customSection = document.getElementById('custom-section');
+    if (customSection) {
+      const timestamp = Date.now();
+      const newDetailContainer = document.createElement('div');
+      newDetailContainer.className = 'custom-detail-container input-group';
+      
+      newDetailContainer.innerHTML = `
+        <div class="custom-detail-wrapper">
+          <input id="custom-detail-input-${timestamp}" class="custom-detail-input styled-input" type="text" name="customDetail" placeholder="Enter custom section detail" />
+          <button type="button" class="remove-detail-button" onclick="removeCustomDetail(this, ${timestamp})">Remove</button>
+        </div>
+      `;
+      
+      const addDetailContainer = customSection.querySelector('.add-detail-container');
+      if (addDetailContainer) {
+        customSection.insertBefore(newDetailContainer, addDetailContainer);
+      } else {
+        customSection.appendChild(newDetailContainer);
+      }
+      
+      // Add event listener to the new input to update form state
+      const newInput = newDetailContainer.querySelector('.custom-detail-input');
+      if (newInput) {
+        newInput.addEventListener('input', (e) => {
+          const inputId = e.target.id;
+          const index = parseInt(inputId.split('-').pop());
+          const value = e.target.value;
+          
+          // Update the formData.customSection array
+          const updatedCustomSection = [...(formData.customSection || [])];
+          if (updatedCustomSection[index]) {
+            updatedCustomSection[index].detail = value;
+            updateFormData({ ...formData, customSection: updatedCustomSection });
             markAsChanged();
-        }
-    };
+          }
+        });
+      }
+      
+      // Update React state to include the new empty detail
+      const newCustomSection = [...(formData.customSection || [])];
+      newCustomSection.push({ heading: '', detail: '' });
+      updateFormData({ ...formData, customSection: newCustomSection });
+      markAsChanged();
+    }
+  };
 
     // Simple function to add new reference input
     const addReferenceInput = () => {

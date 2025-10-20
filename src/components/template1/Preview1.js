@@ -5,12 +5,13 @@ import './Preview1.css';
 
 function Preview1({ formData: propFormData, autoSaveStatus, hasUnsavedChanges }) {
   const { formData: hookFormData, getProfileImageUrl, formatContactInfo, updatePreviewData } = usePreviewHandler(propFormData);
-  // Merge with hook data taking precedence (ensures DOM-derived fields like customSection appear)
-  // But prioritize propFormData for profileImage to handle database-loaded images
+  // Use propFormData as primary source (from app state/database) and merge with hook data for DOM-only fields
   const formData = { 
-    ...(hookFormData || {}), 
     ...(propFormData || {}),
-    profileImage: propFormData?.profileImage || hookFormData?.profileImage
+    ...(hookFormData || {}),
+    profileImage: propFormData?.profileImage || hookFormData?.profileImage,
+    // Ensure customSection comes from propFormData (app state) not DOM
+    customSection: propFormData?.customSection || hookFormData?.customSection || []
   };
 
   // Refresh preview data from form inputs whenever app form data changes
@@ -18,11 +19,10 @@ function Preview1({ formData: propFormData, autoSaveStatus, hasUnsavedChanges })
     updatePreviewData();
   }, [propFormData, updatePreviewData]);
 
-  // Ensure dynamic Custom Section detail inputs and Other Information inputs update preview on typing
+  // Ensure dynamic inputs update preview on typing
   useEffect(() => {
     const onInput = (e) => {
       if (e && e.target && e.target.classList && (
-        e.target.classList.contains('custom-detail-input') ||
         e.target.classList.contains('father-name-input') ||
         e.target.classList.contains('husband-name-input') ||
         e.target.classList.contains('cnic-input') ||
