@@ -72,6 +72,7 @@ function Preview1({ formData: propFormData, autoSaveStatus, hasUnsavedChanges })
     hasHeading: !!item.heading,
     hasDetail: !!item.detail
   })));
+  console.log('Template1 - Full Custom Section Array:', JSON.stringify(displayData.customSection, null, 2));
 
   return (
     <div className="right-container">
