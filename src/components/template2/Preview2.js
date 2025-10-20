@@ -143,7 +143,7 @@ function Preview2({ formData: propFormData, autoSaveStatus, hasUnsavedChanges })
           )}
         </div>
 
-        {/* Right Column */}
+        {/* Right Column - Education should be here after Professional Summary */}
         <div className="cv-right-column">
           {/* Professional Summary Section */}
           <div className="cv-section right-column">
