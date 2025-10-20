@@ -1,17 +1,33 @@
 import React, { useEffect } from 'react';
-import useFormHandler from './FormHandler2';
-import './Form2.css';
+import useFormHandler from './FormHandler1';
+import './Form1.css';
 
-function Form2() {
-    const { toggleSection, initializeForm, addEducationGroup, addExperienceGroup, addSkillInput, addCertificationInput, addCustomInformation, addLanguageInput, addHobbyInput, addCustomSectionDetail, addReferenceInput } = useFormHandler();
+function Form({ formData, updateFormData, markAsChanged }) {
+    const { 
+        toggleSection, 
+        initializeForm, 
+        addSkillInput, 
+        addCertificationInput, 
+        addCustomInformation, 
+        addLanguageInput, 
+        addHobbyInput, 
+        addCustomSectionDetail, 
+        addReferenceInput,
+        handleInputChange,
+        handleReferenceChange,
+        referenceText,
+        activeSection
+    } = useFormHandler(formData, updateFormData, markAsChanged);
 
     // Initialize form on component mount
     useEffect(() => {
         initializeForm();
-    }, []);
+    }, [initializeForm]);
+
+    // Debug logs removed for cleaner console
     return (
         <div className="left-container">
-            <div id="contact-info" className="contact-info-section">
+            <div id="contact-info" className={`contact-info-section ${activeSection === 'contact-info' ? 'active' : ''}`}>
                 <h3 className="section-title" onClick={() => toggleSection('contact-info')}>Contact Information</h3>
 
                 <div className="file-input-container">
@@ -23,6 +39,12 @@ function Form2() {
                         className="file-input"
                         type="file"
                         accept="image/*"
+                        onChange={(e) => {
+                            const file = e.target.files[0];
+                            if (file) {
+                                handleInputChange('profileImage', file);
+                            }
+                        }}
                     />
                 </div>
 
@@ -36,6 +58,8 @@ function Form2() {
                         type="text"
                         name="name"
                         placeholder="Enter your name"
+                        value={formData.name || ''}
+                        onChange={(e) => handleInputChange('name', e.target.value)}
                     />
                 </div>
 
@@ -49,6 +73,8 @@ function Form2() {
                         type="text"
                         name="position"
                         placeholder="Enter your position or title"
+                        value={formData.position || ''}
+                        onChange={(e) => handleInputChange('position', e.target.value)}
                     />
                 </div>
 
@@ -62,6 +88,8 @@ function Form2() {
                         type="tel"
                         name="phone"
                         placeholder="Enter your phone number"
+                        value={formData.phone || ''}
+                        onChange={(e) => handleInputChange('phone', e.target.value)}
                     />
                 </div>
 
@@ -75,6 +103,8 @@ function Form2() {
                         type="email"
                         name="email"
                         placeholder="Enter your email"
+                        value={formData.email || ''}
+                        onChange={(e) => handleInputChange('email', e.target.value)}
                     />
                 </div>
 
@@ -88,11 +118,13 @@ function Form2() {
                         type="text"
                         name="address"
                         placeholder="Enter your address"
+                        value={formData.address || ''}
+                        onChange={(e) => handleInputChange('address', e.target.value)}
                     />
                 </div>
             </div>
 
-            <div id="professional-summary" className="professional-summary-section">
+            <div id="professional-summary" className={`professional-summary-section ${activeSection === 'professional-summary' ? 'active' : ''}`}>
                 <h3 className="section-title" onClick={() => toggleSection('professional-summary')} >Professional Summary</h3>
 
                 <div className="professional-summary-textarea-container input-group">
@@ -101,147 +133,269 @@ function Form2() {
                         className="professional-summary-textarea styled-input"
                         name="professionalSummary"
                         rows={4}
-                        defaultValue="To work with a organization that offers a creative, dynamic and professional environment, where my education, knowledge, skills and proven abilities can be fully utilized and which also offers learning opportunities for my career development in the long run."
+                        value={formData.professionalSummary || "To work with an organization that offers a creative, dynamic and professional environment, where my education, knowledge, skills and proven abilities can be fully utilized and which also offers learning opportunities for my career development in the long run."}
+                        onChange={(e) => handleInputChange('professionalSummary', e.target.value)}
                     />
                 </div>
             </div>
 
-            <div id="education" className="education-section">
+            <div id="education" className={`education-section ${activeSection === 'education' ? 'active' : ''}`}>
                 <h3 className="section-title" onClick={() => toggleSection('education')} >Education</h3>
 
-                <div className="degree-input-container input-group">
-                    <label htmlFor="degree-input" className="degree-label input-label">
-                        Degree
-                    </label>
-                    <input
-                        id="degree-input"
-                        className="degree-input styled-input"
-                        type="text"
-                        name="degree"
-                        placeholder="Enter your degree"
-                    />
-                </div>
+                {/* Render all education entries dynamically */}
+                {(formData.education || []).map((edu, index) => (
+                    <div key={index} className="education-group">
+                        <div className="degree-input-container input-group">
+                            <label htmlFor={`degree-input-${index}`} className="degree-label input-label">
+                                Degree
+                            </label>
+                            <input
+                                id={`degree-input-${index}`}
+                                className="degree-input styled-input"
+                                type="text"
+                                name="degree"
+                                placeholder="Enter your degree"
+                                value={edu.degree || ''}
+                                onChange={(e) => {
+                                    const newEducation = [...(formData.education || [])];
+                                    newEducation[index].degree = e.target.value;
+                                    handleInputChange('education', newEducation);
+                                }}
+                            />
+                        </div>
 
-                <div className="board-input-container input-group">
-                    <label htmlFor="board-input" className="board-label input-label">
-                        Board/University
-                    </label>
-                    <input
-                        id="board-input"
-                        className="board-input styled-input"
-                        type="text"
-                        name="board"
-                        placeholder="Enter your board or university"
-                    />
-                </div>
+                        <div className="board-input-container input-group">
+                            <label htmlFor={`board-input-${index}`} className="board-label input-label">
+                                Board/University
+                            </label>
+                            <input
+                                id={`board-input-${index}`}
+                                className="board-input styled-input"
+                                type="text"
+                                name="board"
+                                placeholder="Enter your board or university"
+                                value={edu.board || ''}
+                                onChange={(e) => {
+                                    const newEducation = [...(formData.education || [])];
+                                    newEducation[index].board = e.target.value;
+                                    handleInputChange('education', newEducation);
+                                }}
+                            />
+                        </div>
 
-                <div className="year-input-container input-group">
-                    <label htmlFor="year-input" className="year-label input-label">
-                        Year
-                    </label>
-                    <input
-                        id="year-input"
-                        className="year-input styled-input"
-                        type="text"
-                        name="year"
-                        placeholder="Enter the year"
-                    />
-                </div>
+                        <div className="year-input-container input-group">
+                            <label htmlFor={`year-input-${index}`} className="year-label input-label">
+                                Year
+                            </label>
+                            <input
+                                id={`year-input-${index}`}
+                                className="year-input styled-input"
+                                type="text"
+                                name="year"
+                                placeholder="Enter the year"
+                                value={edu.year || ''}
+                                onChange={(e) => {
+                                    const newEducation = [...(formData.education || [])];
+                                    newEducation[index].year = e.target.value;
+                                    handleInputChange('education', newEducation);
+                                }}
+                            />
+                        </div>
 
-                <div className="marks-input-container input-group">
-                    <label htmlFor="marks-input" className="marks-label input-label">
-                        Marks/CGPA
-                    </label>
-                    <input
-                        id="marks-input"
-                        className="marks-input styled-input"
-                        type="text"
-                        name="marks"
-                        placeholder="Enter your marks or CGPA"
-                    />
-                </div>
+                        <div className="marks-input-container input-group">
+                            <label htmlFor={`marks-input-${index}`} className="marks-label input-label">
+                                Marks/CGPA
+                            </label>
+                            <input
+                                id={`marks-input-${index}`}
+                                className="marks-input styled-input"
+                                type="text"
+                                name="marks"
+                                placeholder="Enter your marks or CGPA"
+                                value={edu.marks || ''}
+                                onChange={(e) => {
+                                    const newEducation = [...(formData.education || [])];
+                                    newEducation[index].marks = e.target.value;
+                                    handleInputChange('education', newEducation);
+                                }}
+                            />
+                        </div>
+
+                        {/* Remove button for each education entry */}
+                        {index > 0 && (
+                            <div className="remove-education-container">
+                                <button 
+                                    type="button" 
+                                    onClick={() => {
+                                        const newEducation = [...(formData.education || [])];
+                                        newEducation.splice(index, 1);
+                                        handleInputChange('education', newEducation);
+                                    }} 
+                                    className="remove-education-button"
+                                >
+                                    Remove Education
+                                </button>
+                            </div>
+                        )}
+                    </div>
+                ))}
 
                 <div className="add-education-container">
-                    <button type="button" onClick={addEducationGroup} className="add-education-button">
+                    <button type="button" onClick={() => {
+                        const newEducation = [...(formData.education || [])];
+                        newEducation.push({ degree: '', board: '', year: '', marks: '' });
+                        handleInputChange('education', newEducation);
+                    }} className="add-education-button">
                         Add Education
                     </button>
                 </div>
             </div>
 
-            <div id="experience" className="experience-section">
+            <div id="experience" className={`experience-section ${activeSection === 'experience' ? 'active' : ''}`}>
                 <h3 className="section-title" onClick={() => toggleSection('experience')} >Experience</h3>
 
-                <div className="job-title-input-container input-group">
-                    <label htmlFor="job-title-input" className="job-title-label input-label">
-                        Job Title
-                    </label>
-                    <input
-                        id="job-title-input"
-                        className="job-title-input styled-input"
-                        type="text"
-                        name="jobTitle"
-                        placeholder="Enter your job title"
-                    />
-                </div>
+                {/* Render all experience entries dynamically */}
+                {(formData.experience || []).map((exp, index) => (
+                    <div key={index} className="experience-group">
+                        <div className="job-title-input-container input-group">
+                            <label htmlFor={`job-title-input-${index}`} className="job-title-label input-label">
+                                Job Title
+                            </label>
+                            <input
+                                id={`job-title-input-${index}`}
+                                className="job-title-input styled-input"
+                                type="text"
+                                name="jobTitle"
+                                placeholder="Enter your job title"
+                                value={exp.jobTitle || ''}
+                                onChange={(e) => {
+                                    const newExperience = [...(formData.experience || [])];
+                                    newExperience[index].jobTitle = e.target.value;
+                                    handleInputChange('experience', newExperience);
+                                }}
+                            />
+                        </div>
 
-                <div className="company-input-container input-group">
-                    <label htmlFor="company-input" className="company-label input-label">
-                        Company
-                    </label>
-                    <input
-                        id="company-input"
-                        className="company-input styled-input"
-                        type="text"
-                        name="company"
-                        placeholder="Enter your company"
-                    />
-                </div>
+                        <div className="company-input-container input-group">
+                            <label htmlFor={`company-input-${index}`} className="company-label input-label">
+                                Company
+                            </label>
+                            <input
+                                id={`company-input-${index}`}
+                                className="company-input styled-input"
+                                type="text"
+                                name="company"
+                                placeholder="Enter your company"
+                                value={exp.company || ''}
+                                onChange={(e) => {
+                                    const newExperience = [...(formData.experience || [])];
+                                    newExperience[index].company = e.target.value;
+                                    handleInputChange('experience', newExperience);
+                                }}
+                            />
+                        </div>
 
-                <div className="duration-input-container input-group">
-                    <label htmlFor="duration-input" className="duration-label input-label">
-                        Duration
-                    </label>
-                    <input
-                        id="duration-input"
-                        className="duration-input styled-input"
-                        type="text"
-                        name="duration"
-                        placeholder="Enter the duration"
-                    />
-                </div>
+                        <div className="duration-input-container input-group">
+                            <label htmlFor={`duration-input-${index}`} className="duration-label input-label">
+                                Duration
+                            </label>
+                            <input
+                                id={`duration-input-${index}`}
+                                className="duration-input styled-input"
+                                type="text"
+                                name="duration"
+                                placeholder="Enter the duration"
+                                value={exp.duration || ''}
+                                onChange={(e) => {
+                                    const newExperience = [...(formData.experience || [])];
+                                    newExperience[index].duration = e.target.value;
+                                    handleInputChange('experience', newExperience);
+                                }}
+                            />
+                        </div>
 
-                <div className="job-details-input-container input-group">
-                    <label htmlFor="job-details-textarea" className="job-details-label input-label">
-                        Job Details
-                    </label>
-                    <textarea
-                        id="job-details-textarea"
-                        className="job-details-textarea styled-input"
-                        name="jobDetails"
-                        placeholder="Enter details about your job"
-                        rows={2}
-                    />
-                </div>
+                        <div className="job-details-input-container input-group">
+                            <label htmlFor={`job-details-textarea-${index}`} className="job-details-label input-label">
+                                Job Details
+                            </label>
+                            <textarea
+                                id={`job-details-textarea-${index}`}
+                                className="job-details-textarea styled-input"
+                                name="jobDetails"
+                                placeholder="Enter details about your job"
+                                rows={2}
+                                value={exp.jobDetails || ''}
+                                onChange={(e) => {
+                                    const newExperience = [...(formData.experience || [])];
+                                    newExperience[index].jobDetails = e.target.value;
+                                    handleInputChange('experience', newExperience);
+                                }}
+                            />
+                        </div>
+
+                        {/* Remove button for each experience entry */}
+                        {index > 0 && (
+                            <div className="remove-experience-container">
+                                <button 
+                                    type="button" 
+                                    onClick={() => {
+                                        const newExperience = [...(formData.experience || [])];
+                                        newExperience.splice(index, 1);
+                                        handleInputChange('experience', newExperience);
+                                    }} 
+                                    className="remove-experience-button"
+                                >
+                                    Remove Experience
+                                </button>
+                            </div>
+                        )}
+                    </div>
+                ))}
 
                 <div className="add-experience-container">
-                    <button type="button" onClick={addExperienceGroup} className="add-experience-button">
+                    <button type="button" onClick={() => {
+                        const newExperience = [...(formData.experience || [])];
+                        newExperience.push({ jobTitle: '', company: '', duration: '', jobDetails: '' });
+                        handleInputChange('experience', newExperience);
+                    }} className="add-experience-button">
                         Add Experience
                     </button>
                 </div>
             </div>
 
-            <div id="certifications" className="certifications-section">
+            <div id="certifications" className={`certifications-section ${activeSection === 'certifications' ? 'active' : ''}`}>
                 <h3 className="section-title" onClick={() => toggleSection('certifications')} >Certifications</h3>
 
-                <div className="certification-input-container input-group">
-                    <input
-                        id="certification-input"
-                        className="certification-input styled-input"
-                        type="text"
-                        name="certification"
-                        placeholder="Enter a certification"
-                    />
-                </div>
+                {formData.certifications && formData.certifications.map((certification, index) => (
+                    <div key={index} className="certification-input-container input-group">
+                        <div className="certification-input-wrapper">
+                            <input
+                                id={`certification-input-${index}`}
+                                className="certification-input styled-input"
+                                type="text"
+                                name="certification"
+                                placeholder="Enter a certification"
+                                value={certification}
+                                onChange={(e) => {
+                                    const newCertifications = [...(formData.certifications || [])];
+                                    newCertifications[index] = e.target.value;
+                                    handleInputChange('certifications', newCertifications);
+                                }}
+                            />
+                            <button 
+                                type="button" 
+                                className="remove-certification-button"
+                                onClick={() => {
+                                    const newCertifications = [...(formData.certifications || [])];
+                                    newCertifications.splice(index, 1);
+                                    handleInputChange('certifications', newCertifications);
+                                }}
+                            >
+                                Remove
+                            </button>
+                        </div>
+                    </div>
+                ))}
 
                 <div className="add-certification-container">
                     <button type="button" onClick={addCertificationInput} className="add-certification-button">
@@ -250,52 +404,44 @@ function Form2() {
                 </div>
             </div>
 
-            <div id="skills" className="skills-section">
+            <div id="skills" className={`skills-section ${activeSection === 'skills' ? 'active' : ''}`}>
                 <h3 className="section-title" onClick={() => toggleSection('skills')} >Skills</h3>
 
-                <div className="communication-skills-container input-group">
+                {formData.skills && formData.skills.map((skill, index) => (
+                    <div key={index} className="skill-input-container input-group">
+                        <div className="skill-input-wrapper">
+                            <input
+                                id={`skill-input-${index}`}
+                                className="skill-input styled-input"
+                                type="text"
+                                name="skill"
+                                placeholder="Enter a skill"
+                                value={skill}
+                                onChange={(e) => {
+                                    const newSkills = [...(formData.skills || [])];
+                                    newSkills[index] = e.target.value;
+                                    // Filter out empty skills
+                                    const filteredSkills = newSkills.filter(skill => skill && skill.trim() !== '');
+                                    handleInputChange('skills', filteredSkills);
+                                }}
+                            />
+                            <button 
+                                type="button" 
+                                className="remove-skill-button"
+                                onClick={() => {
+                                    const newSkills = [...(formData.skills || [])];
+                                    newSkills.splice(index, 1);
+                                    // Filter out empty skills
+                                    const filteredSkills = newSkills.filter(skill => skill && skill.trim() !== '');
+                                    handleInputChange('skills', filteredSkills);
+                                }}
+                            >
+                                Remove
+                            </button>
+                        </div>
+                    </div>
+                ))}
 
-                    <input
-                        id="communication-skills-input"
-                        className="communication-skills-input styled-input"
-                        type="text"
-                        name="communicationSkills"
-                        defaultValue="Communication Skills"
-                    />
-                </div>
-
-                <div className="time-management-container input-group">
-
-                    <input
-                        id="time-management-input"
-                        className="time-management-input styled-input"
-                        type="text"
-                        name="timeManagement"
-                        defaultValue="Time Management"
-                    />
-                </div>
-
-                <div className="problem-solving-container input-group">
-
-                    <input
-                        id="problem-solving-input"
-                        className="problem-solving-input styled-input"
-                        type="text"
-                        name="problemSolving"
-                        defaultValue="Problem Solving"
-                    />
-                </div>
-
-                <div className="hardworking-container input-group">
-
-                    <input
-                        id="hardworking-input"
-                        className="hardworking-input styled-input"
-                        type="text"
-                        name="hardworking"
-                        defaultValue="Hardworking"
-                    />
-                </div>
 
                 <div className="add-skill-container">
                     <button type="button" onClick={addSkillInput} className="add-skill-button">
@@ -305,86 +451,208 @@ function Form2() {
 
             </div>
 
-            <div id="other-information" className="other-information-section">
+            <div id="other-information" className={`other-information-section ${activeSection === 'other-information' ? 'active' : ''}`}>
                 <h3 className="section-title" onClick={() => toggleSection('other-information')} >Other Information</h3>
 
+
+                {/* Always visible input fields for users to start entering data */}
                 <div className="father-name-input-container input-group">
-                    <label htmlFor="father-name-input" className="father-name-label input-label">
+                    <label htmlFor="father-name-input-always" className="father-name-label input-label">
                         Father's Name
                     </label>
                     <input
-                        id="father-name-input"
+                        id="father-name-input-always"
                         className="father-name-input styled-input"
                         type="text"
-                        name="fatherName"
+                        name="fatherNameAlways"
                         placeholder="Enter father's name"
+                        value={formData.otherInfo?.find(info => info.label === "Father's Name")?.value || ''}
+                        onChange={(e) => {
+                            const newOtherInfo = [...(formData.otherInfo || [])];
+                            const existingIndex = newOtherInfo.findIndex(info => info.label === "Father's Name");
+                            if (existingIndex >= 0) {
+                                newOtherInfo[existingIndex].value = e.target.value;
+                            } else {
+                                newOtherInfo.push({ label: "Father's Name", value: e.target.value });
+                            }
+                            handleInputChange('otherInfo', newOtherInfo);
+                        }}
                     />
                 </div>
 
                 <div className="husband-name-input-container input-group">
-                    <label htmlFor="husband-name-input" className="husband-name-label input-label">
+                    <label htmlFor="husband-name-input-always" className="husband-name-label input-label">
                         Husband's Name
                     </label>
                     <input
-                        id="husband-name-input"
+                        id="husband-name-input-always"
                         className="husband-name-input styled-input"
                         type="text"
-                        name="husbandName"
+                        name="husbandNameAlways"
                         placeholder="Enter husband's name"
+                        value={formData.otherInfo?.find(info => info.label === "Husband's Name")?.value || ''}
+                        onChange={(e) => {
+                            const newOtherInfo = [...(formData.otherInfo || [])];
+                            const existingIndex = newOtherInfo.findIndex(info => info.label === "Husband's Name");
+                            if (existingIndex >= 0) {
+                                newOtherInfo[existingIndex].value = e.target.value;
+                            } else {
+                                newOtherInfo.push({ label: "Husband's Name", value: e.target.value });
+                            }
+                            handleInputChange('otherInfo', newOtherInfo);
+                        }}
                     />
                 </div>
 
                 <div className="cnic-input-container input-group">
-                    <label htmlFor="cnic-input" className="cnic-label input-label">
+                    <label htmlFor="cnic-input-always" className="cnic-label input-label">
                         CNIC
                     </label>
                     <input
-                        id="cnic-input"
+                        id="cnic-input-always"
                         className="cnic-input styled-input"
                         type="text"
-                        name="cnic"
+                        name="cnicAlways"
                         placeholder="Enter CNIC number"
+                        value={formData.otherInfo?.find(info => info.label === "CNIC")?.value || ''}
+                        onChange={(e) => {
+                            const newOtherInfo = [...(formData.otherInfo || [])];
+                            const existingIndex = newOtherInfo.findIndex(info => info.label === "CNIC");
+                            if (existingIndex >= 0) {
+                                newOtherInfo[existingIndex].value = e.target.value;
+                            } else {
+                                newOtherInfo.push({ label: "CNIC", value: e.target.value });
+                            }
+                            handleInputChange('otherInfo', newOtherInfo);
+                        }}
                     />
                 </div>
 
                 <div className="dob-input-container input-group">
-                    <label htmlFor="dob-input" className="dob-label input-label">
+                    <label htmlFor="dob-input-always" className="dob-label input-label">
                         Date of Birth
                     </label>
                     <input
-                        id="dob-input"
+                        id="dob-input-always"
                         className="dob-input styled-input"
                         type="text"
-                        name="dateOfBirth"
+                        name="dateOfBirthAlways"
                         placeholder="Enter date of birth"
+                        value={formData.otherInfo?.find(info => info.label === "Date of Birth")?.value || ''}
+                        onChange={(e) => {
+                            const newOtherInfo = [...(formData.otherInfo || [])];
+                            const existingIndex = newOtherInfo.findIndex(info => info.label === "Date of Birth");
+                            if (existingIndex >= 0) {
+                                newOtherInfo[existingIndex].value = e.target.value;
+                            } else {
+                                newOtherInfo.push({ label: "Date of Birth", value: e.target.value });
+                            }
+                            handleInputChange('otherInfo', newOtherInfo);
+                        }}
                     />
                 </div>
 
                 <div className="marital-status-input-container input-group">
-                    <label htmlFor="marital-status-input" className="marital-status-label input-label">
+                    <label htmlFor="marital-status-input-always" className="marital-status-label input-label">
                         Marital Status
                     </label>
                     <input
-                        id="marital-status-input"
+                        id="marital-status-input-always"
                         className="marital-status-input styled-input"
                         type="text"
-                        name="maritalStatus"
+                        name="maritalStatusAlways"
                         placeholder="Enter marital status"
+                        value={formData.otherInfo?.find(info => info.label === "Marital Status")?.value || ''}
+                        onChange={(e) => {
+                            const newOtherInfo = [...(formData.otherInfo || [])];
+                            const existingIndex = newOtherInfo.findIndex(info => info.label === "Marital Status");
+                            if (existingIndex >= 0) {
+                                newOtherInfo[existingIndex].value = e.target.value;
+                            } else {
+                                newOtherInfo.push({ label: "Marital Status", value: e.target.value });
+                            }
+                            handleInputChange('otherInfo', newOtherInfo);
+                        }}
                     />
                 </div>
 
                 <div className="religion-input-container input-group">
-                    <label htmlFor="religion-input" className="religion-label input-label">
+                    <label htmlFor="religion-input-always" className="religion-label input-label">
                         Religion
                     </label>
                     <input
-                        id="religion-input"
+                        id="religion-input-always"
                         className="religion-input styled-input"
                         type="text"
-                        name="religion"
+                        name="religionAlways"
                         placeholder="Enter religion"
+                        value={formData.otherInfo?.find(info => info.label === "Religion")?.value || ''}
+                        onChange={(e) => {
+                            const newOtherInfo = [...(formData.otherInfo || [])];
+                            const existingIndex = newOtherInfo.findIndex(info => info.label === "Religion");
+                            if (existingIndex >= 0) {
+                                newOtherInfo[existingIndex].value = e.target.value;
+                            } else {
+                                newOtherInfo.push({ label: "Religion", value: e.target.value });
+                            }
+                            handleInputChange('otherInfo', newOtherInfo);
+                        }}
                     />
                 </div>
+
+                {/* Custom information fields - only show non-standard fields */}
+                {formData.otherInfo && formData.otherInfo
+                    .map((info, originalIndex) => ({ info, originalIndex }))
+                    .filter(({ info }) => !['Father\'s Name', 'Husband\'s Name', 'CNIC', 'Date of Birth', 'Marital Status', 'Religion'].includes(info.label))
+                    .map(({ info, originalIndex }, displayIndex) => (
+                    <div key={originalIndex} className="custom-info-container input-group">
+                        <div className="custom-info-wrapper">
+                            <div className="custom-label-input">
+                                <label htmlFor={`custom-label-${originalIndex}`} className="custom-label">Label:</label>
+                                <input
+                                    id={`custom-label-${originalIndex}`}
+                                    className="custom-label-input-field styled-input"
+                                    type="text"
+                                    name="customLabel"
+                                    placeholder="Enter label"
+                                    value={info.label || ''}
+                                    onChange={(e) => {
+                                        const newOtherInfo = [...(formData.otherInfo || [])];
+                                        newOtherInfo[originalIndex].label = e.target.value;
+                                        handleInputChange('otherInfo', newOtherInfo);
+                                    }}
+                                />
+                            </div>
+                            <div className="custom-value-input">
+                                <label htmlFor={`custom-value-${originalIndex}`} className="custom-label">Value:</label>
+                                <input
+                                    id={`custom-value-${originalIndex}`}
+                                    className="custom-value-input-field styled-input"
+                                    type="text"
+                                    name="customValue"
+                                    placeholder="Enter value"
+                                    value={info.value || ''}
+                                    onChange={(e) => {
+                                        const newOtherInfo = [...(formData.otherInfo || [])];
+                                        newOtherInfo[originalIndex].value = e.target.value;
+                                        handleInputChange('otherInfo', newOtherInfo);
+                                    }}
+                                />
+                            </div>
+                            <button 
+                                type="button" 
+                                className="remove-custom-button"
+                                onClick={() => {
+                                    const newOtherInfo = [...(formData.otherInfo || [])];
+                                    newOtherInfo.splice(originalIndex, 1);
+                                    handleInputChange('otherInfo', newOtherInfo);
+                                }}
+                            >
+                                Remove
+                            </button>
+                        </div>
+                    </div>
+                ))}
 
                 <div className="add-information-container">
                     <button type="button" onClick={addCustomInformation} className="add-information-button">
@@ -393,7 +661,7 @@ function Form2() {
                 </div>
             </div>
 
-            <div id="languages" className="languages-section">
+            <div id="languages" className={`languages-section ${activeSection === 'languages' ? 'active' : ''}`}>
                 <h3 className="section-title" onClick={() => toggleSection('languages')} >Languages</h3>
 
                 <div className="english-language-container input-group">
@@ -402,7 +670,15 @@ function Form2() {
                         className="english-language-input styled-input"
                         type="text"
                         name="englishLanguage"
-                        defaultValue="English"
+                        value={formData.languages?.[0] || "English"}
+                        onChange={(e) => {
+                            const newLanguages = [...(formData.languages || [])];
+                            if (newLanguages.length === 0) {
+                                newLanguages.push("English");
+                            }
+                            newLanguages[0] = e.target.value;
+                            handleInputChange('languages', newLanguages);
+                        }}
                     />
                 </div>
 
@@ -412,7 +688,15 @@ function Form2() {
                         className="urdu-language-input styled-input"
                         type="text"
                         name="urduLanguage"
-                        defaultValue="Urdu"
+                        value={formData.languages?.[1] || "Urdu"}
+                        onChange={(e) => {
+                            const newLanguages = [...(formData.languages || [])];
+                            if (newLanguages.length < 2) {
+                                newLanguages.push("Urdu");
+                            }
+                            newLanguages[1] = e.target.value;
+                            handleInputChange('languages', newLanguages);
+                        }}
                     />
                 </div>
 
@@ -422,7 +706,15 @@ function Form2() {
                         className="punjabi-language-input styled-input"
                         type="text"
                         name="punjabiLanguage"
-                        defaultValue="Punjabi"
+                        value={formData.languages?.[2] || "Punjabi"}
+                        onChange={(e) => {
+                            const newLanguages = [...(formData.languages || [])];
+                            if (newLanguages.length < 3) {
+                                newLanguages.push("Punjabi");
+                            }
+                            newLanguages[2] = e.target.value;
+                            handleInputChange('languages', newLanguages);
+                        }}
                     />
                 </div>
 
@@ -433,18 +725,40 @@ function Form2() {
                 </div>
             </div>
 
-            <div id="hobbies" className="hobbies-section">
+            <div id="hobbies" className={`hobbies-section ${activeSection === 'hobbies' ? 'active' : ''}`}>
                 <h3 className="section-title" onClick={() => toggleSection('hobbies')} >Hobbies</h3>
 
-                <div className="hobby-input-container input-group">
-                    <input
-                        id="hobby-input"
-                        className="hobby-input styled-input"
-                        type="text"
-                        name="hobby"
-                        placeholder="Enter a hobby"
-                    />
-                </div>
+                {formData.hobbies && formData.hobbies.map((hobby, index) => (
+                    <div key={index} className="hobby-input-container input-group">
+                        <div className="hobby-input-wrapper">
+                            <input
+                                id={`hobby-input-${index}`}
+                                className="hobby-input styled-input"
+                                type="text"
+                                name="hobby"
+                                placeholder="Enter a hobby"
+                                value={hobby}
+                                onChange={(e) => {
+                                    const newHobbies = [...(formData.hobbies || [])];
+                                    newHobbies[index] = e.target.value;
+                                    handleInputChange('hobbies', newHobbies);
+                                }}
+                            />
+                            {index > 0 && (
+                                <button 
+                                    type="button" 
+                                    className="remove-hobby-button"
+                                    onClick={() => {
+                                        const newHobbies = formData.hobbies.filter((_, i) => i !== index);
+                                        handleInputChange('hobbies', newHobbies);
+                                    }}
+                                >
+                                    Remove
+                                </button>
+                            )}
+                        </div>
+                    </div>
+                ))}
 
                 <div className="add-hobby-container">
                     <button type="button" onClick={addHobbyInput} className="add-hobby-button">
@@ -453,7 +767,7 @@ function Form2() {
                 </div>
             </div>
 
-            <div id="custom-section" className="custom-section">
+            <div id="custom-section" className={`custom-section ${activeSection === 'custom-section' ? 'active' : ''}`}>
                 <h3 className="section-title" onClick={() => toggleSection('custom-section')} >Custom Section</h3>
 
                 <div className="custom-section-heading-input-container input-group">
@@ -489,8 +803,8 @@ function Form2() {
                 </div>
             </div>
 
-            <div id="references" className="references-section">
-                <h3 className="section-title" onClick={() => toggleSection('references')} >References</h3>
+            <div id="references" className={`references-section ${activeSection === 'references' ? 'active' : ''}`}>
+                <h3 className="section-title" onClick={() => toggleSection('references')}>References</h3>
 
                 <div className="reference-input-container input-group">
                     <input
@@ -498,7 +812,9 @@ function Form2() {
                         className="reference-input styled-input"
                         type="text"
                         name="reference"
-                        defaultValue="References would be furnished on demand."
+                        placeholder="References would be furnished on demand."
+                        value={referenceText}
+                        onChange={handleReferenceChange}
                     />
                 </div>
 
@@ -512,4 +828,4 @@ function Form2() {
     );
 }
 
-export default Form2;
+export default Form;

@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 
-const usePreviewHandler = () => {
+const usePreviewHandler = (passedFormData = null) => {
   const [formData, setFormData] = useState({
     name: '',
     position: '',
@@ -19,6 +19,22 @@ const usePreviewHandler = () => {
     customSection: [],
     references: []
   });
+
+  // Use passed form data if available
+  useEffect(() => {
+    if (passedFormData) {
+      setFormData(passedFormData);
+    }
+  }, [passedFormData]);
+
+  // Cleanup object URLs to prevent memory leaks
+  useEffect(() => {
+    return () => {
+      if (formData.profileImage && formData.profileImage instanceof File) {
+        URL.revokeObjectURL(URL.createObjectURL(formData.profileImage));
+      }
+    };
+  }, [formData.profileImage]);
 
   // Function to get form data from Form1 inputs
   const getFormData = () => {
@@ -75,8 +91,7 @@ const usePreviewHandler = () => {
     
     data.education = educationData;
     
-    // Debug: Log education data
-    console.log('Education data:', data.education);
+    // Debug log removed to prevent console spam
 
     // Get experience data - first get the main experience section, then any additional groups
     const mainJobTitle = document.getElementById('job-title-input')?.value || '';
@@ -124,9 +139,9 @@ const usePreviewHandler = () => {
     const langInputs = document.querySelectorAll('.languages-section input[type="text"]');
     data.languages = Array.from(langInputs).map(input => input.value).filter(value => value.trim() !== '');
 
-    // Get hobbies data
-    const hobbyInputs = document.querySelectorAll('.hobbies-section input[type="text"]');
-    data.hobbies = Array.from(hobbyInputs).map(input => input.value).filter(value => value.trim() !== '');
+    // Get hobbies data - now managed through React state
+    // Since hobbies are now managed in React state, we need to get them from the current formData state
+    data.hobbies = formData.hobbies || [];
 
     // Get references data
     const refInputs = document.querySelectorAll('.references-section input[type="text"]');
@@ -194,14 +209,14 @@ const usePreviewHandler = () => {
     return data;
   };
 
-  // Function to update preview data
-  const updatePreviewData = () => {
+  // Function to update preview data - memoized to prevent infinite re-renders
+  const updatePreviewData = useCallback(() => {
     const newData = getFormData();
     setFormData(newData);
-  };
+  }, []);
 
-  // Function to get profile image URL
-  const getProfileImageUrl = () => {
+  // Function to get profile image URL - memoized to prevent flickering
+  const getProfileImageUrl = useMemo(() => {
     if (formData.profileImage) {
       // If it's a File object, create object URL
       if (formData.profileImage instanceof File) {
@@ -213,7 +228,7 @@ const usePreviewHandler = () => {
       }
     }
     return null;
-  };
+  }, [formData.profileImage]);
 
   // Function to format contact information
   const formatContactInfo = () => {
@@ -232,11 +247,8 @@ const usePreviewHandler = () => {
     return contact;
   };
 
-  // Set up real-time updates
-  useEffect(() => {
-    const updateInterval = setInterval(updatePreviewData, 1000);
-    return () => clearInterval(updateInterval);
-  }, []);
+  // Real-time updates are now handled by the parent component through props
+  // No need for setInterval which was causing infinite re-renders
 
   return {
     formData,

@@ -153,22 +153,15 @@
 .contact-info-section .email-input-container,
 .contact-info-section .address-input-container,
 .professional-summary-section .professional-summary-textarea-container,
-.education-section .degree-input-container,
-.education-section .board-input-container,
-.education-section .year-input-container,
-.education-section .marks-input-container,
+.education-section .education-group,
 .education-section .add-education-container,
-.experience-section .job-title-input-container,
-.experience-section .company-input-container,
-.experience-section .duration-input-container,
-.experience-section .job-details-input-container,
+.education-section .remove-education-container,
+.experience-section .experience-group,
 .experience-section .add-experience-container,
+.experience-section .remove-experience-container,
 .certifications-section .certification-input-container,
 .certifications-section .add-certification-container,
-.skills-section .communication-skills-container,
-.skills-section .time-management-container,
-.skills-section .problem-solving-container,
-.skills-section .hardworking-container,
+.skills-section .skill-input-container,
 .skills-section .add-skill-container,
 .other-information-section .father-name-input-container,
 .other-information-section .husband-name-input-container,
@@ -208,6 +201,7 @@
   border-color: #667eea;
 }
 
+/* Show all content when section is active */
 .contact-info-section.active .file-input-container,
 .contact-info-section.active .name-input-container,
 .contact-info-section.active .position-input-container,
@@ -215,22 +209,15 @@
 .contact-info-section.active .email-input-container,
 .contact-info-section.active .address-input-container,
 .professional-summary-section.active .professional-summary-textarea-container,
-.education-section.active .degree-input-container,
-.education-section.active .board-input-container,
-.education-section.active .year-input-container,
-.education-section.active .marks-input-container,
+.education-section.active .education-group,
 .education-section.active .add-education-container,
-.experience-section.active .job-title-input-container,
-.experience-section.active .company-input-container,
-.experience-section.active .duration-input-container,
-.experience-section.active .job-details-input-container,
+.education-section.active .remove-education-container,
+.experience-section.active .experience-group,
 .experience-section.active .add-experience-container,
+.experience-section.active .remove-experience-container,
 .certifications-section.active .certification-input-container,
 .certifications-section.active .add-certification-container,
-.skills-section.active .communication-skills-container,
-.skills-section.active .time-management-container,
-.skills-section.active .problem-solving-container,
-.skills-section.active .hardworking-container,
+.skills-section.active .skill-input-container,
 .skills-section.active .add-skill-container,
 .other-information-section.active .father-name-input-container,
 .other-information-section.active .husband-name-input-container,
@@ -250,7 +237,7 @@
 .custom-section.active .add-detail-container,
 .references-section.active .reference-input-container,
 .references-section.active .add-reference-container {
-  display: block;
+  display: block !important;
 }
 
 .section-title {

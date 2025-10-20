@@ -1,38 +1,54 @@
 
-const useFormHandler = () => {
-    // Function to toggle section visibility with beautiful list style
-    const toggleSection = (sectionId) => {
-        // Get all sections
-        const allSections = document.querySelectorAll('.contact-info-section, .professional-summary-section, .education-section, .experience-section, .certifications-section, .skills-section, .other-information-section, .languages-section, .hobbies-section, .custom-section, .references-section');
-        
-        // Remove active class from all sections
-        allSections.forEach(section => {
-            section.classList.remove('active');
-        });
-        
-        // Add active class to clicked section
-        const targetSection = document.getElementById(sectionId);
-        if (targetSection) {
-            targetSection.classList.add('active');
+import { useState, useEffect, useCallback } from 'react';
+
+const useFormHandler = (formData, updateFormData, markAsChanged) => {
+    // Local state for references input
+    const [referenceText, setReferenceText] = useState('References would be furnished on demand.');
+    
+    // State for active section
+    const [activeSection, setActiveSection] = useState('contact-info');
+
+    // Sync referenceText with formData changes
+    useEffect(() => {
+        if (formData.references && formData.references.length > 0) {
+            setReferenceText(formData.references[0]);
+        } else {
+            setReferenceText('References would be furnished on demand.');
         }
+    }, [formData.references]);
+
+    // Handle input changes and trigger auto-save
+    const handleInputChange = (field, value) => {
+        const newFormData = { ...formData, [field]: value };
+        updateFormData(newFormData);
+        markAsChanged();
+    };
+
+    // Handle references input change
+    const handleReferenceChange = (e) => {
+        const value = e.target.value;
+        setReferenceText(value);
+        const newFormData = { ...formData, references: value.trim() ? [value] : [] };
+        updateFormData(newFormData);
+        markAsChanged();
+    };
+
+    // Sync local reference text with form data
+    useEffect(() => {
+        if (formData.references && formData.references.length > 0) {
+            setReferenceText(formData.references[0]);
+        }
+    }, [formData.references]);
+
+    // React-based toggle section function
+    const toggleSection = (sectionId) => {
+        setActiveSection(sectionId);
     };
 
     // Function to initialize the form - show only Contact Information on page load
-    const initializeForm = () => {
-        // Get all sections
-        const allSections = document.querySelectorAll('.contact-info-section, .professional-summary-section, .education-section, .experience-section, .certifications-section, .skills-section, .other-information-section, .languages-section, .hobbies-section, .custom-section, .references-section');
-        
-        // Remove active class from all sections
-        allSections.forEach(section => {
-            section.classList.remove('active');
-        });
-        
-        // Show only Contact Information section
-        const contactSection = document.getElementById('contact-info');
-        if (contactSection) {
-            contactSection.classList.add('active');
-        }
-    };
+    const initializeForm = useCallback(() => {
+        setActiveSection('contact-info');
+    }, []);
 
     // Function to add new education group
     const addEducationGroup = () => {
@@ -104,81 +120,26 @@ const useFormHandler = () => {
 
     // Function to add new skill input
     const addSkillInput = () => {
-        const skillsSection = document.getElementById('skills');
-        if (skillsSection) {
-            const timestamp = Date.now();
-            const newSkillContainer = document.createElement('div');
-            newSkillContainer.className = 'skill-input-container input-group';
-            
-            newSkillContainer.innerHTML = `
-                <div class="skill-input-wrapper">
-                    <input id="skill-input-${timestamp}" class="skill-input styled-input" type="text" name="skill" placeholder="Enter a skill" />
-                    <button type="button" class="remove-skill-button" onclick="this.parentElement.parentElement.remove()">Remove</button>
-                </div>
-            `;
-            
-            const addSkillContainer = skillsSection.querySelector('.add-skill-container');
-            if (addSkillContainer) {
-                skillsSection.insertBefore(newSkillContainer, addSkillContainer);
-            } else {
-                skillsSection.appendChild(newSkillContainer);
-            }
-        }
+        const newSkills = [...(formData.skills || [])];
+        newSkills.push('');
+        updateFormData({ ...formData, skills: newSkills });
+        markAsChanged();
     };
 
     // Function to add new certification input
     const addCertificationInput = () => {
-        const certificationsSection = document.getElementById('certifications');
-        if (certificationsSection) {
-            const timestamp = Date.now();
-            const newCertificationContainer = document.createElement('div');
-            newCertificationContainer.className = 'certification-input-container input-group';
-            
-            newCertificationContainer.innerHTML = `
-                <div class="certification-input-wrapper">
-                    <input id="certification-input-${timestamp}" class="certification-input styled-input" type="text" name="certification" placeholder="Enter a certification" />
-                    <button type="button" class="remove-certification-button" onclick="this.parentElement.parentElement.remove()">Remove</button>
-                </div>
-            `;
-            
-            const addCertificationContainer = certificationsSection.querySelector('.add-certification-container');
-            if (addCertificationContainer) {
-                certificationsSection.insertBefore(newCertificationContainer, addCertificationContainer);
-            } else {
-                certificationsSection.appendChild(newCertificationContainer);
-            }
-        }
+        const newCertifications = [...(formData.certifications || [])];
+        newCertifications.push('');
+        updateFormData({ ...formData, certifications: newCertifications });
+        markAsChanged();
     };
 
     // Function to add new custom information field
     const addCustomInformation = () => {
-        const otherInfoSection = document.getElementById('other-information');
-        if (otherInfoSection) {
-            const timestamp = Date.now();
-            const newCustomField = document.createElement('div');
-            newCustomField.className = 'custom-info-container input-group';
-            
-            newCustomField.innerHTML = `
-                <div class="custom-info-wrapper">
-                    <div class="custom-label-input">
-                        <label for="custom-label-${timestamp}" class="custom-label">Label:</label>
-                        <input id="custom-label-${timestamp}" class="custom-label-input-field styled-input" type="text" name="customLabel" placeholder="Enter label" />
-                    </div>
-                    <div class="custom-value-input">
-                        <label for="custom-value-${timestamp}" class="custom-label">Value:</label>
-                        <input id="custom-value-${timestamp}" class="custom-value-input-field styled-input" type="text" name="customValue" placeholder="Enter value" />
-                    </div>
-                    <button type="button" class="remove-custom-button" onclick="this.parentElement.parentElement.remove()">Remove</button>
-                </div>
-            `;
-            
-            const addInfoContainer = otherInfoSection.querySelector('.add-information-container');
-            if (addInfoContainer) {
-                otherInfoSection.insertBefore(newCustomField, addInfoContainer);
-            } else {
-                otherInfoSection.appendChild(newCustomField);
-            }
-        }
+        const newOtherInfo = [...(formData.otherInfo || [])];
+        newOtherInfo.push({ label: '', value: '' });
+        updateFormData({ ...formData, otherInfo: newOtherInfo });
+        markAsChanged();
     };
 
     // Function to add new language input
@@ -207,26 +168,10 @@ const useFormHandler = () => {
 
     // Function to add new hobby input
     const addHobbyInput = () => {
-        const hobbiesSection = document.getElementById('hobbies');
-        if (hobbiesSection) {
-            const timestamp = Date.now();
-            const newHobbyContainer = document.createElement('div');
-            newHobbyContainer.className = 'hobby-input-container input-group';
-            
-            newHobbyContainer.innerHTML = `
-                <div class="hobby-input-wrapper">
-                    <input id="hobby-input-${timestamp}" class="hobby-input styled-input" type="text" name="hobby" placeholder="Enter a hobby" />
-                    <button type="button" class="remove-hobby-button" onclick="this.parentElement.parentElement.remove()">Remove</button>
-                </div>
-            `;
-            
-            const addHobbyContainer = hobbiesSection.querySelector('.add-hobby-container');
-            if (addHobbyContainer) {
-                hobbiesSection.insertBefore(newHobbyContainer, addHobbyContainer);
-            } else {
-                hobbiesSection.appendChild(newHobbyContainer);
-            }
-        }
+        const newHobbies = [...(formData.hobbies || [])];
+        newHobbies.push('');
+        updateFormData({ ...formData, hobbies: newHobbies });
+        markAsChanged();
     };
 
     // Function to add new custom section detail
@@ -253,7 +198,7 @@ const useFormHandler = () => {
         }
     };
 
-    // Function to add new reference input
+    // Simple function to add new reference input
     const addReferenceInput = () => {
         const referencesSection = document.getElementById('references');
         if (referencesSection) {
@@ -288,7 +233,11 @@ const useFormHandler = () => {
         addLanguageInput,
         addHobbyInput,
         addCustomSectionDetail,
-        addReferenceInput
+        addReferenceInput,
+        handleInputChange,
+        handleReferenceChange,
+        referenceText,
+        activeSection
     };
 };
 

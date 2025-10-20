@@ -7,7 +7,7 @@ import Form1 from './components/template1/Form1';
 import Preview1 from './components/template1/Preview1';
 import Form2 from './components/template2/Form2';
 import Preview2 from './components/template2/Preview2';
-import useAutoSave from './components/template1/useAutoSave';
+import useAutoSave from './components/Supabase/useAutoSave';
 import { authService } from './components/Supabase/supabase';
 import { dbHelpers } from './components/Supabase/database';
 
