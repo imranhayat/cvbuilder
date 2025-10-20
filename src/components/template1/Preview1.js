@@ -1,11 +1,17 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import usePreviewHandler from './PreviewHandler1';
 import generatePDF from './pdf1';
 import './Preview1.css';
 
 function Preview1({ formData: propFormData, autoSaveStatus, hasUnsavedChanges }) {
-  const { formData: hookFormData, getProfileImageUrl, formatContactInfo } = usePreviewHandler(propFormData);
-  const formData = propFormData || hookFormData;
+  const { formData: hookFormData, getProfileImageUrl, formatContactInfo, updatePreviewData } = usePreviewHandler(propFormData);
+  // Merge DOM-derived data (hookFormData) with app state (propFormData) so custom sections render
+  const formData = { ...hookFormData, ...propFormData };
+
+  // Refresh preview data from form inputs whenever app form data changes
+  useEffect(() => {
+    updatePreviewData();
+  }, [propFormData, updatePreviewData]);
   
   // Default sections to show on page load: professional-summary, skills, languages, references
   const displayData = {
