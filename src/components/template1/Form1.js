@@ -780,6 +780,13 @@ function Form({ formData, updateFormData, markAsChanged }) {
                         type="text"
                         name="customSectionHeading"
                         placeholder="Enter custom section heading"
+                        value={formData.customSection?.[0]?.heading || ''}
+                        onChange={(e) => {
+                            const heading = e.target.value;
+                            const existing = formData.customSection && formData.customSection.length > 0 ? formData.customSection[0] : { heading: '', detail: '' };
+                            const newCustomSection = [{ ...existing, heading }];
+                            handleInputChange('customSection', newCustomSection);
+                        }}
                     />
                 </div>
 
@@ -793,6 +800,13 @@ function Form({ formData, updateFormData, markAsChanged }) {
                         type="text"
                         name="customSectionDetail"
                         placeholder="Enter custom section detail"
+                        value={formData.customSection?.[0]?.detail || ''}
+                        onChange={(e) => {
+                            const detail = e.target.value;
+                            const existing = formData.customSection && formData.customSection.length > 0 ? formData.customSection[0] : { heading: '', detail: '' };
+                            const newCustomSection = [{ ...existing, detail }];
+                            handleInputChange('customSection', newCustomSection);
+                        }}
                     />
                 </div>
 
