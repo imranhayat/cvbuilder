@@ -228,16 +228,8 @@ const SearchCV = ({ onBack, onEditCV }) => {
         <h2>Search for Existing CV</h2>
         <p className="search-description">Find and edit your previously created CVs</p>
         {isAdmin && (
-          <div className="admin-indicator">
-            <span className="admin-badge">🔐 ADMIN MODE</span>
-            <small>You can see and manage all CVs from all users</small>
-            <button 
-              onClick={() => window.location.reload()} 
-              className="refresh-button"
-              style={{marginTop: '0.5rem', padding: '0.3rem 0.8rem', fontSize: '0.8rem'}}
-            >
-              🔄 Refresh CVs
-            </button>
+          <div className="admin-indicator-simple">
+            <span className="admin-text">Admin</span>
           </div>
         )}
       </div>

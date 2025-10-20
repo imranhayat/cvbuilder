@@ -271,29 +271,20 @@
   font-style: italic;
 }
 
-/* Admin indicator */
-.admin-indicator {
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 8px;
-  padding: 0.5rem 1rem;
-  margin-top: 1rem;
+/* Simple admin indicator */
+.admin-indicator-simple {
+  margin-top: 0.5rem;
   text-align: center;
 }
 
-.admin-badge {
-  background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+.admin-text {
+  background: rgba(255, 255, 255, 0.2);
   color: white;
-  padding: 0.2rem 0.5rem;
-  border-radius: 4px;
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
   font-size: 0.8rem;
   font-weight: 600;
-  margin-right: 0.5rem;
-}
-
-.admin-indicator small {
-  color: rgba(255, 255, 255, 0.8);
-  font-size: 0.7rem;
+  border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .cv-actions {
