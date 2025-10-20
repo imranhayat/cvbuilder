@@ -34,7 +34,7 @@ function Preview1({ formData: propFormData, autoSaveStatus, hasUnsavedChanges })
       <div className="cv-preview">
         {/* CV Header */}
         <div className="cv-header">
-          {/* Profile Image Container - Top Left */}
+          {/* Profile Image Container */}
           <div className="profile-image-container">
             {profileImageUrl ? (
               <img 
@@ -44,7 +44,7 @@ function Preview1({ formData: propFormData, autoSaveStatus, hasUnsavedChanges })
               />
             ) : (
               <div className="profile-placeholder">
-                No Image
+                CV
               </div>
             )}
           </div>
@@ -58,11 +58,10 @@ function Preview1({ formData: propFormData, autoSaveStatus, hasUnsavedChanges })
 
             {/* Position/Title */}
             {displayData.position && (
-              <h2 className="header-position">
+              <h2 className="header-title">
                 {displayData.position}
               </h2>
             )}
-
 
             {/* Contact Information */}
             <div className="header-contact">
