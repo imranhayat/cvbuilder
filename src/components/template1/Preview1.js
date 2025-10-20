@@ -12,6 +12,17 @@ function Preview1({ formData: propFormData, autoSaveStatus, hasUnsavedChanges })
   useEffect(() => {
     updatePreviewData();
   }, [propFormData, updatePreviewData]);
+
+  // Ensure dynamic Custom Section detail inputs update preview on typing
+  useEffect(() => {
+    const onInput = (e) => {
+      if (e && e.target && e.target.classList && e.target.classList.contains('custom-detail-input')) {
+        updatePreviewData();
+      }
+    };
+    document.addEventListener('input', onInput, true);
+    return () => document.removeEventListener('input', onInput, true);
+  }, [updatePreviewData]);
   
   // Default sections to show on page load: professional-summary, skills, languages, references
   const displayData = {
