@@ -64,6 +64,7 @@ function Preview1({ formData: propFormData, autoSaveStatus, hasUnsavedChanges })
   // Debug: Log contact information
   console.log('Template1 - Contact Info:', contactInfo);
   console.log('Template1 - Form Data:', formData);
+  console.log('Template1 - Custom Section Data:', displayData.customSection);
 
   return (
     <div className="right-container">
@@ -273,6 +274,9 @@ function Preview1({ formData: propFormData, autoSaveStatus, hasUnsavedChanges })
               <div className="custom-section-content">
                 {displayData.customSection.map((custom, index) => (
                   <div key={index} className="custom-section-item">
+                    {custom.heading && (
+                      <h4 className="custom-section-subheading">{custom.heading}</h4>
+                    )}
                     {custom.detail && (
                       <p className="custom-section-detail">{custom.detail}</p>
                     )}
