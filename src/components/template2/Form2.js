@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
-import useFormHandler from './FormHandler1';
-import './Form1.css';
+import useFormHandler from './FormHandler2';
+import './Form2.css';
 
-function Form({ formData, updateFormData, markAsChanged }) {
+function Form2({ formData, updateFormData, markAsChanged }) {
     const { 
         toggleSection, 
         initializeForm, 
@@ -828,4 +828,4 @@ function Form({ formData, updateFormData, markAsChanged }) {
     );
 }
 
-export default Form;
+export default Form2;

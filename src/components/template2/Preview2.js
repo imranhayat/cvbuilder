@@ -1,9 +1,9 @@
 import React from 'react';
-import usePreviewHandler from './PreviewHandler1';
-import generatePDF from './pdf1';
-import './Preview1.css';
+import usePreviewHandler from './PreviewHandler2';
+import generatePDF from './pdf2';
+import './Preview2.css';
 
-function Preview1({ formData: propFormData, autoSaveStatus, hasUnsavedChanges }) {
+function Preview2({ formData: propFormData, autoSaveStatus, hasUnsavedChanges }) {
   const { formData: hookFormData, getProfileImageUrl, formatContactInfo } = usePreviewHandler(propFormData);
   const formData = propFormData || hookFormData;
   
@@ -272,4 +272,4 @@ function Preview1({ formData: propFormData, autoSaveStatus, hasUnsavedChanges })
   );
 }
 
-export default Preview1;
+export default Preview2;
