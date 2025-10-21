@@ -79,6 +79,8 @@ function Preview1({ formData: propFormData, autoSaveStatus, hasUnsavedChanges })
   // Debug: Log contact information
   console.log('Template1 - Contact Info:', contactInfo);
   console.log('Template1 - Form Data:', formData);
+  console.log('Template1 - Profile Image:', formData.profileImage);
+  console.log('Template1 - Profile Image URL:', profileImageUrl);
   console.log('Template1 - Custom Section Data:', displayData.customSection);
   console.log('Template1 - Custom Section Data Details:', displayData.customSection.map((item, index) => ({
     index,
