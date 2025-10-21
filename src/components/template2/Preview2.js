@@ -5,7 +5,14 @@ import './Preview2.css';
 
 function Preview2({ formData: propFormData, autoSaveStatus, hasUnsavedChanges }) {
   const { formData: hookFormData, getProfileImageUrl, formatContactInfo } = usePreviewHandler(propFormData);
-  const formData = propFormData || hookFormData;
+  // Use propFormData as primary source (from app state/database) and merge with hook data for DOM-only fields
+  const formData = { 
+    ...(propFormData || {}),
+    ...(hookFormData || {}),
+    profileImage: propFormData?.profileImage || hookFormData?.profileImage,
+    // Ensure customSection comes from propFormData (app state) not DOM
+    customSection: propFormData?.customSection || hookFormData?.customSection || []
+  };
   
   // Default sections to show on page load: professional-summary, skills, languages, references
   const displayData = {
@@ -26,7 +33,22 @@ function Preview2({ formData: propFormData, autoSaveStatus, hasUnsavedChanges })
     references: formData.references && formData.references.length > 0 ? formData.references.filter(ref => ref && ref.trim() !== '') : ['References would be furnished on demand.']
   };
   
-  const profileImageUrl = getProfileImageUrl;
+  // Create local getProfileImageUrl function that uses the merged formData
+  const getLocalProfileImageUrl = () => {
+    if (formData.profileImage) {
+      // If it's a File object, create object URL
+      if (formData.profileImage instanceof File) {
+        return URL.createObjectURL(formData.profileImage);
+      }
+      // If it's base64 data from database, use it directly
+      if (formData.profileImage.data) {
+        return formData.profileImage.data;
+      }
+    }
+    return null;
+  };
+  
+  const profileImageUrl = getLocalProfileImageUrl();
   const contactInfo = formatContactInfo();
 
   return (

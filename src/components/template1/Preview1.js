@@ -58,7 +58,22 @@ function Preview1({ formData: propFormData, autoSaveStatus, hasUnsavedChanges })
     references: formData.references && formData.references.length > 0 ? formData.references.filter(ref => ref && ref.trim() !== '') : ['References would be furnished on demand.']
   };
   
-  const profileImageUrl = getProfileImageUrl;
+  // Create local getProfileImageUrl function that uses the merged formData
+  const getLocalProfileImageUrl = () => {
+    if (formData.profileImage) {
+      // If it's a File object, create object URL
+      if (formData.profileImage instanceof File) {
+        return URL.createObjectURL(formData.profileImage);
+      }
+      // If it's base64 data from database, use it directly
+      if (formData.profileImage.data) {
+        return formData.profileImage.data;
+      }
+    }
+    return null;
+  };
+  
+  const profileImageUrl = getLocalProfileImageUrl();
   const contactInfo = formatContactInfo();
   
   // Debug: Log contact information
