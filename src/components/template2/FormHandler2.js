@@ -45,15 +45,19 @@ const useFormHandler = (formData, updateFormData, markAsChanged) => {
         setActiveSection(sectionId);
     };
 
-    // Function to initialize the form - show only Contact Information on page load
-    const initializeForm = useCallback(() => {
-        setActiveSection('contact-info');
-        // Initialize languages with default values if empty
+    // Initialize languages with default values on component mount
+    useEffect(() => {
         if (!formData.languages || formData.languages.length === 0) {
+            console.log('Initializing default languages...');
             const newFormData = { ...formData, languages: ['English', 'Urdu', 'Punjabi'] };
             updateFormData(newFormData);
         }
-    }, [formData, updateFormData]);
+    }, []); // Only run once on mount
+
+    // Function to initialize the form - show only Contact Information on page load
+    const initializeForm = useCallback(() => {
+        setActiveSection('contact-info');
+    }, []);
 
     // Function to add new education group
     const addEducationGroup = () => {

@@ -665,7 +665,7 @@ function Form2({ formData, updateFormData, markAsChanged }) {
                 <h3 className="section-title" onClick={() => toggleSection('languages')} >Languages</h3>
 
                 {/* Render all language inputs dynamically */}
-                {formData.languages && formData.languages.map((language, index) => (
+                {(formData.languages || ['English', 'Urdu', 'Punjabi']).map((language, index) => (
                     <div key={index} className="language-input-container input-group">
                         <div className="language-input-wrapper">
                             <input
