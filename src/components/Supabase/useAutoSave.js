@@ -245,6 +245,8 @@ const useAutoSave = (formData, saveInterval = 10000) => {
     setCurrentCVId(null);
     setHasUnsavedChanges(false);
     setAutoSaveStatus('');
+    // Clear the last saved data reference to ensure new CV starts fresh
+    lastSavedDataRef.current = null;
   };
 
   return {

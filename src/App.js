@@ -82,7 +82,7 @@ function App() {
 
   // Handle "Make a new CV" button
   const handleMakeNewCV = () => {
-    setFormData({
+    const newFormData = {
       name: '',
       position: '',
       phone: '',
@@ -96,11 +96,13 @@ function App() {
       languages: [],
       hobbies: [],
       references: []
-    });
+    };
+    setFormData(newFormData);
     setHasUnsavedChanges(false);
     setAutoSaveStatus('');
     setFormResetKey(prev => prev + 1); // Force form re-render
     createNewCV(); // Reset the hook state
+    setCurrentView('cv-builder'); // Ensure we're in the CV builder view
   };
 
   useEffect(() => {
