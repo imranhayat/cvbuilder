@@ -57,6 +57,9 @@ const useFormHandler = (formData, updateFormData, markAsChanged) => {
         }
     }, []); // Only run once on mount
 
+    // Track if languages have been explicitly cleared by user
+    const [languagesCleared, setLanguagesCleared] = useState(false);
+
     // Function to initialize the form - show only Contact Information on page load
     const initializeForm = useCallback(() => {
         setActiveSection('contact-info');
@@ -219,7 +222,9 @@ const useFormHandler = (formData, updateFormData, markAsChanged) => {
         handleInputChange,
         handleReferenceChange,
         referenceText,
-        activeSection
+        activeSection,
+        languagesCleared,
+        setLanguagesCleared
     };
 };
 

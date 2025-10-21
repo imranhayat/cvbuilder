@@ -16,7 +16,9 @@ function Form({ formData, updateFormData, markAsChanged }) {
         handleInputChange,
         handleReferenceChange,
         referenceText,
-        activeSection
+        activeSection,
+        languagesCleared,
+        setLanguagesCleared
     } = useFormHandler(formData, updateFormData, markAsChanged);
 
     // Initialize form on component mount
@@ -665,7 +667,14 @@ function Form({ formData, updateFormData, markAsChanged }) {
                 <h3 className="section-title" onClick={() => toggleSection('languages')} >Languages</h3>
 
                 {/* Render all language inputs dynamically */}
-                {(formData.languages || ['English', 'Urdu', 'Punjabi']).map((language, index) => (
+                {(() => {
+                    // If languages have been explicitly cleared by user, don't show fallback
+                    if (languagesCleared && (!formData.languages || formData.languages.length === 0)) {
+                        return [];
+                    }
+                    // Otherwise show current languages or default fallback
+                    return (formData.languages && formData.languages.length > 0 ? formData.languages : ['English', 'Urdu', 'Punjabi']);
+                })().map((language, index) => (
                     <div key={index} className="language-input-container input-group">
                         <div className="language-input-wrapper">
                             <input
@@ -680,6 +689,12 @@ function Form({ formData, updateFormData, markAsChanged }) {
                                     newLanguages[index] = e.target.value;
                                     // Filter out empty languages
                                     const filteredLanguages = newLanguages.filter(lang => lang && lang.trim() !== '');
+                                    
+                                    // If all languages are cleared, mark as cleared
+                                    if (filteredLanguages.length === 0) {
+                                        setLanguagesCleared(true);
+                                    }
+                                    
                                     handleInputChange('languages', filteredLanguages);
                                 }}
                             />
@@ -689,6 +704,12 @@ function Form({ formData, updateFormData, markAsChanged }) {
                                 onClick={() => {
                                     const newLanguages = [...(formData.languages || [])];
                                     newLanguages.splice(index, 1);
+                                    
+                                    // If all languages are removed, mark as cleared
+                                    if (newLanguages.length === 0) {
+                                        setLanguagesCleared(true);
+                                    }
+                                    
                                     handleInputChange('languages', newLanguages);
                                 }}
                             >
@@ -699,7 +720,10 @@ function Form({ formData, updateFormData, markAsChanged }) {
                 ))}
 
                 <div className="add-language-container">
-                    <button type="button" onClick={addLanguageInput} className="add-language-button">
+                    <button type="button" onClick={() => {
+                        setLanguagesCleared(false); // Reset cleared state when adding language
+                        addLanguageInput();
+                    }} className="add-language-button">
                         Add Language
                     </button>
                 </div>

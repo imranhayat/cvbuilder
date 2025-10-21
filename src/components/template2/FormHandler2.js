@@ -47,12 +47,16 @@ const useFormHandler = (formData, updateFormData, markAsChanged) => {
 
     // Initialize languages with default values on component mount
     useEffect(() => {
+        console.log('FormHandler2 - Checking languages:', formData.languages);
         if (!formData.languages || formData.languages.length === 0) {
             console.log('Initializing default languages...');
             const newFormData = { ...formData, languages: ['English', 'Urdu', 'Punjabi'] };
             updateFormData(newFormData);
         }
     }, []); // Only run once on mount
+
+    // Track if languages have been explicitly cleared by user
+    const [languagesCleared, setLanguagesCleared] = useState(false);
 
     // Function to initialize the form - show only Contact Information on page load
     const initializeForm = useCallback(() => {
@@ -230,7 +234,9 @@ const useFormHandler = (formData, updateFormData, markAsChanged) => {
         handleInputChange,
         handleReferenceChange,
         referenceText,
-        activeSection
+        activeSection,
+        languagesCleared,
+        setLanguagesCleared
     };
 };
 
