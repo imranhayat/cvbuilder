@@ -664,71 +664,39 @@ function Form({ formData, updateFormData, markAsChanged }) {
             <div id="languages" className={`languages-section ${activeSection === 'languages' ? 'active' : ''}`}>
                 <h3 className="section-title" onClick={() => toggleSection('languages')} >Languages</h3>
 
-                <div className="english-language-container input-group">
-                    <input
-                        id="english-language-input"
-                        className="english-language-input styled-input"
-                        type="text"
-                        name="englishLanguage"
-                        value={formData.languages?.[0] || "English"}
-                        onChange={(e) => {
-                            const newLanguages = [...(formData.languages || [])];
-                            // Ensure we have at least one element
-                            if (newLanguages.length === 0) {
-                                newLanguages.push("English");
-                            }
-                            // Update the first language
-                            newLanguages[0] = e.target.value;
-                            // Filter out empty languages
-                            const filteredLanguages = newLanguages.filter(lang => lang && lang.trim() !== '');
-                            handleInputChange('languages', filteredLanguages);
-                        }}
-                    />
-                </div>
-
-                <div className="urdu-language-container input-group">
-                    <input
-                        id="urdu-language-input"
-                        className="urdu-language-input styled-input"
-                        type="text"
-                        name="urduLanguage"
-                        value={formData.languages?.[1] || "Urdu"}
-                        onChange={(e) => {
-                            const newLanguages = [...(formData.languages || [])];
-                            // Ensure we have at least two elements
-                            if (newLanguages.length < 2) {
-                                newLanguages.push("Urdu");
-                            }
-                            // Update the second language
-                            newLanguages[1] = e.target.value;
-                            // Filter out empty languages
-                            const filteredLanguages = newLanguages.filter(lang => lang && lang.trim() !== '');
-                            handleInputChange('languages', filteredLanguages);
-                        }}
-                    />
-                </div>
-
-                <div className="punjabi-language-container input-group">
-                    <input
-                        id="punjabi-language-input"
-                        className="punjabi-language-input styled-input"
-                        type="text"
-                        name="punjabiLanguage"
-                        value={formData.languages?.[2] || "Punjabi"}
-                        onChange={(e) => {
-                            const newLanguages = [...(formData.languages || [])];
-                            // Ensure we have at least three elements
-                            if (newLanguages.length < 3) {
-                                newLanguages.push("Punjabi");
-                            }
-                            // Update the third language
-                            newLanguages[2] = e.target.value;
-                            // Filter out empty languages
-                            const filteredLanguages = newLanguages.filter(lang => lang && lang.trim() !== '');
-                            handleInputChange('languages', filteredLanguages);
-                        }}
-                    />
-                </div>
+                {/* Render all language inputs dynamically */}
+                {formData.languages && formData.languages.map((language, index) => (
+                    <div key={index} className="language-input-container input-group">
+                        <div className="language-input-wrapper">
+                            <input
+                                id={`language-input-${index}`}
+                                className="language-input styled-input"
+                                type="text"
+                                name="language"
+                                placeholder="Enter a language"
+                                value={language}
+                                onChange={(e) => {
+                                    const newLanguages = [...(formData.languages || [])];
+                                    newLanguages[index] = e.target.value;
+                                    // Filter out empty languages
+                                    const filteredLanguages = newLanguages.filter(lang => lang && lang.trim() !== '');
+                                    handleInputChange('languages', filteredLanguages);
+                                }}
+                            />
+                            <button 
+                                type="button" 
+                                className="remove-language-button"
+                                onClick={() => {
+                                    const newLanguages = [...(formData.languages || [])];
+                                    newLanguages.splice(index, 1);
+                                    handleInputChange('languages', newLanguages);
+                                }}
+                            >
+                                Remove
+                            </button>
+                        </div>
+                    </div>
+                ))}
 
                 <div className="add-language-container">
                     <button type="button" onClick={addLanguageInput} className="add-language-button">

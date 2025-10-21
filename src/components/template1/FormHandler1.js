@@ -50,7 +50,12 @@ const useFormHandler = (formData, updateFormData, markAsChanged) => {
     // Function to initialize the form - show only Contact Information on page load
     const initializeForm = useCallback(() => {
         setActiveSection('contact-info');
-    }, []);
+        // Initialize languages with default values if empty
+        if (!formData.languages || formData.languages.length === 0) {
+            const newFormData = { ...formData, languages: ['English', 'Urdu', 'Punjabi'] };
+            updateFormData(newFormData);
+        }
+    }, [formData, updateFormData]);
 
     // Function to add new education group
     const addEducationGroup = () => {
@@ -146,26 +151,10 @@ const useFormHandler = (formData, updateFormData, markAsChanged) => {
 
     // Function to add new language input
     const addLanguageInput = () => {
-        const languagesSection = document.getElementById('languages');
-        if (languagesSection) {
-            const timestamp = Date.now();
-            const newLanguageContainer = document.createElement('div');
-            newLanguageContainer.className = 'language-input-container input-group';
-            
-            newLanguageContainer.innerHTML = `
-                <div class="language-input-wrapper">
-                    <input id="language-input-${timestamp}" class="language-input styled-input" type="text" name="language" placeholder="Enter a language" />
-                    <button type="button" class="remove-language-button" onclick="this.parentElement.parentElement.remove()">Remove</button>
-                </div>
-            `;
-            
-            const addLanguageContainer = languagesSection.querySelector('.add-language-container');
-            if (addLanguageContainer) {
-                languagesSection.insertBefore(newLanguageContainer, addLanguageContainer);
-            } else {
-                languagesSection.appendChild(newLanguageContainer);
-            }
-        }
+        const newLanguages = [...(formData.languages || [])];
+        newLanguages.push('');
+        updateFormData({ ...formData, languages: newLanguages });
+        markAsChanged();
     };
 
     // Function to add new hobby input
