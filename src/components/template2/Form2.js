@@ -673,9 +673,11 @@ function Form2({ formData, updateFormData, markAsChanged }) {
                         value={formData.languages?.[0] || "English"}
                         onChange={(e) => {
                             const newLanguages = [...(formData.languages || [])];
+                            // Ensure we have at least one element
                             if (newLanguages.length === 0) {
                                 newLanguages.push("English");
                             }
+                            // Update the first language
                             newLanguages[0] = e.target.value;
                             // Filter out empty languages
                             const filteredLanguages = newLanguages.filter(lang => lang && lang.trim() !== '');
@@ -693,9 +695,11 @@ function Form2({ formData, updateFormData, markAsChanged }) {
                         value={formData.languages?.[1] || "Urdu"}
                         onChange={(e) => {
                             const newLanguages = [...(formData.languages || [])];
+                            // Ensure we have at least two elements
                             if (newLanguages.length < 2) {
                                 newLanguages.push("Urdu");
                             }
+                            // Update the second language
                             newLanguages[1] = e.target.value;
                             // Filter out empty languages
                             const filteredLanguages = newLanguages.filter(lang => lang && lang.trim() !== '');
@@ -713,9 +717,11 @@ function Form2({ formData, updateFormData, markAsChanged }) {
                         value={formData.languages?.[2] || "Punjabi"}
                         onChange={(e) => {
                             const newLanguages = [...(formData.languages || [])];
+                            // Ensure we have at least three elements
                             if (newLanguages.length < 3) {
                                 newLanguages.push("Punjabi");
                             }
+                            // Update the third language
                             newLanguages[2] = e.target.value;
                             // Filter out empty languages
                             const filteredLanguages = newLanguages.filter(lang => lang && lang.trim() !== '');
