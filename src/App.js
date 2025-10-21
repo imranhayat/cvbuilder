@@ -125,6 +125,10 @@ function App() {
     const handleAuth = () => {
       setIsAuthenticated(true);
       setIsLoading(false);
+      // If user was on form/preview page, redirect to dashboard after login
+      if (currentView === 'cv-builder') {
+        setCurrentView('dashboard');
+      }
     };
 
     window.addEventListener('userAuthenticated', handleAuth);
@@ -145,8 +149,8 @@ function App() {
       localStorage.removeItem('cvBuilderAuth');
       setIsAuthenticated(false);
       setIsLoading(false);
-      // Don't set currentView to dashboard when logging out
-      // Let the authentication check handle the redirect
+      // Reset to dashboard view so when user logs back in, they go to dashboard
+      setCurrentView('dashboard');
     }
   };
 
