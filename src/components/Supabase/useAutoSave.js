@@ -19,8 +19,9 @@ const useAutoSave = (formData, saveInterval = 10000) => {
       return;
     }
 
-    // Check if data has changed since last save
-    const currentDataString = JSON.stringify(formData);
+    // Check if data has changed since last save (excluding profileImage from comparison)
+    const { profileImage, ...formDataForComparison } = formData;
+    const currentDataString = JSON.stringify(formDataForComparison);
     if (lastSavedDataRef.current === currentDataString) {
       console.log('Auto-save skipped - no changes since last save');
       return;
@@ -64,11 +65,13 @@ const useAutoSave = (formData, saveInterval = 10000) => {
       }
 
       // Format CV data for database
+      console.log('Profile image before formatting:', formData.profileImage);
       const cvData = await dbHelpers.formatCVData(formData);
       cvData.user_id = user.id;
       cvData.template_id = 'template1'; // Default template
       
       console.log('Formatted CV data:', cvData);
+      console.log('Profile image in formatted data:', cvData.cv_data.profileImage);
 
       // Check if user is admin for update operations
       const { data: userData, error: userError } = await supabase
@@ -94,8 +97,9 @@ const useAutoSave = (formData, saveInterval = 10000) => {
         setCurrentCVId(savedCV.id);
       }
       
-      // Update last saved data reference
-      lastSavedDataRef.current = JSON.stringify(formData);
+      // Update last saved data reference (excluding profileImage from comparison)
+      const { profileImage: _, ...formDataForComparison } = formData;
+      lastSavedDataRef.current = JSON.stringify(formDataForComparison);
       setHasUnsavedChanges(false);
       setAutoSaveStatus('Auto-saved to database');
       
