@@ -19,10 +19,24 @@ const useAutoSave = (formData, saveInterval = 10000) => {
       return;
     }
 
-    // Check if data has changed since last save (excluding profileImage from comparison)
+    // Check if data has changed since last save
     const { profileImage, ...formDataForComparison } = formData;
     const currentDataString = JSON.stringify(formDataForComparison);
-    if (lastSavedDataRef.current === currentDataString) {
+    
+    // Special check for profileImage changes
+    const hasProfileImageChanged = formData.profileImage && 
+      (formData.profileImage instanceof File || 
+       (formData.profileImage.data && formData.profileImage.data !== lastSavedDataRef.current?.profileImageData));
+    
+    console.log('Change detection:', {
+      hasProfileImageChanged,
+      profileImageType: formData.profileImage?.constructor?.name,
+      isFile: formData.profileImage instanceof File,
+      hasData: !!formData.profileImage?.data,
+      lastSavedProfileImage: !!lastSavedDataRef.current?.profileImageData
+    });
+    
+    if (lastSavedDataRef.current?.dataString === currentDataString && !hasProfileImageChanged) {
       console.log('Auto-save skipped - no changes since last save');
       return;
     }
@@ -97,9 +111,12 @@ const useAutoSave = (formData, saveInterval = 10000) => {
         setCurrentCVId(savedCV.id);
       }
       
-      // Update last saved data reference (excluding profileImage from comparison)
+      // Update last saved data reference
       const { profileImage: _, ...formDataForComparison } = formData;
-      lastSavedDataRef.current = JSON.stringify(formDataForComparison);
+      lastSavedDataRef.current = {
+        dataString: JSON.stringify(formDataForComparison),
+        profileImageData: formData.profileImage?.data || null
+      };
       setHasUnsavedChanges(false);
       setAutoSaveStatus('Auto-saved to database');
       
