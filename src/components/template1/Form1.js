@@ -677,7 +677,9 @@ function Form({ formData, updateFormData, markAsChanged }) {
                                 newLanguages.push("English");
                             }
                             newLanguages[0] = e.target.value;
-                            handleInputChange('languages', newLanguages);
+                            // Filter out empty languages
+                            const filteredLanguages = newLanguages.filter(lang => lang && lang.trim() !== '');
+                            handleInputChange('languages', filteredLanguages);
                         }}
                     />
                 </div>
@@ -695,7 +697,9 @@ function Form({ formData, updateFormData, markAsChanged }) {
                                 newLanguages.push("Urdu");
                             }
                             newLanguages[1] = e.target.value;
-                            handleInputChange('languages', newLanguages);
+                            // Filter out empty languages
+                            const filteredLanguages = newLanguages.filter(lang => lang && lang.trim() !== '');
+                            handleInputChange('languages', filteredLanguages);
                         }}
                     />
                 </div>
@@ -713,7 +717,9 @@ function Form({ formData, updateFormData, markAsChanged }) {
                                 newLanguages.push("Punjabi");
                             }
                             newLanguages[2] = e.target.value;
-                            handleInputChange('languages', newLanguages);
+                            // Filter out empty languages
+                            const filteredLanguages = newLanguages.filter(lang => lang && lang.trim() !== '');
+                            handleInputChange('languages', filteredLanguages);
                         }}
                     />
                 </div>
