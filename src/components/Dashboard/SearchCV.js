@@ -193,7 +193,36 @@ const SearchCV = ({ onBack, onEditCV }) => {
     e.stopPropagation();
     if (window.confirm('Are you sure you want to delete this CV? This action cannot be undone.')) {
       try {
-        await cvService.deleteCV(cvId);
+        // Get current user for deletion
+        const { data: { user }, error: userError } = await supabase.auth.getUser();
+        if (userError || !user) {
+          console.error('Error getting current user:', userError);
+          alert('Authentication error. Please log in again.');
+          return;
+        }
+        
+        // Check if user is admin
+        const { data: userData, error: adminError } = await supabase
+          .from('users')
+          .select('is_admin')
+          .eq('email', user.email)
+          .single();
+        
+        const isAdmin = userData?.is_admin || false;
+        
+        if (isAdmin) {
+          // Admin can delete any CV - don't filter by user_id
+          const { error } = await supabase
+            .from('cvs')
+            .delete()
+            .eq('id', cvId);
+          
+          if (error) throw error;
+        } else {
+          // Regular user can only delete their own CVs
+          await cvService.deleteCV(cvId, user.id);
+        }
+        
         // Remove from search results
         setSearchResults(prev => prev.filter(cv => cv.id !== cvId));
       } catch (error) {
