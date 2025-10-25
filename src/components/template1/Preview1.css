@@ -5,6 +5,17 @@
   padding: 20px;
   font-family: 'Arial', sans-serif;
   color: #333;
+  font-size: 1.4rem;
+  line-height: 1.4;
+}
+
+/* Ensure consistent base font size for all text elements */
+.cv-preview p,
+.cv-preview div,
+.cv-preview span,
+.cv-preview li {
+  font-size: 1.4rem;
+  line-height: 1.4;
 }
 
 
@@ -64,7 +75,7 @@
 }
 
 .header-name {
-  font-size: 36px;
+  font-size: 2.4rem;
   font-weight: 700;
   color: #2c3e50;
   margin: 0 0 4px 0;
@@ -72,7 +83,7 @@
 }
 
 .header-title {
-  font-size: 24px;
+  font-size: 1.6rem;
   font-weight: 500;
   color: #667eea;
   margin: 0 0 8px 0;
@@ -89,7 +100,7 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  font-size: 16px;
+  font-size: 1.4rem;
   color: #555;
 }
 
@@ -110,7 +121,7 @@
 }
 
 .section-heading {
-  font-size: 16px;
+  font-size: 1.8rem;
   font-weight: 600;
   color: #2c3e50;
   margin: 0 0 8px 0;
@@ -125,7 +136,7 @@
 }
 
 .professional-summary-text {
-  font-size: 16px;
+  font-size: 1.4rem;
   color: #555;
   margin: 0;
   line-height: 1.7;
@@ -162,25 +173,25 @@
 }
 
 .education-degree {
-  font-size: 16px !important;
+  font-size: 1.6rem !important;
   font-weight: 600;
   color: #2c3e50;
 }
 
 .education-board {
-  font-size: 16px !important;
+  font-size: 1.4rem !important;
   font-weight: 500;
   color: #667eea;
 }
 
 .education-year {
-  font-size: 16px !important;
+  font-size: 1.4rem !important;
   font-weight: 500;
   color: #555;
 }
 
 .education-marks {
-  font-size: 16px !important;
+  font-size: 1.4rem !important;
   color: #888;
   font-style: italic;
 }
@@ -214,13 +225,13 @@
 }
 
 .experience-job-title {
-  font-size: 16px !important;
+  font-size: 1.6rem !important;
   font-weight: 600;
   color: #2c3e50;
 }
 
 .experience-duration {
-  font-size: 16px !important;
+  font-size: 1.4rem !important;
   font-weight: 500;
   color: #555;
 }
@@ -230,13 +241,13 @@
 }
 
 .experience-company {
-  font-size: 16px !important;
+  font-size: 1.4rem !important;
   font-weight: 500;
   color: #667eea;
 }
 
 .experience-details {
-  font-size: 16px !important;
+  font-size: 1.4rem !important;
   color: #666;
   line-height: 1.4;
   margin-left: 6px;
@@ -254,7 +265,7 @@
 .experience-detail-item {
   position: relative;
   padding: 2px 0 2px 16px;
-  font-size: 16px !important;
+  font-size: 1.4rem !important;
   color: #666;
   line-height: 1.4;
 }
@@ -284,7 +295,7 @@
 }
 
 .certification-text {
-  font-size: 14px;
+  font-size: 1.4rem;
   color: #555;
   margin: 0;
   line-height: 1.4;
@@ -303,7 +314,7 @@
   color: white;
   padding: 6px 14px;
   border-radius: 25px;
-  font-size: 14px;
+  font-size: 1.2rem;
   font-weight: 500;
   box-shadow: 0 2px 6px rgba(102, 126, 234, 0.3);
   transition: all 0.3s ease;
@@ -364,13 +375,13 @@
   font-weight: 600;
   color: #667eea;
   margin-right: 8px;
-  font-size: 16px !important;
+  font-size: 1.4rem !important;
   min-width: fit-content;
 }
 
 .info-value {
   color: #333;
-  font-size: 16px !important;
+  font-size: 1.4rem !important;
   font-weight: 500;
 }
 
@@ -386,7 +397,7 @@
   color: white;
   padding: 6px 14px;
   border-radius: 25px;
-  font-size: 14px;
+  font-size: 1.2rem;
   font-weight: 500;
   box-shadow: 0 2px 6px rgba(102, 126, 234, 0.3);
   transition: all 0.3s ease;
@@ -433,7 +444,7 @@
   color: white;
   padding: 6px 14px;
   border-radius: 25px;
-  font-size: 14px;
+  font-size: 1.2rem;
   font-weight: 500;
   box-shadow: 0 2px 6px rgba(102, 126, 234, 0.3);
   transition: all 0.3s ease;
@@ -484,7 +495,7 @@
 }
 
 .custom-section-subheading {
-  font-size: 16px;
+  font-size: 1.6rem;
   font-weight: 600;
   color: #2c3e50;
   margin: 0 0 6px 0;
@@ -493,7 +504,7 @@
 }
 
 .custom-section-detail {
-  font-size: 14px;
+  font-size: 1.4rem;
   color: #555;
   margin: 0;
   line-height: 1.5;
@@ -515,7 +526,7 @@
 }
 
 .reference-text {
-  font-size: 14px;
+  font-size: 1.4rem;
   color: #555;
   margin: 0;
   line-height: 1.4;
@@ -537,7 +548,7 @@
   border: none;
   padding: 12px 24px;
   border-radius: 8px;
-  font-size: 16px;
+  font-size: 1.4rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
