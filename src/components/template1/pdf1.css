@@ -5,7 +5,7 @@
   padding: 8px;
   min-height: auto;
   line-height: 1.3;
-  font-family: 'Arial', sans-serif;
+  font-family: 'Inter', 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
 }
 
 .cv-preview.pdf-mode .cv-header {
@@ -26,7 +26,7 @@
 .cv-preview.pdf-mode .section-heading {
   font-size: 1.8rem;
   padding-bottom: 4px;
-  font-family: 'Arial', sans-serif;
+  font-family: 'Inter', 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
 }
 
 .cv-preview.pdf-mode .contact-info {
@@ -36,7 +36,7 @@
 .cv-preview.pdf-mode .contact-item {
   font-size: 1.4rem;
   margin-bottom: 3px;
-  font-family: 'Arial', sans-serif;
+  font-family: 'Inter', 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
 }
 
 .cv-preview.pdf-mode .experience-item,
@@ -54,30 +54,30 @@
 .cv-preview.pdf-mode .education-degree {
   font-size: 1.6rem;
   font-weight: 600;
-  font-family: 'Arial', sans-serif;
+  font-family: 'Inter', 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
 }
 
 .cv-preview.pdf-mode .experience-company {
   font-size: 1.4rem;
-  font-family: 'Arial', sans-serif;
+  font-family: 'Inter', 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
 }
 
 .cv-preview.pdf-mode .education-institution {
   font-size: 1.4rem;
-  font-family: 'Arial', sans-serif;
+  font-family: 'Inter', 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
 }
 
 .cv-preview.pdf-mode .experience-duration,
 .cv-preview.pdf-mode .education-duration {
   font-size: 1.4rem;
-  font-family: 'Arial', sans-serif;
+  font-family: 'Inter', 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
 }
 
 .cv-preview.pdf-mode .experience-details,
 .cv-preview.pdf-mode .education-details {
   font-size: 1.4rem;
   margin-top: 3px;
-  font-family: 'Arial', sans-serif;
+  font-family: 'Inter', 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
 }
 
 .cv-preview.pdf-mode .skills-list,
@@ -86,7 +86,7 @@
 .cv-preview.pdf-mode .hobbies-list {
   font-size: 1.4rem;
   margin-bottom: 6px;
-  font-family: 'Arial', sans-serif;
+  font-family: 'Inter', 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
 }
 
 .cv-preview.pdf-mode .skills-list li,
@@ -94,43 +94,43 @@
 .cv-preview.pdf-mode .languages-list li,
 .cv-preview.pdf-mode .hobbies-list li {
   margin-bottom: 3px;
-  font-family: 'Arial', sans-serif;
+  font-family: 'Inter', 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
 }
 
 .cv-preview.pdf-mode .cv-name {
   font-size: 2.4rem;
   margin-bottom: 6px;
-  font-family: 'Arial', sans-serif;
+  font-family: 'Inter', 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
 }
 
 .cv-preview.pdf-mode .cv-position {
   font-size: 1.6rem;
   margin-bottom: 8px;
-  font-family: 'Arial', sans-serif;
+  font-family: 'Inter', 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
 }
 
 .cv-preview.pdf-mode .professional-summary-text {
   font-size: 1.4rem;
   line-height: 1.4;
   margin: 0;
-  font-family: 'Arial', sans-serif;
+  font-family: 'Inter', 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
 }
 
 .cv-preview.pdf-mode .other-info-item {
   font-size: 1.4rem;
   margin-bottom: 3px;
-  font-family: 'Arial', sans-serif;
+  font-family: 'Inter', 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
 }
 
 .cv-preview.pdf-mode .references-list {
   font-size: 1.4rem;
   margin-bottom: 6px;
-  font-family: 'Arial', sans-serif;
+  font-family: 'Inter', 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
 }
 
 .cv-preview.pdf-mode .references-list li {
   margin-bottom: 3px;
-  font-family: 'Arial', sans-serif;
+  font-family: 'Inter', 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
 }
 
 /* Balanced pill styles for PDF */
@@ -144,7 +144,7 @@
   display: inline-block;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
-  font-family: 'Arial', sans-serif;
+  font-family: 'Inter', 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
   line-height: 1.3;
 }
 
@@ -160,7 +160,7 @@
 .cv-preview.pdf-mode .hobby-name {
   color: white;
   font-size: 1.2rem;
-  font-family: 'Arial', sans-serif;
+  font-family: 'Inter', 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
 }
 
 /* Additional PDF font size overrides for consistency */
@@ -270,7 +270,7 @@
 
 /* Ensure all text elements have consistent base font size */
 .cv-preview.pdf-mode * {
-  font-family: 'Arial', sans-serif !important;
+  font-family: 'Inter', 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif !important;
 }
 
 .cv-preview.pdf-mode p,
