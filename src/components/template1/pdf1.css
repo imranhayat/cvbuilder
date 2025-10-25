@@ -24,7 +24,7 @@
 }
 
 .cv-preview.pdf-mode .section-heading {
-  font-size: 1.4rem;
+  font-size: 1.8rem;
   padding-bottom: 4px;
   font-family: 'Arial', sans-serif;
 }
@@ -34,7 +34,7 @@
 }
 
 .cv-preview.pdf-mode .contact-item {
-  font-size: 1.1rem;
+  font-size: 1.4rem;
   margin-bottom: 3px;
   font-family: 'Arial', sans-serif;
 }
@@ -52,30 +52,30 @@
 
 .cv-preview.pdf-mode .experience-job-title,
 .cv-preview.pdf-mode .education-degree {
-  font-size: 1.2rem;
+  font-size: 1.6rem;
   font-weight: 600;
   font-family: 'Arial', sans-serif;
 }
 
 .cv-preview.pdf-mode .experience-company {
-  font-size: 1.1rem;
+  font-size: 1.4rem;
   font-family: 'Arial', sans-serif;
 }
 
 .cv-preview.pdf-mode .education-institution {
-  font-size: 1.1rem;
+  font-size: 1.4rem;
   font-family: 'Arial', sans-serif;
 }
 
 .cv-preview.pdf-mode .experience-duration,
 .cv-preview.pdf-mode .education-duration {
-  font-size: 1.1rem;
+  font-size: 1.4rem;
   font-family: 'Arial', sans-serif;
 }
 
 .cv-preview.pdf-mode .experience-details,
 .cv-preview.pdf-mode .education-details {
-  font-size: 1.1rem;
+  font-size: 1.4rem;
   margin-top: 3px;
   font-family: 'Arial', sans-serif;
 }
@@ -84,7 +84,7 @@
 .cv-preview.pdf-mode .certifications-list,
 .cv-preview.pdf-mode .languages-list,
 .cv-preview.pdf-mode .hobbies-list {
-  font-size: 1.1rem;
+  font-size: 1.4rem;
   margin-bottom: 6px;
   font-family: 'Arial', sans-serif;
 }
@@ -98,32 +98,32 @@
 }
 
 .cv-preview.pdf-mode .cv-name {
-  font-size: 2rem;
+  font-size: 2.4rem;
   margin-bottom: 6px;
   font-family: 'Arial', sans-serif;
 }
 
 .cv-preview.pdf-mode .cv-position {
-  font-size: 1.3rem;
+  font-size: 1.6rem;
   margin-bottom: 8px;
   font-family: 'Arial', sans-serif;
 }
 
 .cv-preview.pdf-mode .professional-summary-text {
-  font-size: 1.1rem;
+  font-size: 1.4rem;
   line-height: 1.4;
   margin: 0;
   font-family: 'Arial', sans-serif;
 }
 
 .cv-preview.pdf-mode .other-info-item {
-  font-size: 1.1rem;
+  font-size: 1.4rem;
   margin-bottom: 3px;
   font-family: 'Arial', sans-serif;
 }
 
 .cv-preview.pdf-mode .references-list {
-  font-size: 1.1rem;
+  font-size: 1.4rem;
   margin-bottom: 6px;
   font-family: 'Arial', sans-serif;
 }
@@ -137,9 +137,9 @@
 .cv-preview.pdf-mode .skill-pill,
 .cv-preview.pdf-mode .language-pill,
 .cv-preview.pdf-mode .hobby-pill {
-  padding: 4px 8px;
+  padding: 6px 12px;
   border-radius: 15px;
-  font-size: 1rem;
+  font-size: 1.2rem;
   margin: 2px 4px 2px 0;
   display: inline-block;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -159,6 +159,124 @@
 .cv-preview.pdf-mode .language-name,
 .cv-preview.pdf-mode .hobby-name {
   color: white;
-  font-size: 1rem;
+  font-size: 1.2rem;
   font-family: 'Arial', sans-serif;
+}
+
+/* Additional PDF font size overrides for consistency */
+.cv-preview.pdf-mode .header-name {
+  font-size: 2.4rem !important;
+  font-weight: 700;
+  color: #2c3e50;
+}
+
+.cv-preview.pdf-mode .header-title {
+  font-size: 1.6rem !important;
+  font-weight: 500;
+  color: #667eea;
+}
+
+.cv-preview.pdf-mode .education-degree {
+  font-size: 1.6rem !important;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.cv-preview.pdf-mode .education-board {
+  font-size: 1.4rem !important;
+  font-weight: 500;
+  color: #667eea;
+}
+
+.cv-preview.pdf-mode .education-year {
+  font-size: 1.4rem !important;
+  font-weight: 500;
+  color: #555;
+}
+
+.cv-preview.pdf-mode .education-marks {
+  font-size: 1.4rem !important;
+  color: #888;
+  font-style: italic;
+}
+
+.cv-preview.pdf-mode .experience-job-title {
+  font-size: 1.6rem !important;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.cv-preview.pdf-mode .experience-duration {
+  font-size: 1.4rem !important;
+  font-weight: 500;
+  color: #555;
+}
+
+.cv-preview.pdf-mode .experience-company {
+  font-size: 1.4rem !important;
+  font-weight: 500;
+  color: #667eea;
+}
+
+.cv-preview.pdf-mode .experience-details {
+  font-size: 1.4rem !important;
+  color: #666;
+  line-height: 1.4;
+}
+
+.cv-preview.pdf-mode .experience-detail-item {
+  font-size: 1.4rem !important;
+  color: #666;
+  line-height: 1.4;
+}
+
+.cv-preview.pdf-mode .certification-text {
+  font-size: 1.4rem !important;
+  color: #555;
+  line-height: 1.4;
+  font-weight: 500;
+}
+
+.cv-preview.pdf-mode .info-label {
+  font-size: 1.4rem !important;
+  font-weight: 600;
+  color: #667eea;
+}
+
+.cv-preview.pdf-mode .info-value {
+  font-size: 1.4rem !important;
+  color: #333;
+  font-weight: 500;
+}
+
+.cv-preview.pdf-mode .custom-section-subheading {
+  font-size: 1.6rem !important;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.cv-preview.pdf-mode .custom-section-detail {
+  font-size: 1.4rem !important;
+  color: #555;
+  line-height: 1.5;
+}
+
+.cv-preview.pdf-mode .reference-text {
+  font-size: 1.4rem !important;
+  color: #555;
+  line-height: 1.4;
+  font-style: italic;
+}
+
+/* Ensure all text elements have consistent base font size */
+.cv-preview.pdf-mode * {
+  font-family: 'Arial', sans-serif !important;
+}
+
+.cv-preview.pdf-mode p,
+.cv-preview.pdf-mode div,
+.cv-preview.pdf-mode span,
+.cv-preview.pdf-mode li {
+  font-size: 1.4rem !important;
+  line-height: 1.4;
 }
