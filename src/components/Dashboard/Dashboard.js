@@ -2,11 +2,15 @@ import React, { useState } from 'react';
 import './Dashboard.css';
 import SearchCV from './SearchCV';
 
-const Dashboard = ({ onTemplateSelect, onLogout, onEditCV }) => {
+const Dashboard = ({ onTemplateSelect, onLogout, onEditCV, onCreateNewCV }) => {
   const [currentView, setCurrentView] = useState('dashboard');
 
   const handleMakeNewCV = () => {
-    onTemplateSelect('template1'); // Default to template1, or you can make it configurable
+    if (onCreateNewCV) {
+      onCreateNewCV(); // Call the proper function that resets form data
+    } else {
+      onTemplateSelect('template1'); // Fallback to template selection
+    }
   };
 
   const handleSearchCV = () => {

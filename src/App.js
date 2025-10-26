@@ -229,6 +229,7 @@ function App() {
         onTemplateSelect={handleTemplateSelect}
         onLogout={handleLogout}
         onEditCV={handleEditCV}
+        onCreateNewCV={handleMakeNewCV}
       />
     );
   }
